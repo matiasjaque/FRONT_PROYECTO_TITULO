@@ -3,14 +3,18 @@ import '../styles/Login.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import fondo from '../assets/fondo.png';
 
+import axios from 'axios';
+import Cookies from 'universal-cookie';
+
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 const serverUrl = process.env.REACT_APP_SERVER;
+const conectado = new Cookies();
 
 function Login() {
-    const userRef = useRef();
-    const errRef = useRef();
+    /* const userRef = useRef();
+    const errRef = useRef(); */
 
     /* const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -25,10 +29,13 @@ function Login() {
         setError('');
     }, [email, password]) */
 
-    const [login, setLogin] = useState({
+    /* const [login, setLogin] = useState({
         email: '',
         password: '',
-    });
+    }); */
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const imagenFondo = {
         backgroundImage: `url(${fondo})`,
@@ -40,25 +47,51 @@ function Login() {
         //width: '100vw'
       };
 
+      const iniciarSesion =  async (e) =>{
+        // conectado.set('id',1,{path:"/"});
+        // conectado.set('nombre',"Victor",{path:"/"});
+        // console.log(conectado);
+        e.preventDefault();
+        console.log("llama a iniciarSesion")
+        console.log(email, password)
+        await axios.get(serverUrl + "/login", {params:{email: email, password: password}})
+        .then(response=>{
+            console.log("la data funciona " + response.data);
+            var respuesta = response.data;
+            conectado.set('id', respuesta.ID,{path:"/paginaPrincipal"});
+            conectado.set('nombre',respuesta.NOMBRE,{path:"/paginaPrincipal"})
+            conectado.set('apellido',respuesta.APELLIDO_PATERNO,{path:"/paginaPrincipal"})
+            alert("bienvenido " + respuesta.NOMBRE + " " + respuesta.APELLIDO_PATERNO);
+            console.log("aqui llega? " + conectado);
+            window.location.replace("/paginaPrincipal")
+            document.getElementById('email').value = ''
+        })
+        .catch(error=>{
+            alert(error.response.data.message);
+            console.log(error);
+        })
+            
+    }
+
   return (
     <div style={imagenFondo} className='contenedorPrincipal'>
         <div className='contenedorSecundario'>
             <h1 className='titulo'>Software De Votación Electronica</h1>
-            {JSON.stringify(login)}
-            <Form className='contenedorForm'>
-                <Form.Group className='mb-3' controlId="formBasicEmail">
+            
+            <Form className='contenedorForm' onSubmit={iniciarSesion}>
+                <Form.Group className='mb-3' >
                     <Form.Control className='formEmailInput' id='email' type="email" placeholder="Ingrese su email"  onChange={(event) => {
-                        const value = event.target.value;
+                        var value = event.target.value;
                         console.log(value);
-                        setLogin({...login, email: value});
+                        setEmail(value);
                     }}/>
                 </Form.Group>
 
-                <Form.Group className="mb-3" id='password' controlId="formBasicPassword">
+                <Form.Group className="mb-3" id='password' >
                     <Form.Control type="password" id='contraseña' placeholder="Ingrese su contraseña" onChange={(event) => {
                         const value = event.target.value;
                         console.log(value);
-                        setLogin({...login, password: value});
+                        setPassword(value);
                     }}/>
                 </Form.Group>
                 <Button id="botonLogin" variant="primary" type="submit">

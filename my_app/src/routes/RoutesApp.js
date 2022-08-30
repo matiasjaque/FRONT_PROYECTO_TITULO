@@ -1,12 +1,14 @@
 import React from 'react';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Login from '../pages/Login';
+import PaginaPrincipal from '../pages/PaginaPrincipal';
 
 function RoutesApp() {
   return (
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={<Login />} />
+        <Route exact path="/paginaPrincipal" element={<PaginaPrincipal />} />
         <Route path="*" element={<NotFound/>} />
       </Routes>
       
