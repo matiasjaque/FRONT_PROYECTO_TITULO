@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useState} from 'react'
+import React, { useState} from 'react'
 import '../styles/Login.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import fondo from '../assets/fondo.png';
@@ -99,10 +99,10 @@ function Login() {
                 </Button>
             </Form>
             <div>
-                <Button id="botonOlvideContraseña" variant="primary" type="submit">
+                <Button id="botonOlvideContraseña" variant="primary" type="onClick" href='/recuperarContrasena'>
                     ¿Olvidaste tu contraseña?
                 </Button>
-                <Button id="botonRegistrarse" variant="primary" type="submit">
+                <Button id="botonRegistrarse" variant="primary" type="onclick" href='/registrarse' >
                     ¿No tienes una cuenta? Registrate
                 </Button>
             </div>

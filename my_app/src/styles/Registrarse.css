@@ -1,0 +1,66 @@
+.containerPadre{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+
+.container{
+    background-color: #B0ABA7;
+   
+    
+}
+
+.titulo{
+    position: inherit;
+    color: white;
+    font-size: 60px;
+    font-family: Roboto, sans-serif;    
+    justify-content: center;
+    padding-top: 30px;
+}
+
+.parametros{
+    font-size: 30px;
+    color: white;
+}
+
+#fila{
+    border-bottom: 1px solid white;
+    padding-bottom: 5px;
+    margin-top: 30px;
+}
+
+.botones{
+    display: flex;  
+    text-align: center;
+}
+
+.botonVolver{
+    font-size: 25px;
+    justify-content: center;
+    width: 50%;
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 5px;
+}
+
+.botonVolver{
+    font-size: 25px;
+    justify-content: center;
+    width: 50%;
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 5px;
+}
+
+.botonCrearCuenta{
+    font-size: 25px;
+    justify-content: center;
+    width: 50%;
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 5px;
+}

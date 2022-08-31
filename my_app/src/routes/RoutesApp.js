@@ -2,13 +2,17 @@ import React from 'react';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Login from '../pages/Login';
 import PaginaPrincipal from '../pages/PaginaPrincipal';
+import Registrarse from '../pages/Registrarse';
+import RecuperarContraseña from '../pages/RecuperarContraseña';
 
 function RoutesApp() {
   return (
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={<Login />} />
-        <Route exact path="/paginaPrincipal" element={<PaginaPrincipal />} />
+        <Route path="/paginaPrincipal" element={<PaginaPrincipal />} />
+        <Route path="/registrarse" element={<Registrarse />} />
+        <Route path="/recuperarContrasena" element={<RecuperarContraseña />} />
         <Route path="*" element={<NotFound/>} />
       </Routes>
       

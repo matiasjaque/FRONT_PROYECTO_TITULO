@@ -1,5 +1,7 @@
 import React from 'react'
 import Cookies from 'universal-cookie';
+import Button from 'react-bootstrap/Button';
+
 
 const serverUrl = process.env.REACT_APP_SERVER;
 const conectado = new Cookies();
@@ -9,7 +11,11 @@ const PaginaPrincipal = () => {
     console.log("nombre: " + conectado.get('nombre'));
     console.log("apellido: " + conectado.get('apellido'));
     return (
-    <div>PaginaPrincipal</div>
+    <div>
+      PaginaPrincipal
+      <Button href="/">volver</Button>
+
+    </div>
   )
 }
 
