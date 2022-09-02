@@ -77,6 +77,12 @@ html, body {
     box-shadow: 0 0 50px rgb(0 0 0 / 80%);
 }
 
+.contenedorBotones{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+
 #botonLogin{
     display: flex;
     align-items: center;
@@ -95,6 +101,8 @@ html, body {
 }
 
 #botonOlvideContraseña{   
+    display: flex;
+    align-items: center;
     width: 300px;
     height: 75px;
     font-size: 20px;

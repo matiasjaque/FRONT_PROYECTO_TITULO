@@ -98,7 +98,7 @@ function Login() {
                     Iniciar Sesión
                 </Button>
             </Form>
-            <div>
+            <div className='contenedorBotones'>
                 <Button id="botonOlvideContraseña" variant="primary" type="onClick" href='/recuperarContrasena'>
                     ¿Olvidaste tu contraseña?
                 </Button>

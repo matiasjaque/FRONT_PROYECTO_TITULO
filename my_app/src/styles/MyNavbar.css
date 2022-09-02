@@ -1,0 +1,97 @@
+#navbar{
+    position: relative;
+    height: 100px;
+    width: 100%;
+}
+
+#container{
+    position: absolute;
+    min-width: 100%;
+    height: 100%;
+    font-size: 20px;
+    font-family: roboto, sans-serif;
+    background-color: black;
+}
+
+#titulo{
+    display: flex;
+    margin: 0px 15px;
+    width: 450px;
+    justify-content: center;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 23px;
+    height: 60px;
+    align-items: center;
+    color: white;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+}
+
+#navbarContenedor{
+    color: black;
+}
+
+.botonesNavbar{
+    cursor: pointer;
+    min-width: 220px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 23px;
+    padding: 5px;
+    border-radius: 20px;
+    margin: 0px 15px;
+    height: 60px;
+    color: black;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+}
+
+#homeLink {
+    border-radius: inherit;
+}
+
+#createLink {
+    border-radius: inherit;
+}
+
+#navLink {
+    border-radius: inherit;
+}
+
+#seeLink {
+    border-radius: inherit;
+}
+
+#returnLink {
+    border-radius: inherit;
+}
+
+#iconoHome{
+    font-size: xx-large;
+    color: white;
+}    
+
+#iconoCrearVotacion{
+    color: white;
+    font-size: xx-large;
+}
+
+#iconoMisVotaciones{
+    color: white;
+    font-size: xx-large;
+}
+
+#iconoVerResultados{
+    color: white;
+    font-size: xx-large;
+}
+
+#iconoReturn{
+    color: white;
+    font-size: xx-large;
+}

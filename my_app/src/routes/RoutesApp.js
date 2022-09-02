@@ -4,6 +4,7 @@ import Login from '../pages/Login';
 import PaginaPrincipal from '../pages/PaginaPrincipal';
 import Registrarse from '../pages/Registrarse';
 import RecuperarContraseña from '../pages/RecuperarContraseña';
+import MyNavbar from '../componts/MyNavbar';
 
 function RoutesApp() {
   return (
@@ -13,6 +14,8 @@ function RoutesApp() {
         <Route path="/paginaPrincipal" element={<PaginaPrincipal />} />
         <Route path="/registrarse" element={<Registrarse />} />
         <Route path="/recuperarContrasena" element={<RecuperarContraseña />} />
+        
+        <Route path="/prueba" />
         <Route path="*" element={<NotFound/>} />
       </Routes>
       
