@@ -9,30 +9,12 @@ import Cookies from 'universal-cookie';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
+import Swal from 'sweetalert2';
+
 const serverUrl = process.env.REACT_APP_SERVER;
 const conectado = new Cookies();
 
 function Login() {
-    /* const userRef = useRef();
-    const errRef = useRef(); */
-
-    /* const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [login, setLogin] = useState(false);
-
-    useEffect(() => {
-        userRef.current.focus();
-    }, [])
-
-    useEffect(() => { 
-        setError('');
-    }, [email, password]) */
-
-    /* const [login, setLogin] = useState({
-        email: '',
-        password: '',
-    }); */
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -61,14 +43,24 @@ function Login() {
             conectado.set('id', respuesta.ID,{path:"/paginaPrincipal"});
             conectado.set('nombre',respuesta.NOMBRE,{path:"/paginaPrincipal"})
             conectado.set('apellido',respuesta.APELLIDO_PATERNO,{path:"/paginaPrincipal"})
-            alert("bienvenido " + respuesta.NOMBRE + " " + respuesta.APELLIDO_PATERNO);
-            console.log("aqui llega? " + conectado);
-            window.location.replace("/paginaPrincipal")
+            Swal.fire({title: `Bienvenido  ${respuesta.NOMBRE} ${respuesta.APELLIDO_PATERNO}`,
+                    icon: "success", timer: "3000"})
+            //alert("bienvenido " + respuesta.NOMBRE + " " + respuesta.APELLIDO_PATERNO);
+            //console.log("aqui llega? " + conectado);
+            setTimeout(function () {
+                window.location.replace("/paginaPrincipal")               
+            }, 3000);
             document.getElementById('email').value = ''
         })
         .catch(error=>{
-            alert(error.response.data.message);
-            console.log(error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: (error.response.data.message),
+                timer: 3000
+              })/* 
+            alert();
+            console.log(error); */
         })
             
     }

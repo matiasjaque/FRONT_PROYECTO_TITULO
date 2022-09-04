@@ -8,6 +8,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 
+import validator from 'validator'
+
 import '../styles/Registrarse.css';
 
 
@@ -23,36 +25,43 @@ const Registrarse = () => {
 
 
     const crearUsuario =  async () =>{
-        if (nombreUsuario!=='' && apellidoPaterno !=='' && apellidoMaterno!=='' && email !=='' && password!=='') {
-            console.log(nombreUsuario, apellidoPaterno, apellidoMaterno, email, password)
-            await axios({
-                method: 'post',
-                url:serverUrl + "/usuarioCreate", 
-                headers: {'Content-Type': 'application/json'},
-            params:
-                {nombre: nombreUsuario,
-                apellidoPaterno: apellidoPaterno,
-                apellidoMaterno: apellidoMaterno,
-                email: email,
-                password: password}
-            }).then(response=>{
-                console.log("la data funciona " + response);
-                //var respuesta = response.data;
-                
-                Swal.fire({title: "Registrarse", text:"La cuenta ha sido creada con éxito",
-                icon: "success", timer: "3000"})
-                setTimeout(function () {
-                    window.location.replace("/")               
-                }, 3000);
-            })
-            .catch(error=>{
-                alert(error.response.data.message);
-                console.log(error);
-            })
+        if (validator.isEmail(email)){
+            
+            if (nombreUsuario!=='' && apellidoPaterno !=='' && apellidoMaterno!=='' && email !=='' && password!=='') {
+                console.log(nombreUsuario, apellidoPaterno, apellidoMaterno, email, password)
+                await axios({
+                    method: 'post',
+                    url:serverUrl + "/usuarioCreate", 
+                    headers: {'Content-Type': 'application/json'},
+                params:
+                    {nombre: nombreUsuario,
+                    apellidoPaterno: apellidoPaterno,
+                    apellidoMaterno: apellidoMaterno,
+                    email: email,
+                    password: password}
+                }).then(response=>{
+                    console.log("la data funciona " + response);
+                    //var respuesta = response.data;
+                    
+                    Swal.fire({title: "Registrarse", text:"La cuenta ha sido creada con éxito",
+                    icon: "success", timer: "3000"})
+                    setTimeout(function () {
+                        window.location.replace("/")               
+                    }, 3000);
+                })
+                .catch(error=>{
+                    alert(error.response.data.message);
+                    console.log(error);
+                })
+            }
+            else{
+                alert('Debe completar todos los parametros para crear una nueva cuenta!');
+            }
         }
         else{
-            alert('Debe completar todos los parametros para crear una nueva cuenta!');
+            alert('El correo ingresado no es valido');
         }
+    
 
         
             
@@ -88,7 +97,7 @@ const Registrarse = () => {
 
                             <Form.Group className="mb-3" id="fila">
                                 <Form.Label>EMAIL</Form.Label>
-                                <Form.Control className='formEmailInput' type="email" placeholder="Ingrese su email" onChange={(
+                                <Form.Control type="email" placeholder="Ingrese su email" onChange={(
                                     event => setEmail(event.target.value)
                                 )}/>
                             </Form.Group>

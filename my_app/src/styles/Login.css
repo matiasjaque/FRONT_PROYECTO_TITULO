@@ -34,7 +34,7 @@ html, body {
 }
 
 .titulo{
-    position: inherit;
+    position: sticky;
     top: 0px;
     color: white;
     font-size: 60px;

@@ -22,7 +22,7 @@ function cerrarSesion(){
 const MyNavbar = () => {
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" id="navbar" variant="dark">
-      <Container id="container">
+      <Container id="containerNav">
         <Navbar.Brand id='titulo' href="/">SOFTWARE DE VOTACIÓN ELECTRONICA</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">

@@ -15,7 +15,7 @@ function RoutesApp() {
         <Route path="/registrarse" element={<Registrarse />} />
         <Route path="/recuperarContrasena" element={<RecuperarContraseña />} />
         
-        <Route path="/prueba" />
+        <Route path="/prueba" element={ <MyNavbar/>}/>
         <Route path="*" element={<NotFound/>} />
       </Routes>
       
