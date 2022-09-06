@@ -44,12 +44,12 @@ function Login() {
             conectado.set('nombre',respuesta.NOMBRE,{path:"/paginaPrincipal"})
             conectado.set('apellido',respuesta.APELLIDO_PATERNO,{path:"/paginaPrincipal"})
             Swal.fire({title: `Bienvenido  ${respuesta.NOMBRE} ${respuesta.APELLIDO_PATERNO}`,
-                    icon: "success", timer: "3000"})
+                    icon: "success", timer: "2500"})
             //alert("bienvenido " + respuesta.NOMBRE + " " + respuesta.APELLIDO_PATERNO);
             //console.log("aqui llega? " + conectado);
             setTimeout(function () {
                 window.location.replace("/paginaPrincipal")               
-            }, 3000);
+            }, 2500);
             document.getElementById('email').value = ''
         })
         .catch(error=>{

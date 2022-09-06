@@ -56,13 +56,11 @@ const PaginaPrincipal = () => {
     return (
 
       <div id='contenedorPrincipalPagina'>
-        <MyNavbar/>
+        <MyNavbar activeKey='/paginaPrincipal'/>
         <div id='contenedorSecundario'>
           <Votacion votaciones={votaciones}/>
         </div>
           
-        
-
       </div>
   )
 }
