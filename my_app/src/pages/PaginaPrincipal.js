@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'universal-cookie';
-import Button from 'react-bootstrap/Button';
 
 import MyNavbar from '../componts/MyNavbar';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+
 import Swal from 'sweetalert2';
 
 import '../styles/PaginaPrincipal.css'
