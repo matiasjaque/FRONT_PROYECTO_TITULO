@@ -87,3 +87,54 @@
     border-radius: 20px;
     margin: 20px 0px;
 }
+
+#form{
+    padding: 25px;
+    display: grid;
+    grid-gap: 15px;
+}
+
+.filas{
+    padding: 0;
+    margin: 0;
+    
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 10px;
+}
+
+.filas2{
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.columnas{
+    padding: 0;
+    margin: 0;
+}
+
+#inputPreg{
+    width: 90%;
+    margin-bottom: 15px;
+    font-size: 22px;
+    min-height: 50px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+
+#inputResp{
+    width: 90%;
+    font-size: 20px;
+    min-height: 45px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+}
+
+#iconoCerrar{
+    font-size: xx-large;
+    color: red;
+    cursor: pointer;
+}
