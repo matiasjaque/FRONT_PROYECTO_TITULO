@@ -16,6 +16,10 @@ const conectado = new Cookies();
 
 var idUsuario = conectado.get('id');
 
+conectado.set('id', idUsuario,{path:"/crearVotacion"});
+
+console.log(idUsuario);
+
 const PaginaPrincipal = () => {
 
   const [votaciones, setVotaciones] = useState([]);
