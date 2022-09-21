@@ -16,7 +16,7 @@ const conectado = new Cookies();
 
 var idUsuario = conectado.get('id');
 
-conectado.set('id', idUsuario,{path:"/crearVotacion"});
+
 
 console.log(idUsuario);
 
@@ -53,6 +53,7 @@ const PaginaPrincipal = () => {
     console.log("id: " + conectado.get('id'));
     console.log("nombre: " + conectado.get('nombre'));
     console.log("apellido: " + conectado.get('apellido'));
+    console.log(conectado)
     
     return (
 

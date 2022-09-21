@@ -6,6 +6,7 @@ import Registrarse from '../pages/Registrarse';
 import RecuperarContraseña from '../pages/RecuperarContraseña';
 import MyNavbar from '../componts/MyNavbar';
 import CrearVotacion from '../pages/CrearVotacion';
+import MisVotaciones from '../pages/MisVotaciones';
 
 function RoutesApp() {
   return (
@@ -16,6 +17,7 @@ function RoutesApp() {
         <Route path="/registrarse" element={<Registrarse />} />
         <Route path="/recuperarContrasena" element={<RecuperarContraseña />} />
         <Route path="/crearVotacion" element={<CrearVotacion />} />
+        <Route path="/misVotaciones" element={<MisVotaciones />} />
         <Route path="/prueba" element={ <MyNavbar/>}/>
         <Route path="*" element={<NotFound/>} />
       </Routes>

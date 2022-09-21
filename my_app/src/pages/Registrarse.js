@@ -8,6 +8,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 
+import fondo from '../assets/fondo.png';
+
 import validator from 'validator'
 
 import '../styles/Registrarse.css';
@@ -23,8 +25,18 @@ const Registrarse = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const imagenFondo = {
+        backgroundImage: `url(${fondo})`,
+        backgroundPosition: 'center center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+        backgroundSize: 'cover',
+        height: '100vh',
+        //width: '100vw'
+      };
 
     const crearUsuario =  async () =>{
+        
         if (validator.isEmail(email)){
             
             if (nombreUsuario!=='' && apellidoPaterno !=='' && apellidoMaterno!=='' && email !=='' && password!=='') {
@@ -68,41 +80,41 @@ const Registrarse = () => {
     }
 
     return (
-        <div className="containerPadre">
+        <div style={imagenFondo} className="containerPadre">
             <Container className="container">
                 <Col lg={12}>
-                    <Row  className="titulo">REGISTRARSE</Row>
-                    <Row className="parametros">
-                        <Form>
-                            <Form.Group className="mb-3" controlId="text" id="fila">
+                    <Row  className="tituloRegistrarse">REGISTRARSE</Row>
+                    <Row className="parametrosRec">
+                        <Form id='formRec'>
+                            <Form.Group className="mb-3" controlId="text" id="filaRec">
                                 <Form.Label>NOMBRE</Form.Label>
                                 <Form.Control type="text" placeholder="Ingrese su nombre" onChange={(
                                     event => setNombreUsuario(event.target.value)
                                 )}/>
                             </Form.Group>
 
-                            <Form.Group className="mb-3" controlId="text" id="fila">
+                            <Form.Group className="mb-3" controlId="text" id="filaRec">
                                 <Form.Label>APELLIDO PATERNO</Form.Label>
                                 <Form.Control type="text" placeholder="Ingrese su apellido paterno" onChange={(
                                     event => setApellidoPaterno(event.target.value)
                                 )}/>
                             </Form.Group>
 
-                            <Form.Group className="mb-3" controlId="text" id="fila">
+                            <Form.Group className="mb-3" controlId="text" id="filaRec">
                                 <Form.Label>APELLIDO MATERNO</Form.Label>
                                 <Form.Control type="text" placeholder="Ingrese su apellido materno" onChange={(
                                     event => setApellidoMaterno(event.target.value)
                                 )}/>
                             </Form.Group>
 
-                            <Form.Group className="mb-3" id="fila">
+                            <Form.Group className="mb-3" id="filaRec">
                                 <Form.Label>EMAIL</Form.Label>
                                 <Form.Control type="email" placeholder="Ingrese su email" onChange={(
                                     event => setEmail(event.target.value)
                                 )}/>
                             </Form.Group>
 
-                            <Form.Group className="mb-3" controlId="text" id="fila">
+                            <Form.Group className="mb-3" controlId="text" id="filaRec">
                                 <Form.Label>PASSWORD</Form.Label>
                                 <Form.Control type="text" placeholder="Ingrese su contraseña" onChange={(
                                     event => setPassword(event.target.value)

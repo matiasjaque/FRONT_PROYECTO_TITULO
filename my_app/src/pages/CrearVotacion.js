@@ -24,7 +24,7 @@ const conectado = new Cookies();
 var idUsuario = conectado.get('id');
 
 
-const CrearVotaciones = (props) => {
+const CrearVotaciones = () => {
   
 
   const [tituloVotacion, setTituloVotacion] = useState('');
@@ -38,15 +38,13 @@ const CrearVotaciones = (props) => {
   const [preguntas, setPreguntas] = useState([]);
   var preguntasDemo = [];
   var respuestasDemo = [];
+
   
   var idRespuesta = 0;
 
   const [idResp, setIdResp] = useState(0)
   const [idPreg, setIdPreg] = useState(0)
 
-  //var prueba = ['a', 'b'];
-
-  //const [kk, setKk] = useState(['uno', 'dos', 'tres']);
 
   const [datosVotacion, setDatosVotacion] = useState(false);
 
@@ -55,6 +53,13 @@ const CrearVotaciones = (props) => {
     actualizarIdVotacion();
     actualizarIdPreguntas();
   },[]);
+
+  
+  console.log("id: " + conectado.get('id'));
+  console.log("nombre: " + conectado.get('nombre'));
+  console.log("apellido: " + conectado.get('apellido'));
+  console.log(conectado)
+
 
 
   const actualizarIdVotacion = async () =>{
@@ -155,6 +160,7 @@ const CrearVotaciones = (props) => {
       setPreguntas(preguntasDemo);
       setRespuestas(respuestasDemo);
 
+      //idPreguntaFinal = preguntas[preguntas.length-1].id;
       setDatosVotacion(true);/* 
       console.log(datosVotacion);
       console.log('preguntas de abajo ');
@@ -325,10 +331,11 @@ const CrearVotaciones = (props) => {
     setPreguntas(newPreguntas)
 
     //setCantidadPreg(cantidadPreg + 1);
-    setCantidadPreg( (cantidadPreg + 1) );
+    var newCantPreg = Number(cantidadPreg) + 1;
+    setCantidadPreg( newCantPreg );
     console.log(cantidadPreg)
 
-    document.getElementById('cantPreg').value = cantidadPreg + 1;
+    document.getElementById('cantPreg').value = newCantPreg;
 
     setDatosVotacion(true);
     console.log('termino')
@@ -548,6 +555,8 @@ const CrearVotaciones = (props) => {
   console.log(preguntas)
   console.log('resp')
   console.log(respuestas)
+  console.log('cantidadPreg')
+  console.log(cantidadPreg)
 /*
   
   console.log('idResp')
@@ -559,8 +568,7 @@ const CrearVotaciones = (props) => {
   console.log('tituloVotacion')
   console.log(tituloVotacion)
 
-  console.log('cantidadPreg')
-  console.log(cantidadPreg)
+ 
 
   console.log('cantidadResp')
   console.log(cantidadResp) */
@@ -628,9 +636,8 @@ const CrearVotaciones = (props) => {
                 {preguntas.map((element) => (
                   <div id='contenedorForm'>
                   <Form id='form'>
-                    <Row className='filas'>
-                      <Col sm md lg ={11} className='columnas'>
-                        <h1>{element.id}</h1>
+                    <Row id='filasFormCrear'>
+                      <Col sm md lg ={11} id='columnaTituloPreg'>
                         
                         <Form.Control id='inputPreg' value = {element.tituloPregunta} type="text" placeholder="Ingresa el titulo de la pregunta" onChange={(e) =>{
                           let nuevoTituloPreg = e.target.value;
@@ -650,8 +657,8 @@ const CrearVotaciones = (props) => {
                     <div id="contenedorRespuestas">
                       {element.respuestas.map((elem) =>(
                         
-                        <Row className='filas2'>
-                          <Col sm md lg ={11} className='columnas'>
+                        <Row id='filasFormCrear2'>
+                          <Col sm md lg ={11} className='columnas' id='columnaTituloPreg'>
                             <Form.Control id='inputResp' value={elem.tituloRespuesta} type="text" placeholder="Ingrese una respuesta" onChange={(e) =>{
                               let nuevoTituloResp = e.target.value;
                               updateTitulosResp(elem.idRespuesta, elem.idPregunta, nuevoTituloResp);
@@ -665,18 +672,33 @@ const CrearVotaciones = (props) => {
                         ))}
                     </div>
 
-                    <Button variant="primary" onClick={() => agregarRespuesta(element.id)}>
-                      Agregar Respuesta
-                    </Button>
+                    <div id='contenedorBotonesCrear'>
+                      <Button variant="primary" id='agregarRespCrear' onClick={() => agregarRespuesta(element.id)}>
+                        Agregar Respuesta
+                      </Button>
 
-                    <Button variant="primary" onClick={() => agregarPregunta(element.id)}>
-                      Agregar Pregunta
-                    </Button>
-                    
+                      <Button variant="primary" id='agregarPregCrear' onClick={() => agregarPregunta(element.id)}>
+                        Agregar Pregunta
+                      </Button>
+
+                    </div>
+                          
                 </Form>
-                  <Button variant="primary" onClick={() => crearVotacion(element.id)}>
-                    Finalizar Votacion
-                  </Button>
+
+
+                {element.id === preguntas[preguntas.length-1].id ?
+                  <div id='contenedorBotonFinal'>
+                     <Button variant="primary" id='botonFinal' onClick={() => crearVotacion(element.id)}>
+                      Finalizar Votacion
+                    </Button>
+                  </div>
+                  :
+                  <></>
+              
+              }
+
+
+                  
                 
             </div>
                 ))}
@@ -688,41 +710,6 @@ const CrearVotaciones = (props) => {
               no
             </div>
           } 
-          {/* <div id='contenedorVotacion'>
-            <div id='contenedorForm'>
-              
-              
-              <Form>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  
-                  <Form.Control type="text" placeholder="Ingresa el titulo de la votación" onChange={(e) =>{
-                    setTituloVotacion(e.target.value);
-                  }}/>
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  
-                  <Form.Control type="text" placeholder="Ingresa el titulo de la pregunta" onChange={(e) =>{
-                    let nuevaPregunta = e.target.value;
-                    setPreguntaVotacion([...preguntaVotacion, nuevaPregunta]);
-                  }}/>
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  
-                  <Form.Control type="text" placeholder="Ingresa la cantidad de respuestas que desea para esta pregunta" onChange={(e) =>{
-                    let cantidadRespuestas = e.target.value;
-                    setCantidadDeRespuestas([...cantidadDeRespuestas, cantidadRespuestas]);
-                  }}/>
-                </Form.Group>
-                
-                <Button variant="primary" type="submit">
-                  Submit
-                </Button>
-              </Form>
-              
-            </div>
-          </div> */}
         </div>
           
       </div>

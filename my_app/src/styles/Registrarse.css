@@ -3,34 +3,43 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: white;
 }
 
 
 .container{
-    background-color: #B0ABA7;
-   
-    
+    background-color: #AFB2B7;
+    border-radius: 50px;
+    max-height: 100vh;
 }
 
-.titulo{
+.tituloRegistrarse{
     position: inherit;
     color: white;
-    font-size: 60px;
+    font-size: 45px;
     font-family: Roboto, sans-serif;    
     justify-content: center;
-    padding-top: 30px;
+    padding-top: 15px;
 }
 
-.parametros{
-    font-size: 30px;
+.parametrosRec{
+    font-size: 22px;
     color: white;
+    padding: 0px;
+    margin: 0px;
 }
 
-#fila{
-    border-bottom: 1px solid white;
-    padding-bottom: 5px;
-    margin-top: 30px;
+#formRec{
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#filaRec{
+    padding: 0px;
+    margin: 0px;
+    width: 70%;
 }
 
 .botones{

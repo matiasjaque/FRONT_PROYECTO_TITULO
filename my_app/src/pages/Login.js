@@ -40,9 +40,9 @@ function Login() {
         .then(response=>{
             console.log("la data funciona " + response.data);
             var respuesta = response.data;
-            conectado.set('id', respuesta.ID,{path:"/paginaPrincipal"});
-            conectado.set('nombre',respuesta.NOMBRE,{path:"/paginaPrincipal"})
-            conectado.set('apellido',respuesta.APELLIDO_PATERNO,{path:"/paginaPrincipal"})
+            conectado.set('id', respuesta.ID,{path:"/"});
+            conectado.set('nombre',respuesta.NOMBRE,{path:"/"})
+            conectado.set('apellido',respuesta.APELLIDO_PATERNO,{path:"/"})
             Swal.fire({title: `Bienvenido  ${respuesta.NOMBRE} ${respuesta.APELLIDO_PATERNO}`,
                     icon: "success", timer: "2500"})
             //alert("bienvenido " + respuesta.NOMBRE + " " + respuesta.APELLIDO_PATERNO);

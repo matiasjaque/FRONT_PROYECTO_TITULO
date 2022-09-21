@@ -49,7 +49,7 @@ const MyNavbar = (props) => {
               <Nav.Link href="/crearVotacion" id='createLink' /* onClick={() => setModalShow(true)} */><CgAdd id='iconoCrearVotacion'/> Crear Votación </Nav.Link>
             </Nav.Item> 
             <Nav.Item className="botonesNavbar">
-              <Nav.Link href="#pricingb" id='navLink'><BsArchive id='iconoMisVotaciones'/> Mis Votaciones</Nav.Link>
+              <Nav.Link href="/misVotaciones" id='navLink'><BsArchive id='iconoMisVotaciones'/> Mis Votaciones</Nav.Link>
             </Nav.Item> 
             <Nav.Item className="botonesNavbar">
               <Nav.Link href="#pricinga" id='seeLink' ><GiEyeTarget id='iconoVerResultados'/> Visualizar Resultados</Nav.Link>

@@ -1,0 +1,96 @@
+#contenedorMisVotaciones{
+    background-color: #020202;
+    max-width: 100vw;
+    max-height: 100vh;
+    min-height: 100vh;
+}
+
+#contenedorMisVotacionesSecundario{
+    background: #E5E4E0;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#tituloMisVotaciones{
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+    font-family: 'ROBOTO', sans-serif;
+    margin-top: auto;
+    margin-bottom: 0px;
+    
+}
+
+#contenedorMisVotacionesData{
+    background: #020202;
+    min-height: 70vh;
+    max-height: 70vh;
+    width: 80%;
+    margin: auto;
+    overflow-y: scroll;
+}
+
+#tabla{
+    font-size: 20px;
+    font-family: Roboto, sans-serif;
+    
+}
+
+.columnaTablaTitulo{
+    width: 35%;
+    font-weight: bold;
+    text-align: center;
+    font-size: 22px;
+    
+}
+
+.columnaTablaFunciones{
+    width: 15%;
+}
+
+.columnaTablaVisualizarResult{
+    width: 20%;
+}
+
+.botonesTabla{
+    background: none;
+    color: white;
+    font-weight: 700;
+    border: none;
+}
+
+#iconoEditar{
+    color: white;
+    font-size: xx-large;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+#iconoEliminar{
+    color: white;
+    font-size: xx-large;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+#iconoCompartir{
+    color: white;
+    font-size: xx-large;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+#iconoVisualizarResultado{
+    color: white;
+    font-size: xx-large;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+
+
+
+
+

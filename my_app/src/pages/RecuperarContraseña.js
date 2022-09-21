@@ -8,10 +8,22 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 
+import fondo from '../assets/fondo.png';
+
 import '../styles/RecuperarContraseña.css';
 
 
 const serverUrl = process.env.REACT_APP_SERVER;
+
+const imagenFondo = {
+    backgroundImage: `url(${fondo})`,
+    backgroundPosition: 'center center',
+    backgroundRepeat: 'no-repeat',
+    backgroundAttachment: 'fixed',
+    backgroundSize: 'cover',
+    height: '100vh',
+    //width: '100vw'
+  };
 
 
 const RecuperarContraseña = () => {
@@ -54,21 +66,21 @@ const RecuperarContraseña = () => {
     }
 
     return (
-        <div className="containerPadre">
+        <div style={imagenFondo} className="containerPadre">
             <Container className="container">
                 <Col lg={12}>
                     <Row  className="titulo">RESTABLEZCA SU CONTRASEÑA</Row>
                     <Row className="parametros">
-                        <Form>
+                        <Form id='formRecContra'>
 
-                            <Form.Group className="mb-3" id="fila">
+                            <Form.Group className="mb-3" id="filaRecuperarContra">
                                 <Form.Label>EMAIL</Form.Label>
                                 <Form.Control className='formEmailInput' type="email" placeholder="Ingrese su email" onChange={(
                                     event => setEmail(event.target.value)
                                 )}/>
                             </Form.Group>
 
-                            <Form.Group className="mb-3" controlId="text" id="fila">
+                            <Form.Group className="mb-3" controlId="text" id="filaRecuperarContra">
                                 <Form.Label>PASSWORD</Form.Label>
                                 <Form.Control type="text" placeholder="Ingrese su nueva contraseña" onChange={(
                                     event => setPassword(event.target.value)
