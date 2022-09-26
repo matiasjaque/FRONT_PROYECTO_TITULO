@@ -2,7 +2,6 @@ import React, { useState} from 'react'
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import ModalCrearVotacion from '../componts/ModalCrearVotacion';
 import '../styles/MyNavbar.css';
 
 import Cookies from 'universal-cookie';
@@ -62,10 +61,7 @@ const MyNavbar = (props) => {
       </Container>
     </Navbar>
 
-    {/* <ModalCrearVotacion 
-      show={modalShow}
-      onHide={() => setModalShow(false)}
-    /> */}
+    
     </div>
     
   );

@@ -45,8 +45,6 @@ function Login() {
             conectado.set('apellido',respuesta.APELLIDO_PATERNO,{path:"/"})
             Swal.fire({title: `Bienvenido  ${respuesta.NOMBRE} ${respuesta.APELLIDO_PATERNO}`,
                     icon: "success", timer: "2500"})
-            //alert("bienvenido " + respuesta.NOMBRE + " " + respuesta.APELLIDO_PATERNO);
-            //console.log("aqui llega? " + conectado);
             setTimeout(function () {
                 window.location.replace("/paginaPrincipal")               
             }, 2500);

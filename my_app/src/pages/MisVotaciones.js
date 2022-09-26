@@ -4,6 +4,9 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+
+import ModalCompartir from '../componts/ModalCompartir';
+
 import MyNavbar from '../componts/MyNavbar';
 
 import Table from 'react-bootstrap/Table';
@@ -36,6 +39,12 @@ const MisVotaciones = () => {
     const [preguntas, setPreguntas] = useState([]);
 
     const [respuestas, setRespuestas] = useState([]);
+
+    const [modalShow, setModalShow] = React.useState(false);
+
+    const [enlace, setEnlace] = useState('');
+
+
 
     useEffect(() => {
         votacionesGet();
@@ -200,7 +209,12 @@ const MisVotaciones = () => {
         });
     };
 
+    const handleModal = (idVot) => {
+        setEnlace(`http://localhost:3000/prueba/${idVot}`);
+        setModalShow(true);
+    }
 
+    
 
       
 
@@ -234,8 +248,8 @@ const MisVotaciones = () => {
                                     </button> 
                                 </th>
                                 <th className='columnaTablaFunciones'>
-                                    <MdShare id='iconoCompartir' onClick= {() => alert('click compartir')}/>
-                                    <button className='botonesTabla' onClick= {() => alert('click compartir')}>
+                                    <MdShare id='iconoCompartir' onClick= {() => handleModal(e.id_votacion)}/>
+                                    <button className='botonesTabla' onClick={() => handleModal(e.id_votacion)}>
                                         Compartir
                                     </button> 
                                 </th>
@@ -256,6 +270,11 @@ const MisVotaciones = () => {
             </div>
             
         </div>
+        <ModalCompartir 
+            show={modalShow}
+            onHide={() => setModalShow(false)}
+            enlace= {enlace}
+        /> 
     
     </div>
   )

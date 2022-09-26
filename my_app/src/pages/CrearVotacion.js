@@ -549,6 +549,12 @@ const CrearVotaciones = () => {
 
     setDatosVotacion(true)
 
+    Swal.fire({title: 'Votación creada con éxito',
+    icon: "success", timer: "2500"})
+    setTimeout(function () {
+    window.location.replace("/paginaPrincipal")               
+    }, 2500);
+
   }
 
    console.log('preg')
