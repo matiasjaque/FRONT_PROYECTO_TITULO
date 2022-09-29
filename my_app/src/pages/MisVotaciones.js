@@ -1,11 +1,9 @@
 import React, { useEffect, useState} from 'react'
-import Button from 'react-bootstrap/Button';
-//import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+
 
 
 import ModalCompartir from '../componts/ModalCompartir';
+import ModalResultados from '../componts/ModalResultados';
 
 import MyNavbar from '../componts/MyNavbar';
 
@@ -40,9 +38,13 @@ const MisVotaciones = () => {
 
     const [respuestas, setRespuestas] = useState([]);
 
-    const [modalShow, setModalShow] = React.useState(false);
+    const [modalShow, setModalShow] = useState(false);
+    const [modalResultShow, setModalResultShow] = useState(false);
 
     const [enlace, setEnlace] = useState('');
+
+    const [tituloVotacionResult, setTituloVotacionResult] = useState('');
+    const [pregYresp, serPregYresp] = useState([]);
 
 
 
@@ -51,12 +53,6 @@ const MisVotaciones = () => {
         respuestasGet();
         preguntasGet();
       },[]);
-
-
-    console.log("id: " + conectado.get('id'));
-    console.log("nombre: " + conectado.get('nombre'));
-    console.log("apellido: " + conectado.get('apellido'));
-
 
     const votacionesGet = async () =>{
     await axios.get(serverUrl + "/votaciones", {params:{idUsuario: idUsuario}})
@@ -210,9 +206,92 @@ const MisVotaciones = () => {
     };
 
     const handleModal = (idVot) => {
-        setEnlace(`http://localhost:3000/prueba/${idVot}`);
+        setEnlace(`http://localhost:3000/votar/${idVot}`);
         setModalShow(true);
     }
+
+    const handleModalResult = (idVot, tituloVotacion) => {
+        setEnlace(`http://localhost:3000/votar/${idVot}`);
+        setTituloVotacionResult(tituloVotacion)
+        preguntasConRespuestasGet(idVot)
+        setModalResultShow(true);
+    }
+
+    const preguntasConRespuestasGet = async (id) =>{
+        await axios.get(serverUrl + "/preguntasConRespuestas", {params:{idVotacion: id}})
+            .then(response=>{
+            //setPreguntas(response.data);
+            var dataPregYresp = response.data;
+
+            
+            const newPregYresp = [];
+            dataPregYresp.forEach( (k) => {
+                if (newPregYresp.length === 0) {
+                    let newK = {
+                        idPregunta: k.ID_PREGUNTA,
+                        tituloPreg: k.TITULO,
+                    }
+                    newPregYresp.push(newK);
+                }
+                else{
+                    let estaLaPreg = 0;
+                    for (let i = 0; i < newPregYresp.length; i++) {
+                        if (newPregYresp[i].idPregunta === k.ID_PREGUNTA){
+                            estaLaPreg++;
+                        }
+                    }
+                    if (estaLaPreg === 0) {
+                        
+                        let newK = {
+                            idPregunta: k.ID_PREGUNTA,
+                            tituloPreg: k.TITULO,
+                            respuesta: [],
+                        }
+                        newPregYresp.push(newK);
+                    }
+                }
+            })
+
+            newPregYresp.forEach ( (k) => {
+                const newResp = [];
+                for (let i = 0; i < dataPregYresp.length; i++) {
+                    if (k.idPregunta === dataPregYresp[i].ID_PREGUNTA){
+                        let resp = {
+                                        idPreg: dataPregYresp[i].ID_PREGUNTA,
+                                        idResp: dataPregYresp[i].ID_RESPUESTA,
+                                        respuesta: dataPregYresp[i].RESPUESTA,
+                                        votos: dataPregYresp[i].VOTOS,
+                                        isCheck: false,
+                                    }
+                        newResp.push(resp)
+                    }
+                }
+                for (let j = 0; j < newPregYresp.length; j++) {
+                    if(newPregYresp[j].idPregunta === newResp[0].idPreg) {
+                        newPregYresp[j].respuesta = newResp
+                    }   
+                }
+                
+                console.log("newPregYresp3 ")
+                console.log(newPregYresp)
+
+            })
+
+            
+
+
+            //setLoading(true);
+            serPregYresp(newPregYresp);
+        })
+        .catch (error=> {
+            serPregYresp([]);
+            Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: error.response.data.message,
+            })
+        })
+    };
 
     
 
@@ -254,8 +333,8 @@ const MisVotaciones = () => {
                                     </button> 
                                 </th>
                                 <th className='botonesTablaVisualizarResult'>
-                                    <MdPieChart id='iconoVisualizarResultado' onClick= {() => alert('click visualizar resultados')}/>
-                                    <button className='botonesTabla' onClick= {() => alert('click visualizar resultados')}>
+                                    <MdPieChart id='iconoVisualizarResultado' onClick= {() => handleModalResult(e.id_votacion, e.titulo)}/>
+                                    <button className='botonesTabla' onClick= {() => handleModalResult(e.id_votacion, e.titulo)}>
                                         Visualizar resultados
                                     </button> 
                                 </th>
@@ -275,6 +354,14 @@ const MisVotaciones = () => {
             onHide={() => setModalShow(false)}
             enlace= {enlace}
         /> 
+
+        <ModalResultados
+            show={modalResultShow}
+            onHide={() => setModalResultShow(false)}
+            enlace= {enlace}
+            tituloVotacion = {tituloVotacionResult}
+            data={pregYresp}
+        />
     
     </div>
   )

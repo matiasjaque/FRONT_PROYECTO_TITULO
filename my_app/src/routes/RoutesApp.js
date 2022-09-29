@@ -4,11 +4,11 @@ import Login from '../pages/Login';
 import PaginaPrincipal from '../pages/PaginaPrincipal';
 import Registrarse from '../pages/Registrarse';
 import RecuperarContraseña from '../pages/RecuperarContraseña';
-import MyNavbar from '../componts/MyNavbar';
 import CrearVotacion from '../pages/CrearVotacion';
 import MisVotaciones from '../pages/MisVotaciones';
 import Votar from '../pages/Votar';
-import Votar2 from '../pages/Votar2';
+import ResultadosVotacion from '../pages/ResultadosVotacion';
+import Grafico from '../componts/Grafico';
 
 function RoutesApp() {
   return (
@@ -20,8 +20,9 @@ function RoutesApp() {
         <Route path="/recuperarContrasena" element={<RecuperarContraseña />} />
         <Route path="/crearVotacion" element={<CrearVotacion />} />
         <Route path="/misVotaciones" element={<MisVotaciones />} />
-        <Route path="/prueba/:id" element={ <Votar/>}/>
-        <Route path="/prueba2" element={ <Votar2/>}/>
+        <Route path="/resultadosVotacion" element={<ResultadosVotacion/>} />
+        <Route path="/votar/:id" element={ <Votar/>}/>
+        <Route path="/prueba2" element={ <Grafico/>}/>
         <Route path="*" element={<NotFound/>} />
       </Routes>
       
