@@ -1,5 +1,5 @@
 #contenedorPadreVotar {
-    background: yellow;
+    background: #E5E4E0;
     width: 100%;
     height: 100vh;
     display: flex;
@@ -7,7 +7,7 @@
 }
 
 #contenedorSecundarioVotar{
-    background: yellowgreen;
+    background: black;
     width: 60%;
     height: 90vh; 
     margin: auto;
@@ -26,6 +26,7 @@
     align-items: center;
     width: 100%;
     text-align: center;
+    color: white;
 }
 
 #tituloVotar{
@@ -36,43 +37,42 @@
 
 #filaCuerpoVotar{
     width: 95%;
-    background: aliceblue;
+    background: #212529;
     height: 75%;
     margin: auto;
     margin-top: 0px;
+    border-radius: 20px;
     
     overflow-y: scroll;
 }
 
 #contenedorVotacionVotar{
-    background: red;
+    background: #212529;
     width: 90%;
     height: 90%;
-    margin: 10px auto;
-    border-radius: 40px;
+    margin: 15px auto;
+    color: white;
+    
+    border-bottom: 1px solid white;
 
 }
 
 #tituloPregVotacion{
-    background: purple;
     justify-content: center;
     width: 100%;
-    height: 10%;
+    height: 20%;
     display: flex;
     align-items: center;
 }
 
 #contenedorRespVotar{
-    background: yellow;
     width: 80%;
     height: 80%;
     margin: auto;
-    overflow-y: scroll;
 }
 
 #contenedorCheck{
     font-weight: bold;
-    background: green;
     width: 85%;
     height: 20%;
     margin: 10px auto;
@@ -85,7 +85,6 @@
 }
 
 #contenedorFinalizarVotacion{
-    background: gray;
     width: 100%;
     height: 14%;
     display: flex;
@@ -95,6 +94,8 @@
 }
 
 #finalizarVotacion{
+    background-color: white;
+    color: black;
     width: 30%;
     margin-right: 20px;
     font-size: 28px;

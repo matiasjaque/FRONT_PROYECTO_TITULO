@@ -19,7 +19,8 @@ const serverUrl = process.env.REACT_APP_SERVER;
 
 const Votar = () => {
     const {id} = useParams();
-    //console.log(id)
+    const {estadoVotacion} = useParams();
+    //console.log(estadoVotacion)
     
     const [votacion, setVotacion] = useState('');
     const [preguntas, setPreguntas] = useState([]);
@@ -214,7 +215,7 @@ const Votar = () => {
             }
 
             alert("su votacion fue realizada con exito")
-            window.location.replace('/resultadosVotacion')
+            window.location.replace(`/resultadosVotacion/${estadoVotacion}`)
         }
 
         else{

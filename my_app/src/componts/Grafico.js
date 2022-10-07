@@ -16,6 +16,8 @@ const Grafico = (props) => {
     const [votos, setVotos] = useState([]);
     const [backgroundData, setBackgroundData] = useState([]);
 
+
+
     useEffect( () => {
         var getRespuestas = [];
         var getVotos = [];
@@ -46,8 +48,8 @@ const Grafico = (props) => {
             totalVotos += getVotos[k]
         }
 
-        console.log('totalVotos')
-        console.log(totalVotos)
+        /* console.log('totalVotos')
+        console.log(totalVotos) */
 
 
         for( let l in getVotos){
@@ -62,8 +64,8 @@ const Grafico = (props) => {
                 votosPorcentaje.push(porcentaje.toFixed(1)  )
             }
         }
-        console.log('votosPorcentaje')
-        console.log(votosPorcentaje)
+        /* console.log('votosPorcentaje')
+        console.log(votosPorcentaje) */
 
         setRespuestas(getRespuestas)
         setVotos(votosPorcentaje)
@@ -71,17 +73,17 @@ const Grafico = (props) => {
 
     }, [])
 
-    console.log(props.respuestas)
+    //console.log(props.respuestas)
 
     
 
 
-    console.log('respuestas')
+    /* console.log('respuestas')
     console.log(respuestas)
     console.log('backgroundData')
     console.log(backgroundData)
     console.log('votos')
-    console.log(votos)
+    console.log(votos) */
 
     
     const data = {

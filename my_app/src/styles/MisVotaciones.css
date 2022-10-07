@@ -39,7 +39,7 @@
 }
 
 .columnaTablaTitulo{
-    width: 35%;
+    width: 29%;
     font-weight: bold;
     text-align: center;
     font-size: 22px;
@@ -47,11 +47,15 @@
 }
 
 .columnaTablaFunciones{
-    width: 15%;
+    width: 12%;
 }
 
 .columnaTablaVisualizarResult{
-    width: 20%;
+    width: 18%;
+}
+
+.botonesTablaCerrarVotacion{
+    width: 17%;
 }
 
 .botonesTabla{
@@ -88,6 +92,22 @@
     cursor: pointer;
     margin-right: 10px;
 }
+
+#iconoDisponibleCerrarVotacion{
+    color: #3D9E00;
+    font-size: xx-large;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+#iconoNoDisponibleCerrarVotacion{
+    color: #E80E28;
+    font-size: xx-large;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+
 
 
 

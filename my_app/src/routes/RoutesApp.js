@@ -20,8 +20,8 @@ function RoutesApp() {
         <Route path="/recuperarContrasena" element={<RecuperarContraseña />} />
         <Route path="/crearVotacion" element={<CrearVotacion />} />
         <Route path="/misVotaciones" element={<MisVotaciones />} />
-        <Route path="/resultadosVotacion" element={<ResultadosVotacion/>} />
-        <Route path="/votar/:id" element={ <Votar/>}/>
+        <Route path="/resultadosVotacion/:estado" element={<ResultadosVotacion/>} />
+        <Route path="/votar/:id/:estadoVotacion" element={ <Votar/>}/>
         <Route path="/prueba2" element={ <Grafico/>}/>
         <Route path="*" element={<NotFound/>} />
       </Routes>

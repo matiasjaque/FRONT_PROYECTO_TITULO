@@ -13,11 +13,11 @@ canvas {
   #contenedorBodyModalResult{
     
     
-    background: cyan;
+    background: #E5E4E0;
   }
 
   #contenedorModalResult{
-    background: lightcyan;
+    background: #F6FAFB;
     margin: 15px 0px;
     width: 100%;
     height: 100%;
@@ -27,8 +27,7 @@ canvas {
   }
 
   #tituloPregModalResult{
-    width: 80%;
-    background: aquamarine;
+    width: 100%;
     text-align: center;
     padding: 10px;
     font-size: 27px;

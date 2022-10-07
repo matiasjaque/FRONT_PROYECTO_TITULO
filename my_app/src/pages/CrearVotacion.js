@@ -28,7 +28,7 @@ const CrearVotaciones = () => {
   
 
   const [tituloVotacion, setTituloVotacion] = useState('');
-  const [idVotacion, setIdVotacion] = useState(0);
+  const [idVotacion, setIdVotacion] = useState(1);
 
   
   const [cantidadPreg, setCantidadPreg] = useState(0);
@@ -45,8 +45,18 @@ const CrearVotaciones = () => {
   const [idResp, setIdResp] = useState(0)
   const [idPreg, setIdPreg] = useState(0)
 
+  const [idPregInsert, setIdPregInsert] = useState(0)
+
+ 
+
+
+
+  var idPreguntaInsert = idPregInsert;
+  
+
 
   const [datosVotacion, setDatosVotacion] = useState(false);
+  var reloadPage = false;
 
   // funciones que necesito cargar en cada render
   useEffect(() => {
@@ -55,10 +65,12 @@ const CrearVotaciones = () => {
   },[]);
 
   
-  console.log("id: " + conectado.get('id'));
+  /* console.log("id: " + conectado.get('id'));
   console.log("nombre: " + conectado.get('nombre'));
   console.log("apellido: " + conectado.get('apellido'));
-  console.log(conectado)
+  console.log(conectado) */
+  console.log(idPreguntaInsert)
+  console.log(idPreg)
 
 
 
@@ -84,6 +96,8 @@ const CrearVotaciones = () => {
     await axios.get(serverUrl + "/preguntasGetGlobal")
       .then(response=>{
         setIdPreg(response.data[response.data.length - 1].ID_PREGUNTA)
+        
+        setIdPregInsert(response.data[response.data.length - 1].ID_PREGUNTA)
         //setLoading(true);
         //console.log("trae esto getPreguntas:");
         //console.log(response.data[response.data.length - 1].ID_PREGUNTA);
@@ -194,8 +208,8 @@ const CrearVotaciones = () => {
     const newResp = respuestas.filter((resp) => resp.idPregunta !== idPregu);
 
 
-    console.log('newResp');
-    console.log(newResp);
+    /* console.log('newResp');
+    console.log(newResp); */
 
     setPreguntas(newPreguntas);
     setRespuestas(newResp);
@@ -225,7 +239,7 @@ const CrearVotaciones = () => {
 
     const newPreguntas = preguntas.map((pregunta) => {
     const newRespuestas = respuestas.filter((respu) => (respu.idRespuesta !== idResp && respu.idPregunta === pregunta.id ));
-    console.log(newRespuestas);
+    //console.log(newRespuestas);
        if (pregunta.id === idPreg) {
 
         return {
@@ -242,7 +256,7 @@ const CrearVotaciones = () => {
 
     setRespuestas(newRespuestas2);
     setPreguntas(newPreguntas);
-    console.log(preguntas)
+    //console.log(preguntas)
 
     setDatosVotacion(true);
   }
@@ -260,16 +274,16 @@ const CrearVotaciones = () => {
 
     setRespuestas([...respuestas, newResp])
 
-    console.log('resp IMPORTANT NO ESTA SET')
-    console.log(respuestas)
+    //console.log('resp IMPORTANT NO ESTA SET')
+    //console.log(respuestas)
       
     setIdResp(idResp + 1)
 
       const newRespuestas = respuestas.filter((respu) => (respu.idPregunta === idPregunta));
       newRespuestas.push(newResp)
-      console.log('newRespuestas');
+      //console.log('newRespuestas');
 
-      console.log(newRespuestas);
+      //console.log(newRespuestas);
 
       const newPreguntas = preguntas.map((preg) => {
       if(preg.id === idPregunta){
@@ -280,8 +294,8 @@ const CrearVotaciones = () => {
       }
       return preg
     })
-    console.log('newPreguntas')
-    console.log(newPreguntas)
+    /* console.log('newPreguntas')
+    console.log(newPreguntas) */
     setPreguntas(newPreguntas)
     setDatosVotacion(true);
 
@@ -366,15 +380,15 @@ const CrearVotaciones = () => {
   
   const updateTitulosResp = (idRespu, idPregu, newTitleResp) => {
     setDatosVotacion(false);
-    console.log('datos de la funcion: ')
+    /* console.log('datos de la funcion: ')
     console.log(idRespu);
     console.log(idPregu);
-    console.log(newTitleResp);
+    console.log(newTitleResp); */
 
 
     // actualizar las respuestas generales
     const newRespuestas = respuestas.map((resp) => {
-      console.log(resp.idRespuesta + ' === ' + idRespu);
+      //console.log(resp.idRespuesta + ' === ' + idRespu);
       if(resp.idRespuesta === idRespu){
         return {
           ...resp,
@@ -383,8 +397,8 @@ const CrearVotaciones = () => {
       }
       return resp;
     })
-    console.log('newRespuestas')
-    console.log(newRespuestas)
+    /* console.log('newRespuestas')
+    console.log(newRespuestas) */
     setRespuestas(newRespuestas);
 
 
@@ -392,8 +406,8 @@ const CrearVotaciones = () => {
 
     const newResp = newRespuestas.filter((resp) => (resp.idPregunta === idPregu));
 
-    console.log('newResp')
-    console.log(newResp)
+    /* console.log('newResp')
+    console.log(newResp) */
 
     //actualizar el titulo de respuesta de las preguntas
 
@@ -410,8 +424,8 @@ const CrearVotaciones = () => {
       return preg
     })
 
-    console.log('newPreguntas')
-    console.log(newPreguntas)
+    /* console.log('newPreguntas')
+    console.log(newPreguntas) */
     setPreguntas(newPreguntas);
     setDatosVotacion(true);
 
@@ -419,7 +433,8 @@ const CrearVotaciones = () => {
   }
 
   const createVotacion = async () =>{
-    console.log(idUsuario, tituloVotacion)
+    var idVot = idVotacion + 1;
+    console.log(idUsuario, tituloVotacion, idVot)
     await axios({
       method: 'post',
       url:serverUrl + "/votacionCreate", 
@@ -428,11 +443,12 @@ const CrearVotaciones = () => {
       {
         idUsuario: idUsuario,
         titulo: tituloVotacion,
+        idVotacion: idVot,
       }
     }).then(response=>{
       console.log("Funciona create votacion con id de votacion: ");
-      console.log(response.data.insertId);
-      setIdVotacion(response.data.insertId);
+      console.log(response);
+      //setIdVotacion(response.data.insertId);
     })
     .catch(error=>{
             alert(error.response.data.message);
@@ -459,22 +475,44 @@ const CrearVotaciones = () => {
       }
     }
 
+    let preguntasPrimero = 0;
+
     if(titulosPregVacios === 0){
       if(titulosRespVacios === 0){
-        preguntas.map( (preg) => {
+        preguntas.forEach( (preg) => {
           console.log(preg.tituloPregunta);
+          console.log('createPreguntas', preg)
           createPregunta(preg.tituloPregunta);
-          preg.respuestas.map( (resp) =>{
-            createResp(resp.idPregunta, resp.tituloRespuesta)
-          })
         })
+        preguntasPrimero = 1;  
       }
       else{
         alert('Debe asegurarse de que todas las preguntas tengan sus respuestas asociadas.');
       }
-      
 
+    } 
+
+    else{
+      alert('Debe asegurarse de que todas las preguntas tengan un titulo asociado.');
     }
+
+    if(titulosPregVacios === 0){
+      if(titulosRespVacios === 0 && preguntasPrimero === 1){
+        preguntas.forEach( (preg) => {
+          console.log('createPreguntas2', preg)
+          //idPregunta++
+          preg.respuestas.forEach( (resp) =>{
+            console.log('createRespuestas', resp);
+            createResp(resp.idPregunta, resp.tituloRespuesta)
+          })
+        })
+       reloadPage = true;  
+      }
+      else{
+        alert('Debe asegurarse de que todas las preguntas tengan sus respuestas asociadas.');
+      }
+
+    } 
 
     else{
       alert('Debe asegurarse de que todas las preguntas tengan un titulo asociado.');
@@ -489,18 +527,24 @@ const CrearVotaciones = () => {
   const createPregunta = async (tituloVota) =>{
     console.log('idVotacion: ' )
     console.log(idVotacion);
-    let idVot = idVotacion;
+    let idVot = idVotacion + 1;
+
+    idPreguntaInsert++;
+
+    console.log('idPregunta: ' )
+    console.log(idPreguntaInsert);
 
     console.log('idVot: ' )
     console.log(idVot);
     await axios({
       method: 'post',
-      url:serverUrl + "/preguntaCreate", 
+      url:serverUrl + "/preguntaCreate",
       headers: {'Content-Type': 'application/json'},
       params:
       {
-        idVotacion: idVot + 1,
+        idVotacion: idVot,
         titulo: tituloVota,
+        idPregunta: idPreguntaInsert,
       }
     }).then(response=>{
       console.log("Funciona create pregunta ");
@@ -541,28 +585,43 @@ const CrearVotaciones = () => {
 
     setDatosVotacion(false)
 
-    // crear la votacion
     createVotacion()
 
-    // crear preguntas y respuestas de la votacion
     createPreguntasYrespuestas()
 
     setDatosVotacion(true)
+    
+    /* if(listoVotacion){
+      createPreguntasYrespuestas()
 
-    Swal.fire({title: 'Votación creada con éxito',
-    icon: "success", timer: "2500"})
-    setTimeout(function () {
-    window.location.replace("/paginaPrincipal")               
-    }, 2500);
+      setDatosVotacion(true)
+    } */
+
+    // crear preguntas y respuestas de la votacion
+    
+
+    
+    
+    if(reloadPage){
+      // crear la votacion
+      
+      Swal.fire({title: 'Votación creada con éxito',
+      icon: "success", timer: "2500"})
+      setTimeout(function () {   
+        //window.location.reload()
+        window.location.replace('paginaPrincipal');          
+      }, 2500);
+      
+    }
 
   }
 
-   console.log('preg')
+   /* console.log('preg')
   console.log(preguntas)
   console.log('resp')
   console.log(respuestas)
   console.log('cantidadPreg')
-  console.log(cantidadPreg)
+  console.log(cantidadPreg) */
 /*
   
   console.log('idResp')

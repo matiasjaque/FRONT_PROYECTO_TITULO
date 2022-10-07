@@ -1,0 +1,36 @@
+#contenedorResultVotacion{
+background: lightblue;
+padding: 0;
+margin: 0;
+width: 100%;
+height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+#contenedorEsperarCerrarVotacion{
+    width: 50%;
+    height: 50%;
+    padding: 0px;
+    background: lightcyan;
+}
+
+#mensajeTituloEsperarCerrar{
+    font-size: 35px;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
+#mensajeSecundarioEsperarCerrar{
+    width: 80%;
+    height: 50%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    font-weight: normal;
+    font-family: sans-serif;
+}
