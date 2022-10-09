@@ -434,6 +434,7 @@ const CrearVotaciones = () => {
 
   const createVotacion = async () =>{
     var idVot = idVotacion + 1;
+    var estado = 1;
     console.log(idUsuario, tituloVotacion, idVot)
     await axios({
       method: 'post',
@@ -444,6 +445,7 @@ const CrearVotaciones = () => {
         idUsuario: idUsuario,
         titulo: tituloVotacion,
         idVotacion: idVot,
+        estado: estado,
       }
     }).then(response=>{
       console.log("Funciona create votacion con id de votacion: ");

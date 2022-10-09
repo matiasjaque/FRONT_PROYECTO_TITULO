@@ -9,6 +9,7 @@ import MisVotaciones from '../pages/MisVotaciones';
 import Votar from '../pages/Votar';
 import ResultadosVotacion from '../pages/ResultadosVotacion';
 import Grafico from '../componts/Grafico';
+import CrearVotacion2 from '../pages/CrearVotacion2';
 
 function RoutesApp() {
   return (
@@ -19,9 +20,10 @@ function RoutesApp() {
         <Route path="/registrarse" element={<Registrarse />} />
         <Route path="/recuperarContrasena" element={<RecuperarContraseña />} />
         <Route path="/crearVotacion" element={<CrearVotacion />} />
+        <Route path="/crearVotacionUnGanador" element={<CrearVotacion2/>} />
         <Route path="/misVotaciones" element={<MisVotaciones />} />
         <Route path="/resultadosVotacion/:estado" element={<ResultadosVotacion/>} />
-        <Route path="/votar/:id/:estadoVotacion" element={ <Votar/>}/>
+        <Route path="/votar/:id/:estadoVotacion/:idPreg" element={ <Votar/>}/>
         <Route path="/prueba2" element={ <Grafico/>}/>
         <Route path="*" element={<NotFound/>} />
       </Routes>

@@ -1,0 +1,100 @@
+#contenedorPrincipalMisVotaciones2{
+    background-color: red;
+    max-width: 100vw;
+    max-height: 100vh;
+    min-height: 100vh;
+}
+
+#contenedorSecundarioMisVotaciones2{
+    /* background: #E5E4E0; */
+    background: #D7D8DA;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#contenedorCrearVotacion2{
+    background: #F1F1F1;
+    height: 80vh;
+    border-radius: 20px;
+    /*min-height: 80vh;
+    max-height: 80vh;
+    */margin: auto;
+    width: 80%;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+}
+
+.filasCrearVot2{
+    padding: 0px;
+    margin: 0px;
+}
+
+.columnasVot2{
+    padding: 0px;
+    margin: 0px;
+}
+
+#filaTitulo{
+    height: 20%;
+    align-items: center;
+}
+
+#tituloVotacion2{
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    font-family: 'ROBOTO', sans-serif;
+}
+
+#filaTituloVot{
+    height: 30%;
+    align-items: center;
+    width: 80%;
+    margin: auto;
+}
+
+.titulosForm2{
+    font-size: 20px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+    padding: 0px 10px;
+}
+
+.textosForm2{ 
+    font-size: 18px;
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+    margin: 0px 5px;
+    width: 80%;
+}
+
+#filaTituloPreg{
+    height: 30%;
+    align-items: center;
+    width: 80%;
+    margin: auto;
+}
+
+#filavot2Botones{
+    height: 20%;
+    align-items: center
+}
+
+#contenedorBotonesVot2{
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px;
+}
+
+.boton2{
+    width: 15%;
+    padding: 5px;
+    margin: 0px 10px;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'ROBOTO', sans-serif;
+}
