@@ -29,6 +29,8 @@ const ModalResultados = (props) => {
                         <h3 key={e.idPregunta} id='tituloPregModalResult'>{e.tituloPreg}</h3>
                         <div id='contenedorPie'>
                             <Pie   
+                                width = {1000}
+                                height = {400}
                                 respuestas = {e.respuesta}
                             />
                         </div>

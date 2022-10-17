@@ -58,6 +58,8 @@ const MisVotaciones = () => {
 
     const [idPregEstado2, setIdPregEstado2] = useState(0)
 
+    const [tipoVotacion, setTipoVotacion] = useState('')
+
 
 
 
@@ -766,8 +768,8 @@ const MisVotaciones = () => {
 
             }
             // aqui creo el crear votacion para que se haga solo 1 vez
-
-            createVotacion(tituloNuevo)
+            obtenerTipoVotacion(tituloNuevo)
+            //createVotacion(tituloNuevo)
         })
         .catch (error=> {
             serPregYresp([]);
@@ -779,8 +781,30 @@ const MisVotaciones = () => {
         })
     }
 
+    const obtenerTipoVotacion = async(tituloNuevo) => {
+        await axios.get(serverUrl + "/votacionById", {params:{idVotacion: idVotacion}})
+            .then(response=>{
+                setTipoVotacion(response.data[0].tipo);
+                var tipoVot = response.data[0].tipo;
+            //setLoading(true);
+            console.log("trae esto getVotaciones ojo:");
+            console.log(response.data[0]);
 
-    const createVotacion = async (tituloVotacion) =>{
+            //creo la nueva votacion con el titulo nuevo y el tipo
+            createVotacion(tituloNuevo, tipoVot)
+        })
+        .catch (error=> {
+            setTipoVotacion('');
+            Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: error.response.data.message,
+            })
+        })
+    }
+
+
+    const createVotacion = async (tituloVotacion, tipoVot) =>{
         var idVot = idVotacion + 1;
         var estado = 1;
         console.log(idUsuario, tituloVotacion, idVot)
@@ -794,6 +818,7 @@ const MisVotaciones = () => {
             titulo: tituloVotacion,
             idVotacion: idVot,
             estado: estado,
+            tipo: tipoVot,
           }
         }).then(response=>{
           console.log("Funciona create votacion con id de votacion: ");
@@ -876,7 +901,7 @@ const MisVotaciones = () => {
                 updateEstadoVotacion(idVot, idUsuario, estado)
 
                 Swal.fire(
-                    'Votación empezada!',
+                    'Votación iniciada!',
                     'Su votación ha sido inicializada con éxito!',
                     'success'
                 )

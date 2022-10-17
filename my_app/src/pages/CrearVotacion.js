@@ -446,6 +446,7 @@ const CrearVotaciones = () => {
         titulo: tituloVotacion,
         idVotacion: idVot,
         estado: estado,
+        tipo: 'normal',
       }
     }).then(response=>{
       console.log("Funciona create votacion con id de votacion: ");

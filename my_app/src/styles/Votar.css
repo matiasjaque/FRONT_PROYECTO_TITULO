@@ -43,7 +43,7 @@
     margin-top: 0px;
     border-radius: 20px;
     
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 #contenedorVotacionVotar{
@@ -67,8 +67,9 @@
 
 #contenedorRespVotar{
     width: 80%;
-    height: 80%;
+    height: 75%;
     margin: auto;
+    overflow-y: auto;
 }
 
 #contenedorCheck{
@@ -201,4 +202,58 @@
 #spinnerCargando{
     width: 100px;
     height: 100px;
+}
+
+#contenedorEstado0{
+    background: antiquewhite;
+    width: 70%;
+    height: 45%;
+    margin: auto;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#tituloEstado0{
+    background: aliceblue;
+    width: 80%;
+    height: 30%;
+    display: flex;
+    align-items: center;
+    font-size: 37px;
+    justify-content: center;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
+#mensajeEstado0{
+    background: aquamarine;
+    width: 80%;
+    height: 30%;
+    display: flex;
+    align-items: center;
+    font-size: 27px;
+    justify-content: center;
+    font-weight: 600;
+    font-family: sans-serif;
+}
+
+#contenedorBoton0{
+    width: 80%;
+    height: 40%;
+    background: aqua;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+}
+
+#botonEstado0{
+    width: 55%;
+    height: 30%;
+    font-size: 22px;
+    font-family: sans-serif;
+    font-weight: bold;
+    margin: 0px 10px 10px 0px;
 }

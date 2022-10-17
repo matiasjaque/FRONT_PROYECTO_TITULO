@@ -35,6 +35,7 @@ const Votar = () => {
     const [isRegister, setIsRegister] = useState(false);
 
 
+
     
 
 
@@ -43,7 +44,7 @@ const Votar = () => {
     useEffect(() => {
         
         votacionesGetById();
-        if(estadoVotacion === '1' && preguntas.length === 0){
+        if( (estadoVotacion === '1' || estadoVotacion === '0') && preguntas.length === 0){
             preguntasConRespuestasGet();
         }
 
@@ -248,7 +249,7 @@ const Votar = () => {
             }
 
             alert("su votacion fue realizada con exito")
-            window.location.replace(`/resultadosVotacion/${estadoVotacion}`)
+            window.location.replace(`/resultadosVotacion/${estadoVotacion}/${id}`)
         }
 
         else{
@@ -296,13 +297,26 @@ const Votar = () => {
 
             let disponible = 0;
 
-            console.log(nombreAux); 
+            console.log('respuestas');
+            console.log(respuestas);
+
+            if(respuestas.length > 1) {
+                console.log(nombreAux); 
+                respuestas.forEach( (resp) => {
+                    console.log(resp.respuesta.toUpperCase() + '===' + nombreAux);
+                    if(resp.respuesta.toUpperCase() === nombreAux){
+                        disponible++;
+                    }
+                })
+            }
+
+            /* console.log(nombreAux); 
             respuestas.forEach( (resp) => {
                 console.log(resp.respuesta.toUpperCase() + '===' + nombreAux);
                 if(resp.respuesta.toUpperCase() === nombreAux){
                     disponible++;
                 }
-            })
+            }) */
 
             // quiere decir que el nombre esta disponible
             if(disponible === 0){
@@ -355,7 +369,14 @@ const Votar = () => {
                 alert(error.response.data.message);
                 console.log(error);
               })
-      };
+    };
+
+    const visualizarResultEstado0 = () => {
+        alert('visualizarResultEstado0');
+        
+        window.location.replace(`/resultadosVotacion/${estadoVotacion}/${id}`)
+    }
+    
 
 
 
@@ -449,11 +470,18 @@ const Votar = () => {
                         }
 
                     </>:
+                    <div id='contenedorEstado0'> 
+                        <h1 id='tituloEstado0'>La votación ha finalizado</h1> 
+                        <h3 id='mensajeEstado0'>Para visualizar los resultados haga click en visualizar resultados</h3> 
+                        <div id='contenedorBoton0'>
+                            <Button onClick={() => visualizarResultEstado0()} id='botonEstado0'>Visualizar resultados</Button>
+                        </div>
+                    </div>
 
-                    <></> 
+                    /* <></>  */
                 }
 
-                    <></>
+                    
                 </>
                 
                 }

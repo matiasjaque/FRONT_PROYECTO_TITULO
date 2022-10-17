@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React from 'react'
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -35,7 +35,6 @@ function cerrarSesion(){
 
 const MyNavbar = (props) => {
 
-  const [modalShow, setModalShow] = useState(false);
 
   return (
     <div>
@@ -62,6 +61,7 @@ const MyNavbar = (props) => {
                     <NavDropdown title="Crear Votación" id="colorDelDrop">
                       <NavDropdown.Item href="/crearVotacion" className='interiorDropDown'>  Votación normal</NavDropdown.Item>
                       <NavDropdown.Item href="/crearVotacionUnGanador" className='interiorDropDown'>Votación especial</NavDropdown.Item>
+                      <NavDropdown.Item href="/crearVotacionDirectorio" className='interiorDropDown'>Votación directorio</NavDropdown.Item>
                     </NavDropdown>
                   </Col>
                 </Row>
@@ -81,6 +81,7 @@ const MyNavbar = (props) => {
                   <NavDropdown title="Crear Votación" id="backgroundDelDrop">
                     <NavDropdown.Item href="/crearVotacion" className='interiorDropDown'>Votación normal</NavDropdown.Item>
                     <NavDropdown.Item href="/crearVotacionUnGanador" className='interiorDropDown'>Votación especial</NavDropdown.Item>
+                    <NavDropdown.Item href="/crearVotacionDirectorio" className='interiorDropDown'>Votación directorio</NavDropdown.Item>
                   </NavDropdown>
                 </Col>
               </Row>

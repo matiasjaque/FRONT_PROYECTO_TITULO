@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import '../styles/CrearVotacion2.css';
+import '../styles/CrearVotacion3.css';
 
 import axios from 'axios';
 import Cookies from 'universal-cookie';
@@ -20,12 +20,13 @@ var idUsuario = conectado.get('id');
 
 
 
-const CrearVotacion2 = () => {
+const CrearVotacion3 = () => {
 
 const [idVotacion, setIdVotacion] = useState(0);
 const [idPregInsert, setIdPregInsert] = useState(0)
 const [tituloVotacion, setTituloVotacion] = useState('');
 const [preguntaVotacion, setPreguntaVotacion] = useState('');
+const [cantidadDirectorio, setCantidadDirectorio] = useState(5);
 
 // funciones que necesito cargar en cada render
 useEffect(() => {
@@ -108,7 +109,7 @@ const createVotacion = async () =>{
         titulo: tituloVotacion,
         idVotacion: idVot,
         estado: estado,
-        tipo: 'especial',
+        tipo: 'directorio',
       }
     }).then(response=>{
       console.log("Funciona create votacion con id de votacion: ");
@@ -152,23 +153,23 @@ const createPregunta = async () =>{
         })
 };
 
-  return (
-    <div id='contenedorPrincipalMisVotaciones2'>
+return (
+    <div id='contenedorPrincipalMisVotaciones3'>
         <MyNavbar activeKey='/crearVotacion'/>
-        <div id='contenedorSecundarioMisVotaciones2'>
-          <div id='contenedorCrearVotacion2'>
-            <Row className='filasCrearVot2' id='filaTitulo'>
-              <Col lg={12} md={12} sm={12} className='columnasVot2'>
-                <h1 id='tituloVotacion2'>              
+        <div id='contenedorSecundarioMisVotaciones3'>
+          <div id='contenedorCrearVotacion3'>
+            <Row className='filasCrearVot3' id='filaTituloVot3'>
+              <Col lg={12} md={12} sm={12} className='columnasVot3'>
+                <h1 id='tituloVotacion3'>              
                   Para crear una nueva votación especial ingrese los siguientes datos por favor
                 </h1>
               </Col>
             </Row>
 
-            <Row className='filasCrearVot2' id='filaTituloVot'>
-              <Col lg={12} md={12} sm={12} className='columnasVot2'>
-                <Form.Label className="titulosForm2">TÍTULO DE LA NUEVA VOTACIÓN</Form.Label>
-                <Form.Control className="textosForm2"
+            <Row className='filasCrearVot3' id='filaTituloVot3'>
+              <Col lg={12} md={12} sm={12} className='columnasVot3'>
+                <Form.Label className="titulosForm3">TÍTULO DE LA NUEVA VOTACIÓN</Form.Label>
+                <Form.Control className="textosForm3"
                     type="text"
                     placeholder="Ingrese el título de la votación"
                     value={tituloVotacion}
@@ -177,10 +178,10 @@ const createPregunta = async () =>{
               </Col>
             </Row>
 
-            <Row className='filasCrearVot2' id='filaTituloPreg'>
-                <Col lg={12} md={12} sm={12} className='columnasVot2'>
-                    <Form.Label className="titulosForm2">TÍTULO DE LA PREGUNTA</Form.Label>
-                    <Form.Control className="textosForm2"
+            <Row className='filasCrearVot3' id='filaTituloPregVot3'>
+                <Col lg={12} md={12} sm={12} className='columnasVot3'>
+                    <Form.Label className="titulosForm3">TÍTULO DE LA PREGUNTA</Form.Label>
+                    <Form.Control className="textosForm3"
                         type="text"
                         placeholder="Ingrese la pregunta de la votación"
                         value={preguntaVotacion}
@@ -189,8 +190,20 @@ const createPregunta = async () =>{
                 </Col>
             </Row>
 
-            <Row className='filasCrearVot2' id='filavot2Botones'>
-              <Col lg={12} md={12} sm={12} className='columnasVot2'>
+            {/* <Row className='filasCrearVot3' id='filaCantDePersonasDirectorio'>
+                <Col lg={12} md={12} sm={12} className='columnasVot3'>
+                    <Form.Label className="titulosForm2">CANTIDAD DE PERSONAS QUE CONFORMARA EL DIRECTORIO</Form.Label>
+                    <Form.Control className="textosForm2"
+                        type="text"
+                        placeholder="Ingrese la cantidad de personas que conformara el directorio"
+                        value={cantidadDirectorio}
+                        onChange={(e) => setCantidadDirectorio(e.target.value)}
+                    /> 
+                </Col>
+            </Row> */}
+
+            <Row className='filasCrearVot3' id='filavot2Botones'>
+              <Col lg={12} md={12} sm={12} className='columnasVot3'>
                 <div id='contenedorBotonesVot2'>
                     <Button  className='boton2' onClick={volverHome}>Cancelar</Button>
                     <Button className='boton2' onClick={crearVotacion2}>Crear votación</Button>
@@ -207,6 +220,5 @@ const createPregunta = async () =>{
       </div>
   )
 }
-  
 
-export default CrearVotacion2
+export default CrearVotacion3

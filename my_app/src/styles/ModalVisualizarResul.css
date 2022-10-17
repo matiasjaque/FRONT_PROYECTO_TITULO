@@ -1,0 +1,24 @@
+#tituloModalVisRes{
+    margin-left: 10px;
+    font-size: 26px;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
+.titulosTabla{
+    font-size: 22px;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
+.textosTabla{
+    font-size: 20px;
+    font-weight: 600;
+    font-family: sans-serif;
+}
+
+#botonCerrarVisRes{
+    font-size: 20px;
+    font-weight: 600;
+    font-family: sans-serif;
+}

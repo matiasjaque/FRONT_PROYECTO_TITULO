@@ -30,7 +30,8 @@ const Grafico = (props) => {
         
         var backGroundDisponibles = ['#FFFF00', '#FFA500', '#FFDEAD', '#C0FF3E', '#FFFFE0',
                                     '#FFEC8B', '#E0FFFF', '#BFEFFF', '#FFC125', '#00FF00', 
-                                    '#FFD700', '#FF3030', '#1E90FF', '#00BFFF', '#FF1493'];
+                                    '#FFD700', '#FF3030', '#1E90FF', '#00BFFF', '#FF1493',
+                                    '#FFD704', '#FF3034', '#1E90F4', '#00BFF4', '#FF1497'];
 
         for (var i in props.respuestas) {
             getRespuestas.push(props.respuestas[i].respuesta)
@@ -139,7 +140,7 @@ const Grafico = (props) => {
 
 
   return (
-    <Chart type='pie' data={data} options={opciones} plugins={[ChartDataLabels]} width={1000} height={400}/>
+    <Chart type='pie' data={data} options={opciones} plugins={[ChartDataLabels]} width={props.width} height={props.height}/>
   )
 }
 
