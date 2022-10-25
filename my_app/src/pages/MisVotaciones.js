@@ -58,7 +58,6 @@ const MisVotaciones = () => {
 
     const [idPregEstado2, setIdPregEstado2] = useState(0)
 
-    const [tipoVotacion, setTipoVotacion] = useState('')
 
 
 
@@ -268,7 +267,7 @@ const MisVotaciones = () => {
         //setEnlace(`http://localhost:3000/votar/${idVot}`);
         setTituloVotacionResult(tituloVotacion)
         preguntasConRespuestasGet(idVot)
-        setModalResultShow(true);
+        /* setModalResultShow(true); */
     }
 
     const preguntasConRespuestasGet = async (id) =>{
@@ -336,6 +335,7 @@ const MisVotaciones = () => {
 
             //setLoading(true);
             serPregYresp(newPregYresp);
+            setModalResultShow(true);
         })
         .catch (error=> {
             serPregYresp([]);
@@ -784,8 +784,7 @@ const MisVotaciones = () => {
     const obtenerTipoVotacion = async(tituloNuevo) => {
         await axios.get(serverUrl + "/votacionById", {params:{idVotacion: idVotacion}})
             .then(response=>{
-                setTipoVotacion(response.data[0].tipo);
-                var tipoVot = response.data[0].tipo;
+            var tipoVot = response.data[0].tipo;
             //setLoading(true);
             console.log("trae esto getVotaciones ojo:");
             console.log(response.data[0]);
@@ -794,7 +793,6 @@ const MisVotaciones = () => {
             createVotacion(tituloNuevo, tipoVot)
         })
         .catch (error=> {
-            setTipoVotacion('');
             Swal.fire({
             icon: 'error',
             title: 'Oops...',

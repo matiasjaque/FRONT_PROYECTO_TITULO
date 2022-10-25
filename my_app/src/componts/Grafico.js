@@ -72,7 +72,7 @@ const Grafico = (props) => {
         setVotos(votosPorcentaje)
         setBackgroundData(getBackGroundData)
 
-    }, [])
+    }, [props.respuestas])
 
     //console.log(props.respuestas)
 
