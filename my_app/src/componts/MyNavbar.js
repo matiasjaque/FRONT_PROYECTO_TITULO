@@ -96,9 +96,7 @@ const MyNavbar = (props) => {
             <Nav.Item className="botonesNavbar">
               <Nav.Link href="/misVotaciones" id='navLink'><BsArchive id='iconoMisVotaciones'/> Mis Votaciones</Nav.Link>
             </Nav.Item> 
-            <Nav.Item className="botonesNavbar">
-              <Nav.Link href="#pricinga" id='seeLink' ><GiEyeTarget id='iconoVerResultados'/> Visualizar Resultados</Nav.Link>
-            </Nav.Item> 
+            
             <Nav.Item className="botonesNavbar">
               <Nav.Link onClick={()=>cerrarSesion()} id='returnLink'><GiReturnArrow id='iconoReturn'/> Cerrar Sesión</Nav.Link>
             </Nav.Item>

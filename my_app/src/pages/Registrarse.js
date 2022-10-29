@@ -81,8 +81,9 @@ const Registrarse = () => {
 
     return (
         <div style={imagenFondo} className="containerPadre">
-            <Container className="container">
-                <Col lg={12}>
+            <Container className="container" fluid>
+                <Row >
+                <Col xs md lg={12}>
                     <Row  className="tituloRegistrarse">REGISTRARSE</Row>
                     <Row className="parametrosRec">
                         <Form id='formRec'>
@@ -131,6 +132,7 @@ const Registrarse = () => {
                         </Form>
                     </Row>
                 </Col>
+                </Row>
             </Container>
         </div>
   );

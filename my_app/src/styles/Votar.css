@@ -13,6 +13,7 @@
     margin: auto;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 }
 
 .filasVotar{
@@ -21,7 +22,7 @@
 }
 
 #filaTituloVotar{
-    height: 11%;
+    height: auto;
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -87,11 +88,12 @@
 
 #contenedorFinalizarVotacion{
     width: 100%;
-    height: 14%;
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: end;
+    padding:10px;
 }
 
 #finalizarVotacion{
@@ -214,6 +216,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow-y: auto;
 }
 
 #tituloEstado0{

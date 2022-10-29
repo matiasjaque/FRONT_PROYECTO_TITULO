@@ -25,6 +25,7 @@
     font-family: Roboto, sans-serif;    
     justify-content: center;
     padding-top: 30px;
+    text-align: center;
 }
 
 .parametros{
@@ -49,7 +50,7 @@
 
 
 
-.botonVolver{
+#botonVolverRecContra{
     font-size: 25px;
     justify-content: center;
     width: 100%;
@@ -62,6 +63,26 @@
     -ms-border-radius: 50px;
     -o-border-radius: 50px;
 }
+
+#botonVolverRecContraChico{
+    font-size: 25px;
+    justify-content: center;
+    width: 100%;
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 5px;
+    border-radius: 50px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    -ms-border-radius: 50px;
+    -o-border-radius: 50px;
+    align-items: center;
+    display: flex;
+    align-items: center;
+    height: 90px;
+}
+
+
 
 .botonCrearCuenta{
     font-size: 25px;

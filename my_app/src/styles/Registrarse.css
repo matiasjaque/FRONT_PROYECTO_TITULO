@@ -1,5 +1,5 @@
 .containerPadre{
-    height: 100vh;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -9,7 +9,9 @@
 .container{
     background-color: #AFB2B7;
     border-radius: 50px;
-    max-height: 100vh;
+    height: 75%;
+    min-height: 75%;
+    overflow-y: auto;
 }
 
 .tituloRegistrarse{
@@ -47,22 +49,20 @@
     text-align: center;
 }
 
-.botonVolver{
-    font-size: 25px;
-    justify-content: center;
-    width: 50%;
-    margin: auto;
-    margin-bottom: 20px;
-    margin-top: 5px;
-}
+
 
 .botonVolver{
     font-size: 25px;
     justify-content: center;
-    width: 50%;
+    width: 80%;
     margin: auto;
     margin-bottom: 20px;
     margin-top: 5px;
+    border-radius: 50px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    -ms-border-radius: 50px;
+    -o-border-radius: 50px;
 }
 
 .botonCrearCuenta{

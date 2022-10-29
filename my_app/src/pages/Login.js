@@ -66,7 +66,7 @@ function Login() {
   return (
     <div style={imagenFondo} className='contenedorPrincipal'>
         <div className='contenedorSecundario'>
-            <h1 className='titulo'>Software De Votación Electronica</h1>
+            <h1 className='tituloLogin'>Software De Votación Electronica</h1>
             
             <Form className='contenedorForm' onSubmit={iniciarSesion}>
                 <Form.Group className='mb-3' >

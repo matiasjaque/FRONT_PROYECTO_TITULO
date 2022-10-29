@@ -64,11 +64,12 @@ const RecuperarContraseña = () => {
         
             
     }
+    //console.log(window.innerWidth +' <= 1200' )
 
     return (
         <div style={imagenFondo} className="containerPadre">
             <Container className="container">
-                <Col lg={12}>
+                <Col xs md lg={12}>
                     <Row  className="titulo">RESTABLEZCA SU CONTRASEÑA</Row>
                     <Row className="parametros">
                         <Form id='formRecContra'>
@@ -88,7 +89,10 @@ const RecuperarContraseña = () => {
                             </Form.Group>
                             <Row className='botones'>
                                 <Col>
-                                    <Button className='botonVolver' href='/'>VOLVER</Button>
+                                    {window.innerWidth >= 1200 ?
+                                        <Button id="botonVolverRecContra" href='/'>VOLVER</Button>
+                                        :<Button id='botonVolverRecContraChico' href='/'>VOLVER</Button>
+                                    }
                                 </Col>
                                 <Col>
                                     <Button className='botonCrearCuenta' onClick={crearUsuario}>RECUPERAR CONTRASEÑA</Button>

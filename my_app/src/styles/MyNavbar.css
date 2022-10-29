@@ -18,7 +18,7 @@
 #titulo{
     display: flex;
     margin: 0px 15px;
-    width: 450px;
+    min-width: 450px;
     justify-content: center;
     border-radius: 20px;
     font-weight: bold;
@@ -38,7 +38,7 @@
 
 .botonesNavbar{
     cursor: pointer;
-    min-width: 220px;
+    min-width: 240px;
     text-align: center;
     font-weight: bold;
     font-size: 23px;
@@ -124,7 +124,7 @@
 }
 
 #crearVotacionDropDown{
-    min-width: 220px;
+    min-width: 240px;
     text-align: center;
     font-weight: bold;
     font-size: 23px;
