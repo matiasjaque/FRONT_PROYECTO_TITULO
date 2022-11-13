@@ -40,7 +40,10 @@
 }
 
 .columnaTablaTitulo{
-    min-width: 400px;
+    min-width: 360px;
+    max-width: 360px;
+    height: 70px;
+    vertical-align: middle;
     font-weight: bold;
     text-align: center;
     font-size: 22px;
@@ -48,19 +51,23 @@
 }
 
 .columnaTablaFunciones{
-    min-width: 200px;
+    min-width: 220px;
+    vertical-align: middle;
 }
 
 .columnaTablaVisualizarResult{
     min-width: 300px;
+    vertical-align: middle;
 }
 
 .botonesTablaCerrarVotacion{
     min-width: 290px;
+    vertical-align: middle;
 }
 
 .columnaTablaEstado{
     min-width: 200px;
+    vertical-align: middle;
 }
 
 #centrarTitulosColumnas{

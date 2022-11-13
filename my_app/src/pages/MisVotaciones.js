@@ -18,7 +18,7 @@ import Cookies from 'universal-cookie';
 import Swal from 'sweetalert2';
 
 
-import { MdAutorenew, MdDeleteForever, MdShare, MdPieChart, MdCheckCircleOutline, MdHighlightOff, MdRule, MdWorkspacesFilled } from "react-icons/md";
+import { MdAutorenew,MdOutlineContentCopy, MdDeleteForever, MdShare, MdPieChart, MdCheckCircleOutline, MdHighlightOff, MdRule, MdWorkspacesFilled } from "react-icons/md";
 
 
 const serverUrl = process.env.REACT_APP_SERVER;
@@ -74,9 +74,7 @@ const MisVotaciones = () => {
         setMisVotaciones(response.data);
 
         setIdVotacion(response.data[response.data.length - 1].id_votacion)
-        //setLoading(true);
-        console.log("trae esto getVotaciones:");
-        console.log(response.data);
+        
     })
     .catch (error=> {
         setMisVotaciones([]);
@@ -97,8 +95,7 @@ const MisVotaciones = () => {
             //setLoading(true);
             
             setIdPregInsert(response.data[response.data.length - 1].ID_PREGUNTA)
-            console.log("trae esto getPreguntas:");
-            console.log(response.data);
+            
         })
         .catch (error=> {
             setPreguntas([]);
@@ -116,8 +113,7 @@ const MisVotaciones = () => {
             await axios.get(serverUrl + "/respuestasGetGlobal")
                 .then(response=>{
                 setRespuestas(response.data);
-                console.log("trae esto getResp:");
-                console.log(response.data);
+                
             })
             .catch (error=> {
                 setRespuestas([]);
@@ -132,51 +128,57 @@ const MisVotaciones = () => {
         };
 
 
+    const confirmacionEliminarVotacion = (idVotacion) => {
+        Swal.fire({
+            title: '¿Esta seguro de eliminar la votación?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, eliminar votación!',
+            cancelButtonText: 'Cancelar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+
+                Swal.fire(
+                    'Votación eliminada!',
+                    'Su votación ha sido eliminada con éxito',
+                    'success'
+                )
+                setTimeout(function () {   
+                    eliminarVotacion(idVotacion) 
+                }, 1500);
+              
+                
+            }})
+    }   
+
     const eliminarVotacion = (idVotacion) => {
-
-        // eliminar votacion
-        console.log('idVotacion');
-        console.log(idVotacion)
-
-        //eliminar todas las preguntas asociadas
-
-        // primero traemos las preguntas asociadas
- 
+        
         
         const pregAborrar = preguntas.filter((preg) => (preg.ID_VOTACION === idVotacion))
 
 
-        
-        
-        console.log('respuestas estan ')
-        console.log(respuestas)
-
         // ahora se eliminan las preguntas asociadas y las respuestas asociadas a cada pregunta
-        console.log('pregAborrar.length')
-        console.log(pregAborrar.length)
-        console.log(pregAborrar)
-
+       
         for (let i = 0; i < pregAborrar.length; i++) {
-            console.log('adentro del for del largo de preguntas')
             eliminarPreguntaId(idVotacion, pregAborrar[i].ID_PREGUNTA)
-            console.log(pregAborrar[i].ID_PREGUNTA)
+            
             const respAborrar = respuestas.filter((respu) => (respu.ID_PREGUNTA === pregAborrar[i].ID_PREGUNTA))
-            console.log('respAborrar.length');
-            console.log(respAborrar.length);
+            
             
             for (let j = 0; j < respAborrar.length; j++) {
-                console.log('entre al for de respuestas')
                 eliminarRespuestaId(pregAborrar[i].ID_PREGUNTA, respAborrar[j].ID_RESPUESTA)
             }
-            console.log('resp a borrar')
-            console.log(respAborrar)
-
             
         } 
         
         eliminarVotacionId(idVotacion, idUsuario)
     
       }
+
+
+
 
     const eliminarVotacionId = async (idVotacion, idUser) => {
         await axios.delete(serverUrl+"/votacionDelete",
@@ -200,8 +202,6 @@ const MisVotaciones = () => {
             }
         ).then(response =>{
             window.location.reload(false);
-            console.log('response');
-            console.log(response);
         }).catch(error =>{
             alert(error.response.data.message);
             console.log(error);
@@ -215,11 +215,8 @@ const MisVotaciones = () => {
             }
         ).then(response =>{
             window.location.reload(false);
-            console.log('response');
-            console.log(response);
         }).catch(error =>{
             alert(error.response.data.message);
-            console.log(error);
         });
     };
 
@@ -243,7 +240,6 @@ const MisVotaciones = () => {
     const getPreguntaId = async (idVot, estado) =>{
         await axios.get(serverUrl + "/preguntasGet", {params:{idVotacion: idVot}})
           .then(response=>{
-            console.log(response.data[0].id_pregunta);
             setIdPregEstado2(response.data[0].id_pregunta)
             setEnlace(`http://localhost:3000/votar/${idVot}/${estado}/${response.data[0].id_pregunta}`);
             //setIdPregInsert(response.data[response.data.length - 1].ID_PREGUNTA)
@@ -324,9 +320,6 @@ const MisVotaciones = () => {
                         newPregYresp[j].respuesta = newResp
                     }   
                 }
-                
-                console.log("newPregYresp3 ")
-                console.log(newPregYresp)
 
             })
 
@@ -370,6 +363,7 @@ const MisVotaciones = () => {
                 )
               
             }
+            
 
             else{
                 window.location.reload(true);
@@ -486,8 +480,6 @@ const MisVotaciones = () => {
 
                 }
 
-                console.log('preguntasConVotosRepetidos')
-                console.log(preguntasConVotosRepetidos.length)
 
                 if(preguntasConVotosRepetidos.length > 0){
                     repetirVotacion = true;
@@ -535,8 +527,6 @@ const MisVotaciones = () => {
                             }    
                         }  
                     }).then((result) => {
-                        console.log('result')
-                        console.log(result.value)
                         if (result.value !== "" && result.value !== undefined) {
                             
                             // se llama la funcion de crear la votacion con el titulo obtenido en el input
@@ -598,8 +588,6 @@ const MisVotaciones = () => {
             params:{idVotacion: idVotacion, idUsuario: idUser, estado: estado}
         }).then(response =>{
             window.location.reload(true);
-            console.log('response');
-            console.log(response);
         }).catch(error =>{
             alert(error.response.data.message);
             console.log(error);
@@ -661,8 +649,6 @@ const MisVotaciones = () => {
                     }   
                 }
             })
-            console.log('data final');
-            console.log(newPregYresp);
 
             var preguntasConVotosRepetidos = [];
 
@@ -681,15 +667,13 @@ const MisVotaciones = () => {
                 }
 
                 // ordenamos los votos para ver si hay preguntas con la misma cantidad de votos
-                console.log('votos')
-                console.log(votos)
+                
 
                 votos.sort(function(a,b){
                     return b - a;
                 })
 
-                console.log('votos ordenados mayor a menor')
-                console.log(votos)
+            
 
                 // ver si los votos se repiten
 
@@ -910,6 +894,216 @@ const MisVotaciones = () => {
           })
     }
 
+    const copiarVotacio = (idVotacionCop) => {
+        Swal.fire({
+            title: '¿Esta seguro de copiar la votación?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, copiar votación!',
+            cancelButtonText: 'Cancelar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                getTituloCopia(idVotacionCop)
+
+                copiarPregYresp(idVotacionCop)
+                
+                Swal.fire(
+                    'Votación copiada!',
+                    'Su votación ha sido copiada con éxito!',
+                    'success'
+                )
+                setTimeout(function () {   
+                    //window.location.reload()
+                    window.location.reload(true);          
+                }, 2000);
+              
+            }})
+    }
+
+    const getTituloCopia = async (idVotacionCopia) =>{
+        await axios.get(serverUrl + "/votacionById", {params:{idVotacion: idVotacionCopia}})
+            .then(response=>{
+    
+            console.log(response.data[0])
+            var tituloCopia = response.data[0].TITULO + ' (copia)';
+            let tipoVot = response.data[0].tipo;
+            createVotacionCopia(tituloCopia, tipoVot)
+            
+        })
+        .catch (error=> {
+            setMisVotaciones([]);
+            Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: error.response.data.message,
+            })
+        })
+    };
+
+    const createVotacionCopia = async (tituloVotacion, tipoVot) =>{
+        var idVot = idVotacion + 1;
+        var estado = 2;
+        console.log(idUsuario, tituloVotacion, idVot)
+        await axios({
+        method: 'post',
+        url:serverUrl + "/votacionCreate", 
+        headers: {'Content-Type': 'application/json'},
+        params:
+        {
+            idUsuario: idUsuario,
+            titulo: tituloVotacion,
+            idVotacion: idVot,
+            estado: estado,
+            tipo: tipoVot,
+        }
+        }).then(response=>{
+        console.log("Funciona create votacion con id de votacion: ");
+        console.log(response);
+        //setIdVotacion(response.data.insertId);
+        })
+        .catch(error=>{
+                alert(error.response.data.message);
+                console.log(error);
+            })
+    };
+
+    const copiarPregYresp = async(idVot) => {
+        await axios.get(serverUrl + "/preguntasConRespuestas", {params:{idVotacion: idVot}})
+        .then(response=>{
+        //setPreguntas(response.data);
+        console.log(response.data);
+        var data = response.data;
+        const newPregYresp = [];
+            data.forEach( (k) => {
+                if (newPregYresp.length === 0) {
+                    let newK = {
+                        idPregunta: k.ID_PREGUNTA,
+                        tituloPreg: k.TITULO,
+                    }
+                    newPregYresp.push(newK);
+                }
+                else{
+                    let estaLaPreg = 0;
+                    for (let i = 0; i < newPregYresp.length; i++) {
+                        if (newPregYresp[i].idPregunta === k.ID_PREGUNTA){
+                            estaLaPreg++;
+                        }
+                    }
+                    if (estaLaPreg === 0) {
+                        
+                        let newK = {
+                            idPregunta: k.ID_PREGUNTA,
+                            tituloPreg: k.TITULO,
+                            respuesta: [],
+                        }
+                        newPregYresp.push(newK);
+                    }
+                }
+            })
+
+            newPregYresp.forEach ( (k) => {
+                const newResp = [];
+                for (let i = 0; i < data.length; i++) {
+                    if (k.idPregunta === data[i].ID_PREGUNTA){
+                        let resp = {
+                                        idPreg: data[i].ID_PREGUNTA,
+                                        idResp: data[i].ID_RESPUESTA,
+                                        respuesta: data[i].RESPUESTA,
+                                        votos: data[i].VOTOS,
+                                        isCheck: false,
+                                    }
+                        newResp.push(resp)
+                    }
+                }
+                for (let j = 0; j < newPregYresp.length; j++) {
+                    if(newPregYresp[j].idPregunta === newResp[0].idPreg) {
+                        newPregYresp[j].respuesta = newResp
+                    }   
+                }
+            })
+
+            console.log(newPregYresp)
+
+            newPregYresp.forEach((k) =>{
+                createPregunta(k.tituloPreg)
+                k.respuesta.forEach((r) => {
+                    createResp(r.respuesta)
+                })
+            })
+
+
+
+
+    })
+    .catch (error=> {
+        serPregYresp([]);
+        Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error.response.data.message,
+        })
+    })
+    }
+
+    const editarVotacion = (idVotacion) => {
+        Swal.fire({
+            title: '¿Esta seguro de editar la votación?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, editar votación!',
+            cancelButtonText: 'Cancelar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                getTipoVotEditar(idVotacion)
+                
+                /* Swal.fire(
+                    'Votación copiada!',
+                    'Su votación ha sido copiada con éxito!',
+                    'success'
+                )
+                setTimeout(function () {   
+                    //window.location.reload()
+                    window.location.reload(true);          
+                }, 2000); */
+              
+            }})
+    }
+
+    const getTipoVotEditar = async (idVotacionEdi) =>{
+        await axios.get(serverUrl + "/votacionById", {params:{idVotacion: idVotacionEdi}})
+            .then(response=>{
+    
+            console.log(response.data[0])
+            let tipoVot = response.data[0].tipo;
+            console.log(tipoVot);
+
+            if(tipoVot === 'directorio'){
+                window.location.replace(`/crearVotacionDirectorio/${tipoVot}/${idVotacionEdi}`)
+            }
+
+            else if(tipoVot === 'especial'){
+                window.location.replace(`/crearVotacionUnGanador/${tipoVot}/${idVotacionEdi}`)
+            }
+
+            else{
+                window.location.replace(`/crearVotacion/${tipoVot}/${idVotacionEdi}`)
+            }
+            
+        })
+        .catch (error=> {
+            setMisVotaciones([]);
+            Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: error.response.data.message,
+            })
+        })
+    };
+
     
 
 
@@ -926,7 +1120,7 @@ const MisVotaciones = () => {
                     <thead>
                         <tr>
                             <th className='columnaTablaTitulo' id='centrarTitulosColumnas'>Nombre Votación</th>
-                            <th className='columnaTablaFunciones' id='centrarTitulosColumnas'>Editar Votación</th>
+                            <th className='columnaTablaFunciones' id='centrarTitulosColumnas'>Editar/Copiar Votación</th>
                             <th className='columnaTablaFunciones' id='centrarTitulosColumnas'>Eliminar Votación</th>
                             <th className='columnaTablaFunciones' id='centrarTitulosColumnas'>Compartir Votación</th>
                             <th className='columnaTablaVisualizarResult' id='centrarTitulosColumnas'>Resultados Votación</th>
@@ -945,16 +1139,26 @@ const MisVotaciones = () => {
                             <tbody>
                             <tr>
                                 <td className='columnaTablaTitulo'>{e.titulo}</td>
-
+                                
+                                {e.estado === 2 ?
                                 <td className='columnaTablaFunciones'> 
-                                    <MdAutorenew id='iconoEditar' onClick= {() => alert('click editar')}/>
-                                    <button className='botonesTabla' onClick= {() => alert('click editar')}>
+                                    <MdAutorenew id='iconoEditar' onClick= {() => editarVotacion(e.id_votacion)}/>
+                                    <button className='botonesTabla' onClick= {() => editarVotacion(e.id_votacion)}>
                                         Editar
                                     </button> 
+                                </td>:
+                                <td className='columnaTablaFunciones'> 
+                                    <MdOutlineContentCopy id='iconoEditar' onClick= {() => copiarVotacio(e.id_votacion)}/>
+                                    <button className='botonesTabla' onClick= {() => copiarVotacio(e.id_votacion)}>
+                                        Copiar
+                                    </button> 
                                 </td>
+                                }
+
+                                
                                 <td className='columnaTablaFunciones'>
-                                    <MdDeleteForever id='iconoEliminar' onClick= {() => eliminarVotacion(e.id_votacion)}/>
-                                    <button className='botonesTabla' onClick= {() => eliminarVotacion(e.id_votacion)}>
+                                    <MdDeleteForever id='iconoEliminar' onClick= {() => confirmacionEliminarVotacion(e.id_votacion)}/>
+                                    <button className='botonesTabla' onClick= {() => confirmacionEliminarVotacion(e.id_votacion)}>
                                         Eliminar
                                     </button> 
                                 </td>

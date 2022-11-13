@@ -133,6 +133,7 @@ const ResultadosVotacion = () => {
 const verGanadores = () => {
     var votosAux = [];
     var ganadoresAux = [];
+    var votos = [];
     data.forEach((e) =>{
         // agregar los votos para ordenarlos y elegir los 5 mas altos
         e.respuesta.forEach((r) => {
@@ -144,13 +145,16 @@ const verGanadores = () => {
         })
 
 
-        let votosAux2 = votosAux.filter((item,index)=>{
+        /* let votosAux2 = votosAux.filter((item,index)=>{
             return votosAux.indexOf(item) === index;
-          })
+        }) */
+        //console.log(votosAux2)
+        console.log(votosAux)
 
-        let votos = [];
-        for (let i = 0; i < 5; i++){
-            votos.push(votosAux2[i]);
+        // aqui se decide cuantas personas mostrar en la tabla directorio
+        
+        for (let i = 0; i < votosAux.length; i++){
+            votos.push(votosAux[i]);
         }
 
         
@@ -160,11 +164,16 @@ const verGanadores = () => {
         votos.forEach((v) => {
             e.respuesta.forEach((r) => {
                 if(r.votos === v) {
-                    if(ganadoresAux.length < 5){
+                    if(ganadoresAux.length < 1){
                         ganadoresAux.push(r);
                     }
                     else{
-                        if(ganadoresAux[ganadoresAux.length - 1] === v){
+                        var agregar = 0;
+                        ganadoresAux.forEach((g) => {
+                            if(g.respuesta === r.respuesta)
+                            agregar++;
+                        })
+                        if(agregar === 0){
                             ganadoresAux.push(r);
                         }
                     }
@@ -175,6 +184,21 @@ const verGanadores = () => {
 
     })
     console.log(ganadoresAux);
+
+    var totalVotos = 0;
+
+    ganadoresAux.forEach((g) => {
+        totalVotos += g.votos 
+    })
+
+    console.log(totalVotos);
+
+    ganadoresAux.forEach((g) => {
+        g.porcentajeVoto = ((g.votos/totalVotos) * 100).toFixed(2)
+    })
+    console.log(ganadoresAux);
+
+
     setDataModal(ganadoresAux);
 }
 
@@ -192,27 +216,30 @@ const verGanadoresEspecial = () => {
         })
 
 
-        let votosAux2 = votosAux.filter((item,index)=>{
+        /* let votosAux2 = votosAux.filter((item,index)=>{
             return votosAux.indexOf(item) === index;
-          })
+          }) */
 
         /* let votos = [];
         for (let i = 0; i < 5; i++){
             votos.push(votosAux2[i]);
         } */
 
-        
-
         // recorremos los votos para ingresar los ganadores
 
-        votosAux2.forEach((v) => {
+        votosAux.forEach((v) => {
             e.respuesta.forEach((r) => {
                 if(r.votos === v) {
                     if(ganadoresAux.length < 1){
                         ganadoresAux.push(r);
                     }
                     else{
-                        if(ganadoresAux[ganadoresAux.length - 1] === v){
+                        var agregar = 0;
+                        ganadoresAux.forEach((g) => {
+                            if(g.respuesta === r.respuesta)
+                            agregar++;
+                        })
+                        if(agregar === 0){
                             ganadoresAux.push(r);
                         }
                     }
@@ -222,6 +249,20 @@ const verGanadoresEspecial = () => {
         })
 
     })
+    console.log(ganadoresAux);
+
+    var totalVotos = 0;
+
+    ganadoresAux.forEach((g) => {
+        totalVotos += g.votos 
+    })
+
+    console.log(totalVotos);
+
+    ganadoresAux.forEach((g) => {
+        g.porcentajeVoto = ((g.votos/totalVotos) * 100).toFixed(2)
+    })
+    
     console.log(ganadoresAux);
     setDataModal(ganadoresAux);
 }

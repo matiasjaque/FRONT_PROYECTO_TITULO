@@ -32,6 +32,7 @@ const ModalVisualizarResult = (props) => {
                         <th className='titulosTabla'>#</th>
                         <th className='titulosTabla'>Nombre</th>
                         <th className='titulosTabla'>Cantidad de votos</th>
+                        <th className='titulosTabla'>porcentaje de votos</th>
                     </tr>
                     {<>{props.data.length}</>}
                     {props.data.map((e, key) => (
@@ -39,6 +40,7 @@ const ModalVisualizarResult = (props) => {
                             <td className='textosTabla'>{key + 1}</td>
                             <td className='textosTabla'>{e.respuesta}</td>
                             <td className='textosTabla'>{e.votos}</td>
+                            <td className='textosTabla'>{e.porcentajeVoto}%</td>
                         </tr>
                     ))}
                 </tbody>

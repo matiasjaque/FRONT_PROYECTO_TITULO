@@ -9,7 +9,7 @@ import '../styles/ModalResultados.css'
 const ModalResultados = (props) => {
 
   const[mostrarGrafico, setMostrarGrafico] = useState(false);
-  console.log(props.data)
+  
   
 
   useEffect( () => {

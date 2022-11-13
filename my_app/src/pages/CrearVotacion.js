@@ -4,6 +4,8 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+import { useParams } from 'react-router-dom';
+
 
 import MyNavbar from '../componts/MyNavbar';
 
@@ -22,19 +24,23 @@ const conectado = new Cookies();
 
 
 var idUsuario = conectado.get('id');
+var controlador = 1;
 
 
 const CrearVotaciones = () => {
+  const {tipo} = useParams();
+  const {idVotacion} = useParams();
   
 
   const [tituloVotacion, setTituloVotacion] = useState('');
-  const [idVotacion, setIdVotacion] = useState(1);
+  const [idVotacionLocal, setIdVotacionLocal] = useState(1);
 
   
   const [cantidadPreg, setCantidadPreg] = useState(0);
   const [cantidadResp, setCantidadResp] = useState(0);
 
   const [respuestas, setRespuestas] = useState([]);
+  const [respuestasGen, setRespuestasGen] = useState([]);
   const [preguntas, setPreguntas] = useState([]);
   var preguntasDemo = [];
   var respuestasDemo = [];
@@ -62,37 +68,176 @@ const CrearVotaciones = () => {
   useEffect(() => {
     actualizarIdVotacion();
     actualizarIdPreguntas();
-  },[]);
+    if(tipo === 'normal' && controlador === 1){
+        obtenerTituloVot();
+        obtenerTituloPreg();	
+        preguntasConRespuestasGet()
+        controlador = 0;
+
+    }
+  });
 
   
-  /* console.log("id: " + conectado.get('id'));
-  console.log("nombre: " + conectado.get('nombre'));
-  console.log("apellido: " + conectado.get('apellido'));
-  console.log(conectado) */
-  console.log(idPreguntaInsert)
-  console.log(idPreg)
+const obtenerTituloVot = async() => {
+	await axios.get(serverUrl + "/votacionById", {params:{idVotacion: idVotacion}})
+            .then(response=>{
+    
+            console.log(response.data[0])
+            let tituloGet = response.data[0].TITULO;
+            setTituloVotacion(tituloGet);
+            
+        })
+        .catch (error=> {
+            Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: error.response.data.message,
+            })
+        })
+}
+
+const obtenerTituloPreg = async() => {
+	await axios.get(serverUrl + "/preguntasGet", {params:{idVotacion: idVotacion}})
+            .then(response=>{
+    
+            console.log(response.data)
+            setCantidadPreg(response.data.length);
+            let idPregUsar = response.data[0].id_pregunta;
+			//setIdPregEditar(response.data[0].id_pregunta)
+            //setPreguntaVotacion(tituloGet);
+            obtenerResp(idPregUsar)
+            
+        })
+        .catch (error=> {
+            Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: error.response.data.message,
+            })
+        })
+}
+
+const obtenerResp = async(idPregUsar) => {
+	await axios.get(serverUrl + "/respuestasGet", {params:{idPregunta: idPregUsar}})
+            .then(response=>{
+    
+            console.log(response.data)
+            setCantidadResp(response.data.length);
+            
+            
+        })
+        .catch (error=> {
+            Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: error.response.data.message,
+            })
+        })
+}
+
+const preguntasConRespuestasGet = async () =>{
+    await axios.get(serverUrl + "/preguntasConRespuestas", {params:{idVotacion: idVotacion}})
+        .then(response=>{
+        //setPreguntas(response.data);
+        var dataPregYresp = response.data;
+
+        
+        const newPregYresp = [];
+        dataPregYresp.forEach( (k) => {
+            if (newPregYresp.length === 0) {
+                let newK = {
+                    idPregunta: k.ID_PREGUNTA,
+                    tituloPreg: k.TITULO,
+                }
+                newPregYresp.push(newK);
+            }
+            else{
+                let estaLaPreg = 0;
+                for (let i = 0; i < newPregYresp.length; i++) {
+                    if (newPregYresp[i].idPregunta === k.ID_PREGUNTA){
+                        estaLaPreg++;
+                    }
+                }
+                if (estaLaPreg === 0) {
+                    
+                    let newK = {
+                        idPregunta: k.ID_PREGUNTA,
+                        tituloPreg: k.TITULO,
+                        respuesta: [],
+                    }
+                    newPregYresp.push(newK);
+                }
+            }
+        })
+
+        newPregYresp.forEach ( (k) => {
+            const newResp = [];
+            for (let i = 0; i < dataPregYresp.length; i++) {
+                if (k.idPregunta === dataPregYresp[i].ID_PREGUNTA){
+                    let resp = {
+                                    idPreg: dataPregYresp[i].ID_PREGUNTA,
+                                    idResp: dataPregYresp[i].ID_RESPUESTA,
+                                    respuesta: dataPregYresp[i].RESPUESTA,
+                                    votos: dataPregYresp[i].VOTOS,
+                                    isCheck: false,
+                                }
+                    newResp.push(resp)
+                }
+            }
+            for (let j = 0; j < newPregYresp.length; j++) {
+                if(newPregYresp[j].idPregunta === newResp[0].idPreg) {
+                    newPregYresp[j].respuesta = newResp
+                }   
+            }
+
+        })
+
+        // obtener las respuestas antes de que se editen
+        var newRespGen = []
+        newPregYresp.forEach((p) => {
+            console.log(p)
+            
+            p.respuesta.forEach((r) => {
+                newRespGen.push(r)    
+            })
+        })
 
 
+        //setLoading(true);
+        setRespuestasGen(newRespGen)
+        setRespuestas(newRespGen)
+        setPreguntas(newPregYresp);
+        setDatosVotacion(true);
+    })
+    .catch (error=> {
+        Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error.response.data.message,
+        })
+    })
+};
 
-  const actualizarIdVotacion = async () =>{
+
+const actualizarIdVotacion = async () =>{
     await axios.get(serverUrl + "/votaciones", {params:{idUsuario: idUsuario}})
       .then(response=>{
-        setIdVotacion(response.data[response.data.length - 1].id_votacion)
+        setIdVotacionLocal(response.data[response.data.length - 1].id_votacion)
         //setLoading(true);
         //console.log("trae esto getVotaciones:");
         //console.log(response.data[response.data.length - 1].id_votacion);
     })
     .catch (error=> {
-      setIdVotacion(0)
+      setIdVotacionLocal(0)
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: error.response.data.message,
       })
     })
-  };
+};
 
-  const actualizarIdPreguntas = async () =>{
+const actualizarIdPreguntas = async () =>{
     await axios.get(serverUrl + "/preguntasGetGlobal")
       .then(response=>{
         setIdPreg(response.data[response.data.length - 1].ID_PREGUNTA)
@@ -103,19 +248,19 @@ const CrearVotaciones = () => {
         //console.log(response.data[response.data.length - 1].ID_PREGUNTA);
     })
     .catch (error=> {
-      setIdVotacion(0)
+      setIdVotacionLocal(0)
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: error.response.data.message,
       })
     })
-  };
+};
 
 
-  const volverHome = () =>{
+const volverHome = () =>{
     window.location.replace('/paginaPrincipal')
-  }
+}
 
   //funcion que inicializa la votacion con los datos ingresados por el usuario
   const continuarVotacion = () =>{
@@ -360,15 +505,18 @@ const CrearVotaciones = () => {
   const updateTitulos = (idPregu, newTitle) => {
     setDatosVotacion(false);
     console.log('updateTitulos')
+    console.log(idPregu, newTitle);
 
     const newPreguntas = preguntas.map((preg) => {
-      if(preg.id === idPregu){
-        return {
-          ...preg,
-          tituloPregunta: newTitle,
+        console.log(preg.idPregunta);
+        console.log(idPregu);
+        if(preg.idPregunta === idPregu){
+            return {
+            ...preg,
+            tituloPreg: newTitle,
+            }
         }
-      }
-      return preg
+        return preg
     })
 
     setPreguntas(newPreguntas)
@@ -388,11 +536,11 @@ const CrearVotaciones = () => {
 
     // actualizar las respuestas generales
     const newRespuestas = respuestas.map((resp) => {
-      //console.log(resp.idRespuesta + ' === ' + idRespu);
-      if(resp.idRespuesta === idRespu){
+      console.log(resp.idResp + ' === ' + idRespu);
+      if(resp.idResp === idRespu){
         return {
           ...resp,
-          tituloRespuesta: newTitleResp,
+          respuesta: newTitleResp,
         }
       }
       return resp;
@@ -433,7 +581,7 @@ const CrearVotaciones = () => {
   }
 
   const createVotacion = async () =>{
-    var idVot = idVotacion + 1;
+    var idVot = idVotacionLocal + 1;
     var estado = 1;
     console.log(idUsuario, tituloVotacion, idVot)
     await axios({
@@ -529,8 +677,8 @@ const CrearVotaciones = () => {
   
   const createPregunta = async (tituloVota) =>{
     console.log('idVotacion: ' )
-    console.log(idVotacion);
-    let idVot = idVotacion + 1;
+    console.log(idVotacionLocal);
+    let idVot = idVotacionLocal + 1;
 
     idPreguntaInsert++;
 
@@ -612,12 +760,86 @@ const CrearVotaciones = () => {
       icon: "success", timer: "2500"})
       setTimeout(function () {   
         //window.location.reload()
-        window.location.replace('paginaPrincipal');          
+        window.location.replace('/misVotaciones');          
       }, 2500);
       
     }
 
   }
+
+  const GuardarCambios = () =>{
+	if(tituloVotacion !== null && cantidadPreg > 0  && cantidadResp > 0) {
+        updateTituloVotacion();
+        updatePreguntas()
+        Swal.fire({title: 'Votación editada con éxito',
+        icon: "success", timer: "2000"})
+        setTimeout(function () {   
+            window.location.replace('/misVotaciones');          
+        }, 2000);
+    }
+    else{
+        alert('Debe asegurarse de ingresar un titulo y pregunta para la nueva votación')
+    }
+}
+
+const updateTituloVotacion = async () => {
+	
+	await axios({
+		method: 'put',
+		url:serverUrl + "/votacionUpdate", 
+		headers: {'Content-Type': 'application/json'},
+		params:{idVotacion: idVotacion, idUsuario: idUsuario, titulo: tituloVotacion}
+	}).catch(error =>{
+		alert(error.response.data.message);
+		console.log(error);
+	});
+};
+
+const updatePreguntas = () => {
+    preguntas.forEach((preg) => {
+        console.log( preg.idPregunta, preg.tituloPreg );
+        updateTituloPreg(preg.idPregunta, preg.tituloPreg);
+        preg.respuesta.forEach((resp) =>{
+            respuestas.forEach((r) => {
+                if(resp.idResp === r.idResp && resp.respuesta !== r.respuesta){
+                    console.log(resp.idResp === r.idResp && resp.respuesta !== r.respuesta)
+                    //console.log(preg.idPregunta, resp.idResp, resp.respuesta)
+                    updateTituloResp(preg.idPregunta, resp.idResp, r.respuesta)
+                }
+
+                
+            })
+            
+        })
+    })
+}
+
+const updateTituloPreg = async (idPregEditar, newTitulo) => {
+	
+	await axios({
+		method: 'put',
+		url:serverUrl + "/preguntaUpdate", 
+		headers: {'Content-Type': 'application/json'},
+		params:{idVotacion: idVotacion, idPregunta: idPregEditar, titulo: newTitulo}
+	}).catch(error =>{
+		alert(error.response.data.message);
+		console.log(error);
+	});
+};
+
+const updateTituloResp = async (idPregEditar, idRespEditar, newTitulo) => {
+    console.log(idPregEditar, idRespEditar, newTitulo)
+	
+	await axios({
+		method: 'put',
+		url:serverUrl + "/respuestaUpdate", 
+		headers: {'Content-Type': 'application/json'},
+		params:{idPregunta: idPregEditar, idRespuesta: idRespEditar, respuestas: newTitulo}
+	}).catch(error =>{
+		alert(error.response.data.message);
+		console.log(error);
+	});
+};
 
    /* console.log('preg')
   console.log(preguntas)
@@ -641,8 +863,13 @@ const CrearVotaciones = () => {
   console.log('cantidadResp')
   console.log(cantidadResp) */
 
+  console.log(preguntas)
+  console.log(respuestasGen)
+  console.log(respuestas)
+
 
   return (
+    <>{tipo === 'null' ?
     <div id='contenedorPrincipalMisVotaciones'>
         <MyNavbar activeKey='/crearVotacion'/>
         <div id='contenedorSecundarioMisVotaciones'>
@@ -707,7 +934,7 @@ const CrearVotaciones = () => {
                     <Row id='filasFormCrear'>
                       <Col sm md lg ={11} id='columnaTituloPreg'>
                         
-                        <Form.Control id='inputPreg' value = {element.tituloPregunta} type="text" placeholder="Ingresa el titulo de la pregunta" onChange={(e) =>{
+                        <Form.Control id='inputPreg' value = {element.tituloPreg} type="text" placeholder="Ingresa el titulo de la pregunta" onChange={(e) =>{
                           let nuevoTituloPreg = e.target.value;
                           updateTitulos(element.id, nuevoTituloPreg)
                           
@@ -757,7 +984,7 @@ const CrearVotaciones = () => {
                 {element.id === preguntas[preguntas.length-1].id ?
                   <div id='contenedorBotonFinal'>
                      <Button variant="primary" id='botonFinal' onClick={() => crearVotacion(element.id)}>
-                      Finalizar Votacion
+                      Crear Votación
                     </Button>
                   </div>
                   :
@@ -780,8 +1007,140 @@ const CrearVotaciones = () => {
           } 
         </div>
           
+      </div>:
+      <div id='contenedorPrincipalMisVotaciones'>
+      <MyNavbar activeKey='/crearVotacion'/>
+      <div id='contenedorSecundarioMisVotaciones'>
+        <div id='contenedorSuperiorCrearVotacion'>
+          <Row className='filas'>
+            <Col lg={12} md={12} sm={12} className='columnas'>
+                <h1 id='tituloVotacion'>              
+                    Editar Votación
+                </h1>
+            </Col>
+          </Row>
+          
+          <Row className='filas'>
+            <Col className='columnas'>
+              <Form.Label className="titulosForm">TÍTULO DE LA VOTACIÓN</Form.Label>
+                <Form.Control className="textosForm"
+                    type="text"
+                    placeholder="Ingrese el título de la votación"
+                    value={tituloVotacion}
+                    onChange={(e) => setTituloVotacion(e.target.value)}
+                />
+            </Col>
+
+            <Col className='columnas'>
+              <Form.Label className="titulosForm">CANTIDAD DE PREGUNTAS DE LA VOTACIÓN</Form.Label>
+                <Form.Control className="textosForm"
+                    id="cantPreg"
+                    type="text"
+                    placeholder="Ingrese la cantidad de preguntas que tendra la votación"
+                    value={cantidadPreg}
+                    onChange={(e) => setCantidadPreg(e.target.value)}
+                />
+            </Col>
+
+            <Col className='columnas'>
+              <Form.Label className="titulosForm">CANTIDAD DE RESPUESTAS POR PREGUNTA DE LA VOTACIÓN</Form.Label>
+                <Form.Control className="textosForm"
+                    type="text"
+                    placeholder="Ingrese la cantidad de respuestas por pregunta que tendra la votación"
+                    value={cantidadResp}
+                    onChange={(e) => setCantidadResp(e.target.value)}
+                />  
+            </Col>
+          </Row>
+              
+        </div>
+        
+        {
+          datosVotacion === true  ? 
+          <div id='contenedorVotacion'>
+            {/* hola
+            {preguntas.map(e => <h1>{e.id}</h1>)} */}
+            
+              {preguntas.map((element) => (
+                <div id='contenedorForm'>
+                <Form id='form'>
+                  <Row id='filasFormCrear'>
+                    <Col sm md lg ={11} id='columnaTituloPreg'>
+                      
+                    <Form.Control id='inputPreg' /* value = {element.tituloPreg} */ type="text" placeholder={element.tituloPreg} onChange={(e) =>{
+                        let nuevoTituloPreg = e.target.value;
+                        updateTitulos(element.idPregunta, nuevoTituloPreg);
+                    }}/> 
+                      
+                      
+                    </Col>
+
+                    <Col>
+                      <AiFillCloseCircle id='iconoCerrar' onClick={() => eliminarPregunta(element.id)}/>
+                    </Col>
+                    
+                  </Row>
+                  
+                <div id="contenedorRespuestas">
+                    {element.respuesta.map((elem) =>(
+                      
+                      <Row id='filasFormCrear2'>
+                        <Col sm md lg ={11} className='columnas' id='columnaTituloPreg'>
+                          <Form.Control id='inputResp' /* value={elem.respuesta} */ type="text" placeholder={elem.respuesta} onChange={(e) =>{
+                            let nuevoTituloResp = e.target.value;
+                            updateTitulosResp(elem.idResp, elem.idPreg, nuevoTituloResp);
+                          }}/>
+                        </Col>
+                        <Col>
+                          <AiFillCloseCircle id='iconoCerrar' onClick={() => eliminarRespuesta(elem.idRespuesta, elem.idPregunta)}/>
+                        </Col>
+                      </Row>
+                      
+                      ))}
+                  </div>
+
+                  <div id='contenedorBotonesCrear'>
+                    <Button variant="primary" id='agregarRespCrear' onClick={() => agregarRespuesta(element.id)}>
+                      Agregar Respuesta
+                    </Button>
+
+                    <Button variant="primary" id='agregarPregCrear' onClick={() => agregarPregunta(element.id)}>
+                      Agregar Pregunta
+                    </Button>
+
+                  </div>
+                        
+              </Form>
+
+
+              {element.idPregunta === preguntas[preguntas.length-1].idPregunta ?
+                <div id='contenedorBotonFinal'>
+                   <Button variant="primary" id='botonFinal' onClick={() => GuardarCambios(element.id)}>
+                        Guardar Cambios
+                  </Button>
+                </div>
+                :
+                <></>
+            
+            }
+
+
+                
+              
+          </div>
+              ))}
+            
+            
+        </div>
+          :
+          <div id='contenedorVotacion'>
+            no
+          </div>
+        } 
       </div>
-  )
+        
+    </div>}
+      </>)
 }
 
 export default CrearVotaciones

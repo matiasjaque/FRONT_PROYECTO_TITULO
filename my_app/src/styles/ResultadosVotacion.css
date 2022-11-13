@@ -1,5 +1,5 @@
 #contenedorResultVotacion{
-background: lightblue;
+background: #AFB2B7;
 padding: 0;
 margin: 0;
 width: 100%;
@@ -11,10 +11,15 @@ justify-content: center;
 }
 
 #contenedorEsperarCerrarVotacion{
-    width: 50%;
-    height: 50%;
+    width: 70%;
+    height: 70vh;
     padding: 0px;
-    background: lightcyan;
+    background: #F6FAFB;
+    border-radius: 50px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    -ms-border-radius: 50px;
+    -o-border-radius: 50px;
 }
 
 #mensajeTituloEsperarCerrar{
@@ -26,13 +31,13 @@ justify-content: center;
 }
 
 #mensajeSecundarioEsperarCerrar{
-    width: 80%;
+    width: 100%;
     height: 50%;
-    margin: auto;
-    display: flex;
+    display: grid;
+    text-align: center;
     align-items: center;
-    font-size: 22px;
-    font-weight: normal;
+    font-size: 26px;
+    font-weight: 600;
     font-family: sans-serif;
 }
 
@@ -82,7 +87,6 @@ justify-content: center;
 #contenedorBotonDirectorio{
     width: 80%;
     height: 15%;
-    background: aliceblue;
     display: flex;
     justify-content: end;
     align-items: end;

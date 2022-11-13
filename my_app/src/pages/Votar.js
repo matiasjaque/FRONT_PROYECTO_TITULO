@@ -372,7 +372,6 @@ const Votar = () => {
     };
 
     const visualizarResultEstado0 = () => {
-        alert('visualizarResultEstado0');
         
         window.location.replace(`/resultadosVotacion/${estadoVotacion}/${id}`)
     }
@@ -471,7 +470,7 @@ const Votar = () => {
 
                     </>:
                     <div id='contenedorEstado0'> 
-                        <h1 id='tituloEstado0'>La votación ha finalizado</h1> 
+                        <h1 id='tituloEstado0'>La votación ha finalizado!</h1> 
                         <h3 id='mensajeEstado0'>Para visualizar los resultados haga click en visualizar resultados</h3> 
                         <div id='contenedorBoton0'>
                             <Button onClick={() => visualizarResultEstado0()} id='botonEstado0'>Visualizar resultados</Button>

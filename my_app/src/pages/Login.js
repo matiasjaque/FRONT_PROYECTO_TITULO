@@ -46,7 +46,7 @@ function Login() {
             Swal.fire({title: `Bienvenido  ${respuesta.NOMBRE} ${respuesta.APELLIDO_PATERNO}`,
                     icon: "success", timer: "2500"})
             setTimeout(function () {
-                window.location.replace("/paginaPrincipal")               
+                window.location.replace("/misVotaciones")               
             }, 2500);
             document.getElementById('email').value = ''
         })
@@ -66,7 +66,7 @@ function Login() {
   return (
     <div style={imagenFondo} className='contenedorPrincipal'>
         <div className='contenedorSecundario'>
-            <h1 className='tituloLogin'>Software De Votación Electronica</h1>
+            <h1 className='tituloLogin'>Software De Votación Electrónica</h1>
             
             <Form className='contenedorForm' onSubmit={iniciarSesion}>
                 <Form.Group className='mb-3' >

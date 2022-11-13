@@ -20,9 +20,9 @@ function RoutesApp() {
         <Route path="/paginaPrincipal" element={<PaginaPrincipal />} />
         <Route path="/registrarse" element={<Registrarse />} />
         <Route path="/recuperarContrasena" element={<RecuperarContraseña />} />
-        <Route path="/crearVotacion" element={<CrearVotacion />} />
-        <Route path="/crearVotacionUnGanador" element={<CrearVotacion2/>} />
-        <Route path="/crearVotacionDirectorio" element={<CrearVotacion3/>} />
+        <Route path="/crearVotacion/:tipo/:idVotacion" element={<CrearVotacion />} />
+        <Route path="/crearVotacionUnGanador/:tipo/:idVotacion" element={<CrearVotacion2/>} />
+        <Route path="/crearVotacionDirectorio/:tipo/:idVotacion" element={<CrearVotacion3/>} />
         <Route path="/misVotaciones" element={<MisVotaciones />} />
         <Route path="/resultadosVotacion/:estado/:idVotacion" element={<ResultadosVotacion/>} />
         <Route path="/votar/:id/:estadoVotacion/:idPreg" element={ <Votar/>}/>

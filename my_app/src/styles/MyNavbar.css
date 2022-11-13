@@ -1,4 +1,5 @@
 #navbar{
+    background-color: black;
     position: relative;
     min-height: 10vh;
     width: 100%;
@@ -34,6 +35,9 @@
 
 #navbarContenedor{
     color: black;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .botonesNavbar{
@@ -157,6 +161,7 @@
     color: white;
     
     background: none;
+    position: absolute;
 }
 
 .interiorDropDown{
@@ -164,6 +169,20 @@
     font-size: 20px;
     font-weight: 500;
     font-family: sans-serif;
+    position: relative;
+    z-index: 2;
+}
+
+#usuarioConectado{
+    display: flex;
+    margin: 0px 15px;
+    min-width: 450px;
+    justify-content: end;
+    font-weight: bold;
+    font-size: 23px;
+    height: 60px;
+    align-items: center;
+    color: white;
 }
 
 

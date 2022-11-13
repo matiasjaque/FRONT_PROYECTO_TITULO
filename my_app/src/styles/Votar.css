@@ -1,5 +1,5 @@
 #contenedorPadreVotar {
-    background: #E5E4E0;
+    background: #AFB2B7;
     width: 100%;
     height: 100vh;
     display: flex;
@@ -7,7 +7,6 @@
 }
 
 #contenedorSecundarioVotar{
-    background: black;
     width: 60%;
     height: 90vh; 
     margin: auto;
@@ -108,10 +107,15 @@
 }
 
 #contenedorIngresarElNombreVotante{
-    background: aliceblue;
+    background: #F6FAFB;
     width: 80%;
     height: 80%;
     margin: auto;
+    border-radius: 40px;
+    -webkit-border-radius: 40px;
+    -moz-border-radius: 40px;
+    -ms-border-radius: 40px;
+    -o-border-radius: 40px;
 }
 
 .filasEstado2{
@@ -120,7 +124,6 @@
 }
 
 #filaTituloVOtarEstado2{
-    background: #EDECE9;
     width: 100%;
     height: 20%;
 }
@@ -134,7 +137,6 @@
 }
 
 #filaFormularioEstado2{
-    background: #EDECE9;
     width: 100%;
     height: 60%;
 }
@@ -149,7 +151,6 @@
 }
 
 #filaBotonEstado2{
-    background: #EDECE9;
     width: 100%;
     height: 20%;
 }
@@ -161,6 +162,8 @@
 }
 
 .botonEstado2{
+    background: white;
+    color: black;
     width: 25%;
     padding: 5px;
     margin: 5px 15px;
@@ -171,7 +174,7 @@
 }
 
 #contenedorEsperandoVotacionEstado2{
-    background: aliceblue;
+    background: #F6FAFB;
     width: 80%;
     height: 60%;
     margin: auto;
@@ -207,9 +210,9 @@
 }
 
 #contenedorEstado0{
-    background: antiquewhite;
-    width: 70%;
-    height: 45%;
+    background: #F6FAFB;
+    width: 100%;
+    height: 80%;
     margin: auto;
     border-radius: 20px;
     display: flex;
@@ -220,7 +223,6 @@
 }
 
 #tituloEstado0{
-    background: aliceblue;
     width: 80%;
     height: 30%;
     display: flex;
@@ -232,7 +234,6 @@
 }
 
 #mensajeEstado0{
-    background: aquamarine;
     width: 80%;
     height: 30%;
     display: flex;
@@ -246,13 +247,14 @@
 #contenedorBoton0{
     width: 80%;
     height: 40%;
-    background: aqua;
     display: flex;
     justify-content: end;
     align-items: end;
 }
 
 #botonEstado0{
+    background: white;
+    color: black;
     width: 55%;
     height: 30%;
     font-size: 22px;
