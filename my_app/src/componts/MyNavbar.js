@@ -2,9 +2,8 @@ import React from 'react'
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import Dropdown from 'react-bootstrap/Dropdown';
 
-import DropdownButton from 'react-bootstrap/DropdownButton';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 import '../styles/MyNavbar.css';
 
 import Cookies from 'universal-cookie';
@@ -62,11 +61,11 @@ const MyNavbar = (props) => {
                     <CgAdd id='iconoCrearVotacion'/> 
                   </Col>
                   <Col className='colGenerico'>
-                    <Dropdown  title="Crear Votación editando" id="colorDelDrop" >
-                      <Dropdown.Item href={`/crearVotacion/${'null'}/${'null'}`} className='interiorDropDown'>  Votación normal</Dropdown.Item>
-                      <Dropdown.Item href={`/crearVotacionUnGanador/${'null'}/${'null'}`} className='interiorDropDown'>Votación especial</Dropdown.Item>
-                      <Dropdown.Item href={`/crearVotacionDirectorio/${'null'}/${'null'}`}  className='interiorDropDown'>Votación directorio</Dropdown.Item>
-                    </Dropdown>
+                    <NavDropdown  title="Crear Votación" id="colorDelDrop" >
+                      <NavDropdown.Item href={`/crearVotacion/${'null'}/${'null'}`} className='interiorDropDown'>  Votación normal</NavDropdown.Item>
+                      <NavDropdown.Item href={`/crearVotacionUnGanador/${'null'}/${'null'}`} className='interiorDropDown'>Votación especial</NavDropdown.Item>
+                      <NavDropdown.Item href={`/crearVotacionDirectorio/${'null'}/${'null'}`}  className='interiorDropDown'>Votación directorio</NavDropdown.Item>
+                    </NavDropdown>
                   </Col>
                 </Row>
                 
@@ -82,11 +81,11 @@ const MyNavbar = (props) => {
                   <CgAdd id='iconoCrearVotacion'/> 
                 </Col>
                 <Col className='colGenerico'>
-                  <DropdownButton  title="Crear Votación edi" id="dropdown-item-button" >
-                    <Dropdown.Item href={`/crearVotacion/${'null'}/${'null'}`} className='interiorDropDown'>Votación normal</Dropdown.Item>
-                    <Dropdown.Item href={`/crearVotacionUnGanador/${'null'}/${'null'}`} className='interiorDropDown'>Votación especial</Dropdown.Item>
-                    <Dropdown.Item href= {`/crearVotacionDirectorio/${'null'}/${'null'}`} className='interiorDropDown'>Votación directorio</Dropdown.Item>
-                  </DropdownButton>
+                  <NavDropdown  title="Crear Votación" id="colorDelDrop" >
+                    <NavDropdown.Item href={`/crearVotacion/${'null'}/${'null'}`} className='interiorDropDown'>Votación normal</NavDropdown.Item>
+                    <NavDropdown.Item href={`/crearVotacionUnGanador/${'null'}/${'null'}`} className='interiorDropDown'>Votación especial</NavDropdown.Item>
+                    <NavDropdown.Item href= {`/crearVotacionDirectorio/${'null'}/${'null'}`} className='interiorDropDown'>Votación directorio</NavDropdown.Item>
+                  </NavDropdown>
                 </Col>
               </Row>
               

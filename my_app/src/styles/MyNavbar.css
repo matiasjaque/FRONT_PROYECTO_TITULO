@@ -2,6 +2,7 @@
     background-color: black;
     position: relative;
     min-height: 10vh;
+    height:auto;
     width: 100%;
 }
 
@@ -111,6 +112,7 @@
     -moz-border-radius: 20px;
     -ms-border-radius: 20px;
     -o-border-radius: 20px;
+    position: fixed;
 }
 
 #contenedorCrearVotacionSelected{
@@ -123,6 +125,7 @@
     -ms-border-radius: 20px;
     -o-border-radius: 20px;
     background: #0D6EFD;
+    position: fixed;
     
     color: white;
 }
@@ -161,7 +164,6 @@
     color: white;
     
     background: none;
-    position: absolute;
 }
 
 .interiorDropDown{
