@@ -19,8 +19,8 @@
 
 #titulo{
     display: flex;
-    margin: 0px 15px;
-    min-width: 450px;
+    margin: 0px 5px;
+    min-width: 400px;
     justify-content: center;
     border-radius: 20px;
     font-weight: bold;
@@ -43,7 +43,7 @@
 
 .botonesNavbar{
     cursor: pointer;
-    min-width: 240px;
+    min-width: 200px;
     text-align: center;
     font-weight: bold;
     font-size: 23px;
@@ -178,7 +178,7 @@
 #usuarioConectado{
     display: flex;
     margin: 0px 15px;
-    min-width: 450px;
+    width: auto;
     justify-content: end;
     font-weight: bold;
     font-size: 23px;

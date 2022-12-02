@@ -508,6 +508,30 @@ const volverHome = () =>{
     console.log(idPregu, newTitle);
 
     const newPreguntas = preguntas.map((preg) => {
+        console.log(preg.id);
+        console.log(idPregu);
+        if(preg.id === idPregu){
+            return {
+            ...preg,
+            tituloPregunta: newTitle,
+            }
+        }
+        return preg
+    })
+
+    setPreguntas(newPreguntas)
+    setDatosVotacion(true);
+
+  }
+
+  // funcion para actualizar los titulos de editar
+
+  const updateTitulosEditar = (idPregu, newTitle) => {
+    setDatosVotacion(false);
+    console.log('updateTitulos')
+    console.log(idPregu, newTitle);
+
+    const newPreguntas = preguntas.map((preg) => {
         console.log(preg.idPregunta);
         console.log(idPregu);
         if(preg.idPregunta === idPregu){
@@ -528,10 +552,66 @@ const volverHome = () =>{
   
   const updateTitulosResp = (idRespu, idPregu, newTitleResp) => {
     setDatosVotacion(false);
-    /* console.log('datos de la funcion: ')
+    console.log('datos de la funcion: ')
     console.log(idRespu);
     console.log(idPregu);
-    console.log(newTitleResp); */
+    console.log(newTitleResp);
+
+
+    // actualizar las respuestas generales
+    const newRespuestas = respuestas.map((resp) => {
+      console.log(resp.idRespuesta + ' === ' + idRespu);
+      if(resp.idRespuesta === idRespu){
+        return {
+          ...resp,
+          tituloRespuesta: newTitleResp,
+        }
+      }
+      return resp;
+    })
+    /* console.log('newRespuestas')
+    console.log(newRespuestas) */
+    setRespuestas(newRespuestas);
+
+
+    // juntar las nuevas respuestas
+
+    const newResp = newRespuestas.filter((resp) => (resp.idPregunta === idPregu));
+
+    /* console.log('newResp')
+    console.log(newResp) */
+
+    //actualizar el titulo de respuesta de las preguntas
+
+    const newPreguntas = preguntas.map((preg) => {
+
+      if(preg.id === idPregu){
+        return {
+          ...preg,
+          respuestas: newResp
+          }
+            
+      }
+
+      return preg
+    })
+
+    /* console.log('newPreguntas')
+    console.log(newPreguntas) */
+    setPreguntas(newPreguntas);
+    setDatosVotacion(true);
+
+
+  }
+
+  //funcion para actualizar los titulos de respuestas
+  
+  const updateTitulosRespEditar = (idRespu, idPregu, newTitleResp) => {
+    setDatosVotacion(false);
+    console.log('datos de la funcion: ')
+    console.log(idRespu);
+    console.log(idPregu);
+    console.log(newTitleResp);
 
 
     // actualizar las respuestas generales
@@ -954,7 +1034,7 @@ const updateTituloResp = async (idPregEditar, idRespEditar, newTitulo) => {
                         
                         <Row id='filasFormCrear2'>
                           <Col sm md lg ={11} className='columnas' id='columnaTituloPreg'>
-                            <Form.Control id='inputResp' value={elem.tituloRespuesta} type="text" placeholder="Ingrese una respuesta" onChange={(e) =>{
+                            <Form.Control id='inputResp' type="text" placeholder="Ingrese una respuesta" onChange={(e) =>{
                               let nuevoTituloResp = e.target.value;
                               updateTitulosResp(elem.idRespuesta, elem.idPregunta, nuevoTituloResp);
                             }}/>
@@ -1069,7 +1149,7 @@ const updateTituloResp = async (idPregEditar, idRespEditar, newTitulo) => {
                       
                     <Form.Control id='inputPreg' /* value = {element.tituloPreg} */ type="text" placeholder={element.tituloPreg} onChange={(e) =>{
                         let nuevoTituloPreg = e.target.value;
-                        updateTitulos(element.idPregunta, nuevoTituloPreg);
+                        updateTitulosEditar(element.idPregunta, nuevoTituloPreg);
                     }}/> 
                       
                       
@@ -1088,7 +1168,7 @@ const updateTituloResp = async (idPregEditar, idRespEditar, newTitulo) => {
                         <Col sm md lg ={11} className='columnas' id='columnaTituloPreg'>
                           <Form.Control id='inputResp' /* value={elem.respuesta} */ type="text" placeholder={elem.respuesta} onChange={(e) =>{
                             let nuevoTituloResp = e.target.value;
-                            updateTitulosResp(elem.idResp, elem.idPreg, nuevoTituloResp);
+                            updateTitulosRespEditar(elem.idResp, elem.idPreg, nuevoTituloResp);
                           }}/>
                         </Col>
                         <Col>

@@ -868,7 +868,6 @@ const MisVotaciones = () => {
 
     const empezarVotacion = (idVot) => {
         let estado = 1;
-        alert('empezar votaciones')
         Swal.fire({
             title: '¿Esta seguro de empezar la votación?',
             text: "Una vez empezada la votación nadie más podra ser ingresado como respuesta",

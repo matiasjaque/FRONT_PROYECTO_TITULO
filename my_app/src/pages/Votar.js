@@ -283,7 +283,6 @@ const Votar = () => {
     };
 
     const ingresarUsuario = () => {
-        alert('ingresar usuario');
         console.log(nombreVotante);
         console.log(typeof(nombreVotante));
         if(nombreVotante === undefined || nombreVotante === '') {

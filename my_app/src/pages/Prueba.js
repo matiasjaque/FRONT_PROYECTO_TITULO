@@ -18,7 +18,7 @@ var idUsuario = conectado.get('id');
 
 
 
-console.log(idUsuario);
+
 
 const PaginaPrincipal = () => {
 
