@@ -19,6 +19,7 @@ import Swal from 'sweetalert2';
 
 
 import { MdAutorenew,MdOutlineContentCopy, MdDeleteForever, MdShare, MdPieChart, MdCheckCircleOutline, MdHighlightOff, MdRule, MdWorkspacesFilled } from "react-icons/md";
+import ModalVotEspecial from '../componts/ModalVotEspecial';
 
 
 const serverUrl = process.env.REACT_APP_SERVER;
@@ -40,11 +41,18 @@ const MisVotaciones = () => {
 
     const [modalShow, setModalShow] = useState(false);
     const [modalResultShow, setModalResultShow] = useState(false);
+    const [modalEspecial, setModalEspecial] = useState(false);
 
     const [enlace, setEnlace] = useState('');
+    const [estadoVotacion, setEstadoVotacion] = useState(0);
 
     const [tituloVotacionResult, setTituloVotacionResult] = useState('');
     const [pregYresp, serPregYresp] = useState([]);
+    const [dataModalEspecial, setDataModalEspecial] = useState([]);
+    const [porcentajeModal, setPorcentajeModal ] = useState(0);
+    const [tituloPregEspecial, setTituloPregEspecial] = useState('');
+    const [idVotacionEspecial, setIdVotacionEspecial] = useState(0);
+    
 
     //data para la nueva votacion
     const [idVotacion, setIdVotacion] = useState(1);
@@ -259,11 +267,12 @@ const MisVotaciones = () => {
 
 
 
-    const handleModalResult = (idVot, tituloVotacion) => {
+    const handleModalResult = (idVot, tituloVotacion, estado) => {
+        //console.log(estado)
         //setEnlace(`http://localhost:3000/votar/${idVot}`);
         setTituloVotacionResult(tituloVotacion)
         preguntasConRespuestasGet(idVot)
-        /* setModalResultShow(true); */
+        setEstadoVotacion(estado)
     }
 
     const preguntasConRespuestasGet = async (id) =>{
@@ -374,205 +383,291 @@ const MisVotaciones = () => {
           
     }
 
-    const segundoSwal = async(idVot, estado) => {
+    const segundoSwal = async(idVot, estado, porcentaje) => {
 
-        //se requiere verificar si la votacion tiene votos repetidos
-        let repetirVotacion = false;
+        console.log(estado, porcentaje)
 
-        await axios.get(serverUrl + "/preguntasConRespuestas", {params:{idVotacion: idVot}})
-        .then(response=>{
-        //setPreguntas(response.data);
-        var data = response.data;
-        
+        // creamos la funcion del estado especial
+        if(estado === 1){
+            //alert('Estado 1')
+            // necesito el total de votos
+            let totalVotos = 0;
+            let usuarios = [];
+            let calculoPorcentaje = 0;
 
-        const newPregYresp = [];
-            data.forEach( (k) => {
-                if (newPregYresp.length === 0) {
-                    let newK = {
-                        idPregunta: k.ID_PREGUNTA,
-                        tituloPreg: k.TITULO,
-                    }
-                    newPregYresp.push(newK);
-                }
-                else{
-                    let estaLaPreg = 0;
-                    for (let i = 0; i < newPregYresp.length; i++) {
-                        if (newPregYresp[i].idPregunta === k.ID_PREGUNTA){
-                            estaLaPreg++;
-                        }
-                    }
-                    if (estaLaPreg === 0) {
-                        
-                        let newK = {
-                            idPregunta: k.ID_PREGUNTA,
-                            tituloPreg: k.TITULO,
-                            respuesta: [],
-                        }
-                        newPregYresp.push(newK);
-                    }
-                }
+            await axios.get(serverUrl + "/preguntasConRespuestas", {params:{idVotacion: idVot}})
+            .then(response=>{
+            //setPreguntas(response.data);
+            var data = response.data;
+
+            console.log(data);
+
+            data.forEach((e) => {
+                totalVotos += e.VOTOS;
+            })
+            console.log(totalVotos)
+
+            // necesito ordenar las respuestas por votos y ver si el primero le gana al segundo por el porcentaje ingresado
+            data.forEach((e) => {
+                usuarios.push({nombre: e.RESPUESTA, cantidadVotos: e.VOTOS, isCheck: true})
             })
 
-            newPregYresp.forEach ( (k) => {
-                const newResp = [];
-                for (let i = 0; i < data.length; i++) {
-                    if (k.idPregunta === data[i].ID_PREGUNTA){
-                        let resp = {
-                                        idPreg: data[i].ID_PREGUNTA,
-                                        idResp: data[i].ID_RESPUESTA,
-                                        respuesta: data[i].RESPUESTA,
-                                        votos: data[i].VOTOS,
-                                        isCheck: false,
-                                    }
-                        newResp.push(resp)
-                    }
-                }
-                for (let j = 0; j < newPregYresp.length; j++) {
-                    if(newPregYresp[j].idPregunta === newResp[0].idPreg) {
-                        newPregYresp[j].respuesta = newResp
-                    }   
-                }
-            })
+            console.log(usuarios)
 
-            var preguntasConVotosRepetidos = [];
+            //necesitamos ordenar el arreglo por votos
+            usuarios.sort(((a, b) => b.cantidadVotos - a.cantidadVotos));
 
-            // recorrer las preguntas con respuestas para buscar preguntas con votos iguales
+            console.log(usuarios)
 
-            for (let i = 0; i < newPregYresp.length; i++) {
-                //console.log(newPregYresp[i].respuesta);
+            // necesito verificar si el primer usuario le gana al segundo por el porcentaje ingresado
 
-                // obtenemos las respuestas de cada pregunta
-                let auxResp = newPregYresp[i].respuesta;
-                let votos =[]
+            calculoPorcentaje = totalVotos*(porcentaje/100);
 
-                // obtenemos los votos de cada pregunta
-                for (let k = 0; k < auxResp.length; k++){
-                    votos.push(auxResp[k].votos)
-                }
+            console.log(calculoPorcentaje)
 
-                // ordenamos los votos para ver si hay preguntas con la misma cantidad de votos
-
-                votos.sort(function(a,b){
-                    return b - a;
-                })
-
-                // ver si los votos se repiten
-
-                // datos necesarios para crear la nueva funcion
-                let preguntaAgregada = 0;
-
-                for (let j = 0; j < votos.length; j++) {
-
-                    if (votos[j] === votos[j+1]){
-                        //agregamos la pregunta que tiene respuestas con voto repetidos
-
-                        // nos aseguramos de agregar solo una vez la pregunta
-                        if(preguntaAgregada === 0 && votos[j] > 0){
-                            preguntasConVotosRepetidos.push(newPregYresp[i]);
-                            preguntaAgregada++;
-                        }
-                        
-                        j = votos.length; 
-                    }
-                    else{
-                        j = votos.length;
-                    }
-
-                }
-
-
-                if(preguntasConVotosRepetidos.length > 0){
-                    repetirVotacion = true;
-                }
-                else{
-                    repetirVotacion = false;
-                }
+            if( usuarios[0].cantidadVotos >= calculoPorcentaje ){
+                Swal.fire(
+                    'Votación cerrada!',
+                    'La votación cumple con los requisitos estipulados!',
+                    'success'
+                )
+                
+                // si se cumple cerrar votacion
+                cerrarVotacion(idVot, estado)
 
             }
+            else{
+                Swal.fire(
+                    'Votación fallida!',
+                    'La votación no cumple con los requisitos estipulados!',
+                    'error'
+                )
+
+                setTimeout(function () {   
+                    setDataModalEspecial(usuarios)
+                    setPorcentajeModal(porcentaje)
+                    setTituloPregEspecial(response.data[0].TITULO)
+                    setIdVotacionEspecial(idVot)
+                    
+                    setModalEspecial(true); 
+                }, 2500);
+                // si no se cumple crear la nueva votacion mostrandole al usuario los usuarios disponible.
+                
+            }
+
+
         })
         .catch (error=> {
             Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: error.response.data.message,
+                icon: 'error',
+                title: 'Oops...',
+                text: error.response.data.message,
             })
         })
 
-        // vemos si la votacion a cerrar tiene preguntas con votos repetidos
-
-        console.log(repetirVotacion)
-        if(repetirVotacion){
-            Swal.fire({
-                title: 'Se han detectado preguntas con votos repetidos!',
-                text: "¿Desea crear una nueva votación para desempatar las preguntas afectadas?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Si, crear la nueva votación!',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-
-
-                    Swal.fire({
-                        title: "Ingrese el titulo para su nueva votación!",
-                        text: "Titulo de votación",
-                        input: 'text',
-                        inputValue: '',
-                        showCancelButton: true,  
-                        inputValidator: (value) => {
-                            if (!value) {
-                              return 'El campo del nuevo titulo es obligatorio!'
-                            }    
-                        }  
-                    }).then((result) => {
-                        if (result.value !== "" && result.value !== undefined) {
-                            
-                            // se llama la funcion de crear la votacion con el titulo obtenido en el input
-                            logicaRepetirVotacionAuto(idVot, result.value)
-                            Swal.fire(
-                                'Votación creada!',
-                                'Su votación ha sido creada con éxito',
-                                'success',
-                            )
-                            setTimeout(function () {   
-                                cerrarVotacion(idVot, estado)  
-                            }, 1500);
-                            //console.log("Result: " + result.value);
-                        }
-
-                        else{
-                            setTimeout(function () {   
-                                cerrarVotacion(idVot, estado)  
-                            }, 1500);
-                        }
-
-                    });
-
-
-                    //logicaRepetirVotacionAuto(idVot)
-                    
-                    /* Swal.fire(
-                        'Votación creada!',
-                        'Su votación ha sido creada con éxito',
-                        'success',
-                    ) */
-                    /* setTimeout(function () {   
-                        cerrarVotacion(idVot, estado)  
-                    }, 1500); */
-                }
-                else{
-                    cerrarVotacion(idVot, estado)
-                }
-            })
         }
 
         else{
 
-            // aqui llamaria al primer swal
-            cerrarVotacion(idVot, estado)
+            //se requiere verificar si la votacion tiene votos repetidos
+            let repetirVotacion = false;
+
+            await axios.get(serverUrl + "/preguntasConRespuestas", {params:{idVotacion: idVot}})
+            .then(response=>{
+            //setPreguntas(response.data);
+            var data = response.data;
+            
+
+            const newPregYresp = [];
+                data.forEach( (k) => {
+                    if (newPregYresp.length === 0) {
+                        let newK = {
+                            idPregunta: k.ID_PREGUNTA,
+                            tituloPreg: k.TITULO,
+                        }
+                        newPregYresp.push(newK);
+                    }
+                    else{
+                        let estaLaPreg = 0;
+                        for (let i = 0; i < newPregYresp.length; i++) {
+                            if (newPregYresp[i].idPregunta === k.ID_PREGUNTA){
+                                estaLaPreg++;
+                            }
+                        }
+                        if (estaLaPreg === 0) {
+                            
+                            let newK = {
+                                idPregunta: k.ID_PREGUNTA,
+                                tituloPreg: k.TITULO,
+                                respuesta: [],
+                            }
+                            newPregYresp.push(newK);
+                        }
+                    }
+                })
+
+                newPregYresp.forEach ( (k) => {
+                    const newResp = [];
+                    for (let i = 0; i < data.length; i++) {
+                        if (k.idPregunta === data[i].ID_PREGUNTA){
+                            let resp = {
+                                            idPreg: data[i].ID_PREGUNTA,
+                                            idResp: data[i].ID_RESPUESTA,
+                                            respuesta: data[i].RESPUESTA,
+                                            votos: data[i].VOTOS,
+                                            isCheck: false,
+                                        }
+                            newResp.push(resp)
+                        }
+                    }
+                    for (let j = 0; j < newPregYresp.length; j++) {
+                        if(newPregYresp[j].idPregunta === newResp[0].idPreg) {
+                            newPregYresp[j].respuesta = newResp
+                        }   
+                    }
+                })
+
+                var preguntasConVotosRepetidos = [];
+
+                // recorrer las preguntas con respuestas para buscar preguntas con votos iguales
+
+                for (let i = 0; i < newPregYresp.length; i++) {
+                    //console.log(newPregYresp[i].respuesta);
+
+                    // obtenemos las respuestas de cada pregunta
+                    let auxResp = newPregYresp[i].respuesta;
+                    let votos =[]
+
+                    // obtenemos los votos de cada pregunta
+                    for (let k = 0; k < auxResp.length; k++){
+                        votos.push(auxResp[k].votos)
+                    }
+
+                    // ordenamos los votos para ver si hay preguntas con la misma cantidad de votos
+
+                    votos.sort(function(a,b){
+                        return b - a;
+                    })
+
+                    // ver si los votos se repiten
+
+                    // datos necesarios para crear la nueva funcion
+                    let preguntaAgregada = 0;
+
+                    for (let j = 0; j < votos.length; j++) {
+
+                        if (votos[j] === votos[j+1]){
+                            //agregamos la pregunta que tiene respuestas con voto repetidos
+
+                            // nos aseguramos de agregar solo una vez la pregunta
+                            if(preguntaAgregada === 0 && votos[j] > 0){
+                                preguntasConVotosRepetidos.push(newPregYresp[i]);
+                                preguntaAgregada++;
+                            }
+                            
+                            j = votos.length; 
+                        }
+                        else{
+                            j = votos.length;
+                        }
+
+                    }
+
+
+                    if(preguntasConVotosRepetidos.length > 0){
+                        repetirVotacion = true;
+                    }
+                    else{
+                        repetirVotacion = false;
+                    }
+
+                }
+            })
+            .catch (error=> {
+                Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error.response.data.message,
+                })
+            })
+
+            // vemos si la votacion a cerrar tiene preguntas con votos repetidos
+
+            console.log(repetirVotacion)
+            if(repetirVotacion){
+                Swal.fire({
+                    title: 'Se han detectado preguntas con votos repetidos!',
+                    text: "¿Desea crear una nueva votación para desempatar las preguntas afectadas?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, crear la nueva votación!',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+
+                        Swal.fire({
+                            title: "Ingrese el titulo para su nueva votación!",
+                            text: "Titulo de votación",
+                            input: 'text',
+                            inputValue: '',
+                            showCancelButton: true,  
+                            inputValidator: (value) => {
+                                if (!value) {
+                                return 'El campo del nuevo titulo es obligatorio!'
+                                }    
+                            }  
+                        }).then((result) => {
+                            if (result.value !== "" && result.value !== undefined) {
+                                
+                                // se llama la funcion de crear la votacion con el titulo obtenido en el input
+                                logicaRepetirVotacionAuto(idVot, result.value)
+                                Swal.fire(
+                                    'Votación creada!',
+                                    'Su votación ha sido creada con éxito',
+                                    'success',
+                                )
+                                setTimeout(function () {   
+                                    cerrarVotacion(idVot, estado)  
+                                }, 1500);
+                                //console.log("Result: " + result.value);
+                            }
+
+                            else{
+                                setTimeout(function () {   
+                                    cerrarVotacion(idVot, estado)  
+                                }, 1500);
+                            }
+
+                        });
+
+
+                        //logicaRepetirVotacionAuto(idVot)
+                        
+                        /* Swal.fire(
+                            'Votación creada!',
+                            'Su votación ha sido creada con éxito',
+                            'success',
+                        ) */
+                        /* setTimeout(function () {   
+                            cerrarVotacion(idVot, estado)  
+                        }, 1500); */
+                    }
+                    else{
+                        cerrarVotacion(idVot, estado)
+                    }
+                })
+            }
+
+            else{
+
+                // aqui llamaria al primer swal
+                cerrarVotacion(idVot, estado)
+            }
         }
+
         
     }
 
@@ -956,6 +1051,7 @@ const MisVotaciones = () => {
             idVotacion: idVot,
             estado: estado,
             tipo: tipoVot,
+            porcentaje: 0,
         }
         }).then(response=>{
         console.log("Funciona create votacion con id de votacion: ");
@@ -1168,8 +1264,8 @@ const MisVotaciones = () => {
                                     </button> 
                                 </td>
                                 <td className='columnaTablaVisualizarResult'>
-                                    <MdPieChart id='iconoVisualizarResultado' onClick= {() => handleModalResult(e.id_votacion, e.titulo)}/>
-                                    <button className='botonesTabla' onClick= {() => handleModalResult(e.id_votacion, e.titulo)}>
+                                    <MdPieChart id='iconoVisualizarResultado' onClick= {() => handleModalResult(e.id_votacion, e.titulo, e.estado)}/>
+                                    <button className='botonesTabla' onClick= {() => handleModalResult(e.id_votacion, e.titulo, e.estado)}>
                                         Visualizar resultados
                                     </button> 
                                 </td>
@@ -1177,8 +1273,8 @@ const MisVotaciones = () => {
                                 {e.estado === 1 ?
                                     <>
                                         <td className='botonesTablaCerrarVotacion'>
-                                            <MdRule id='iconoCerrarVotacion' onClick= {() => segundoSwal(e.id_votacion, e.estado)}/>
-                                            <button className='botonesTabla' onClick= {() => segundoSwal(e.id_votacion, e.estado)}>
+                                            <MdRule id='iconoCerrarVotacion' onClick= {() => segundoSwal(e.id_votacion, e.estado, e.porcentaje)}/>
+                                            <button className='botonesTabla' onClick= {() => segundoSwal(e.id_votacion, e.estado, e.porcentaje)}>
                                                 Cerrar votación
                                             </button> 
                                         </td>
@@ -1264,6 +1360,16 @@ const MisVotaciones = () => {
             onHide={() => setModalResultShow(false)}
             tituloVotacion = {tituloVotacionResult}
             data={pregYresp}
+            estado= {estadoVotacion}
+        />
+
+        <ModalVotEspecial
+            show={modalEspecial}
+            onHide={() => setModalEspecial(false)}
+            data ={dataModalEspecial}
+            porcentaje={porcentajeModal}
+            tituloPregEspecial={tituloPregEspecial}
+            idVotacion = {idVotacionEspecial}
         />
     
     </div>

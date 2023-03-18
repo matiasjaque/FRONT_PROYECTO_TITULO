@@ -34,7 +34,7 @@ const Grafico = (props) => {
                                     '#FFD704', '#FF3034', '#1E90F4', '#00BFF4', '#FF1497'];
 
         for (var i in props.respuestas) {
-            getRespuestas.push(props.respuestas[i].respuesta)
+            getRespuestas.push(props.respuestas[i].respuesta + " / " + props.respuestas[i].votos + " votos")
         }
     
         for (var j in props.respuestas) {

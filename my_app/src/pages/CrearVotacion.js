@@ -663,7 +663,8 @@ const volverHome = () =>{
   const createVotacion = async () =>{
     var idVot = idVotacionLocal + 1;
     var estado = 1;
-    console.log(idUsuario, tituloVotacion, idVot)
+    var porcentaje = 0;
+    console.log(idUsuario, tituloVotacion, idVot, porcentaje)
     await axios({
       method: 'post',
       url:serverUrl + "/votacionCreate", 
@@ -675,6 +676,7 @@ const volverHome = () =>{
         idVotacion: idVot,
         estado: estado,
         tipo: 'normal',
+        porcentaje: porcentaje,
       }
     }).then(response=>{
       console.log("Funciona create votacion con id de votacion: ");

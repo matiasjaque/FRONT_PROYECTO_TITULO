@@ -8,17 +8,32 @@ import '../styles/ModalResultados.css'
 
 const ModalResultados = (props) => {
 
-  const[mostrarGrafico, setMostrarGrafico] = useState(false);
+  //const[mostrarGrafico, setMostrarGrafico] = useState(false);
+  const[cantidadPersonas, setCantidadPersonas] = useState(0);
   
   
 
   useEffect( () => {
 
     var getVotos = [];
-    setMostrarGrafico(false)
+    //setMostrarGrafico(false)
 
     
     var totalVotos = 0;
+    var cantPersonas = 0;
+
+    //calcular la cant de personas
+    console.log(props.data.length)
+    if(props.data.length > 0){
+      for(let i in props.data[0].respuesta) {
+        cantPersonas += props.data[0].respuesta[i].votos;
+        //console.log("kk " + props.data[0].respuesta[i].votos)
+      }
+        
+    }
+    
+
+    setCantidadPersonas(cantPersonas)
     
 
     for (var j in props.data) {
@@ -29,6 +44,8 @@ const ModalResultados = (props) => {
         
     }
 
+
+
     
 
     for (let k in getVotos){
@@ -36,14 +53,14 @@ const ModalResultados = (props) => {
     }
 
     if(totalVotos > 0){
-      setMostrarGrafico(true);
+      //setMostrarGrafico(true);
     }
     
 
 
 }, [props.data])
   
-    
+    console.log(props.data, props.estado, cantidadPersonas)
         
     
 return (
@@ -59,7 +76,7 @@ return (
         </Modal.Title>
       </Modal.Header>
       <Modal.Body id='contenedorBodyModalResult'>
-        {mostrarGrafico ?
+        {props.estado === 0 ?
           <>
           {props.data.map( (e) => (
             <div id='contenedorModalResult'>
@@ -73,7 +90,14 @@ return (
                 </div>
             </div>
         ))} </>:
-        <h2 id='contenedorSinResp'>Aun no hay respuestas</h2>
+          <>
+            {props.estado === 1 ?
+            <>
+              <h2 id='contenedorSinResp'>La cantidad de personas que han votado son: {cantidadPersonas}</h2>
+            </>:<h2 id='contenedorSinResp'>Aun no ha empezado la votación</h2>
+            }
+          </>
+        
         
         }
 

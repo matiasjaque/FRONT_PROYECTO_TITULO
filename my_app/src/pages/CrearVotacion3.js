@@ -192,6 +192,7 @@ const updateTituloPreg = async () => {
 const createVotacion = async () =>{
     var idVot = idVotacionLocal + 1;
     var estado = 2;
+    var porcentaje = 0;
     console.log(idUsuario, tituloVotacion, idVot)
     await axios({
       method: 'post',
@@ -204,6 +205,7 @@ const createVotacion = async () =>{
         idVotacion: idVot,
         estado: estado,
         tipo: 'directorio',
+        porcentaje: porcentaje,
       }
     }).then(response=>{
       console.log("Funciona create votacion con id de votacion: ");

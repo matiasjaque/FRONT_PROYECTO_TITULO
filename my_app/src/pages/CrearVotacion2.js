@@ -32,6 +32,7 @@ const [idVotacionLocal, setIdVotacionLocal] = useState(0);
 const [idPregInsert, setIdPregInsert] = useState(0)
 const [tituloVotacion, setTituloVotacion] = useState('');
 const [preguntaVotacion, setPreguntaVotacion] = useState('');
+const [porcentajeVotacion, setPorcentajeVotacion] = useState(50);
 const [idPregEditar, setIdPregEditar] = useState(0);
 
 // funciones que necesito cargar en cada render
@@ -199,6 +200,7 @@ const createVotacion = async () =>{
         idVotacion: idVot,
         estado: estado,
         tipo: 'especial',
+        porcentaje: porcentajeVotacion,
       }
     }).then(response=>{
       console.log("Funciona create votacion con id de votacion: ");
@@ -278,6 +280,18 @@ const createPregunta = async () =>{
                         placeholder="Ingrese la pregunta de la votación"
                         value={preguntaVotacion}
                         onChange={(e) => setPreguntaVotacion(e.target.value)}
+                    /> 
+                </Col>
+            </Row>
+
+            <Row className='filasCrearVot2' id='filaTituloPreg'>
+                <Col lg={12} md={12} sm={12} className='columnasVot2'>
+                    <Form.Label className="titulosForm2">INGRESE EL % DE VOTOS</Form.Label>
+                    <Form.Control className="textosForm2"
+                        type="text"
+                        placeholder="Ingrese la pregunta de la votación"
+                        value={porcentajeVotacion}
+                        onChange={(e) => setPorcentajeVotacion(e.target.value)}
                     /> 
                 </Col>
             </Row>

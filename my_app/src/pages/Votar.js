@@ -295,6 +295,7 @@ const Votar = () => {
             let nombreAux = nombreVotante.toUpperCase();
 
             let disponible = 0;
+            let ok = false;
 
             console.log('respuestas');
             console.log(respuestas);
@@ -306,7 +307,11 @@ const Votar = () => {
                     if(resp.respuesta.toUpperCase() === nombreAux){
                         disponible++;
                     }
+                    ok = true;
                 })
+            }
+            else{
+                ok = true;
             }
 
             /* console.log(nombreAux); 
@@ -318,7 +323,7 @@ const Votar = () => {
             }) */
 
             // quiere decir que el nombre esta disponible
-            if(disponible === 0){
+            if(disponible === 0 && ok === true){
                 createResp(idPreg, nombreVotante);
                 //necesito un swal alert que diga que el mensaje de exito y se recarge la pagina
                 Swal.fire(
