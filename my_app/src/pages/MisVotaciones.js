@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react'
-
+import Form from 'react-bootstrap/Form';
 
 
 import ModalCompartir from '../componts/ModalCompartir';
@@ -65,6 +65,9 @@ const MisVotaciones = () => {
     // id preg para estado 2
 
     const [idPregEstado2, setIdPregEstado2] = useState(0)
+
+    // cantidad de usuarios para la segunda ronda
+    const [cantidadUsuario, setCantidadUsuario] = useState(0);
 
 
 
@@ -988,7 +991,15 @@ const MisVotaciones = () => {
           })
     }
 
-    const copiarVotacio = (idVotacionCop) => {
+    const copiarVotacio = (idVotacionCop, estado, tipo )=> {
+        //console.log( e)
+        /* if(estado === 1){
+            alert(' copiar normal')
+        }
+
+        if(estado === 0){
+            alert(' copiar y preguntar la cantidad de personas para la siguiente ronda')
+        } */
         Swal.fire({
             title: '¿Esta seguro de copiar la votación?',
             icon: 'warning',
@@ -998,7 +1009,7 @@ const MisVotaciones = () => {
             confirmButtonText: 'Si, copiar votación!',
             cancelButtonText: 'Cancelar'
           }).then((result) => {
-            if (result.isConfirmed) {
+            if (result.isConfirmed && (estado === 1 || estado === 2)) {
                 getTituloCopia(idVotacionCop)
 
                 copiarPregYresp(idVotacionCop)
@@ -1013,6 +1024,26 @@ const MisVotaciones = () => {
                     window.location.reload(true);          
                 }, 2000);
               
+            }
+            if(result.isConfirmed && estado === 0 && tipo !== 'normal'){
+                //alert('copia especial')
+
+                
+                <>
+                    <Form.Label htmlFor="inputPassword5">Password</Form.Label>
+                    <Form.Control
+                        type="password"
+                        id="inputPassword5"
+                        aria-describedby="passwordHelpBlock"
+                    />
+                    <Form.Text id="passwordHelpBlock" muted>
+                        Your password must be 8-20 characters long, contain letters and numbers,
+                        and must not contain spaces, special characters, or emoji.
+                    </Form.Text>
+                </>
+
+                getTituloCopia(idVotacionCop)
+                copiarPregYresp(idVotacionCop)
             }})
     }
 
@@ -1119,7 +1150,22 @@ const MisVotaciones = () => {
                 }
             })
 
-            console.log(newPregYresp)
+            /* console.log(newPregYresp)
+            console.log(newPregYresp[0].respuesta) */
+
+            newPregYresp[0].respuesta.sort((a,b) => {
+                if(a.votos > b.votos) {
+                    return -1;
+                }
+        
+                if(a.votos < b.votos) {
+                    return 1;
+                }
+        
+                return 0;
+            })
+
+            //console.log(newPregYresp)
 
             newPregYresp.forEach((k) =>{
                 createPregunta(k.tituloPreg)
@@ -1243,8 +1289,8 @@ const MisVotaciones = () => {
                                     </button> 
                                 </td>:
                                 <td className='columnaTablaFunciones'> 
-                                    <MdOutlineContentCopy id='iconoEditar' onClick= {() => copiarVotacio(e.id_votacion)}/>
-                                    <button className='botonesTabla' onClick= {() => copiarVotacio(e.id_votacion)}>
+                                    <MdOutlineContentCopy id='iconoEditar' onClick= {() => copiarVotacio(e.id_votacion, e.estado, e.tipo)}/>
+                                    <button className='botonesTabla' onClick= {() => copiarVotacio(e.id_votacion, e.estado, e.tipo)}>
                                         Copiar
                                     </button> 
                                 </td>

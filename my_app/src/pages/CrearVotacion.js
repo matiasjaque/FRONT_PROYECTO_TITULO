@@ -25,7 +25,9 @@ const conectado = new Cookies();
 
 var idUsuario = conectado.get('id');
 var controlador = 1;
+var tieneVotaciones = false;
 
+console.log(tieneVotaciones)
 
 const CrearVotaciones = () => {
   const {tipo} = useParams();
@@ -66,9 +68,16 @@ const CrearVotaciones = () => {
 
   // funciones que necesito cargar en cada render
   useEffect(() => {
-    actualizarIdVotacion();
-    actualizarIdPreguntas();
-    if(tipo === 'normal' && controlador === 1){
+
+    verificarSiTieneVotaciones();
+
+    if (tieneVotaciones === true){
+      actualizarIdVotacion();
+      actualizarIdPreguntas();
+    }
+
+
+    if(tipo === 'normal' && controlador === 1 && tieneVotaciones === true){
         obtenerTituloVot();
         obtenerTituloPreg();	
         preguntasConRespuestasGet()
@@ -76,6 +85,27 @@ const CrearVotaciones = () => {
 
     }
   });
+
+
+const verificarSiTieneVotaciones = async() => {
+	await axios.get(serverUrl + "/votaciones", {params:{idUsuario: idUsuario}})
+    .then(response=>{
+      setIdVotacionLocal(response.data[response.data.length - 1].id_votacion)
+      //setLoading(true);
+      console.log("trae esto getVotaciones:");
+      console.log(response.data[response.data.length - 1].id_votacion);
+      tieneVotaciones = true;
+  }).catch (error=> {
+            tieneVotaciones = false;
+            setIdVotacionLocal(0);
+            /* Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: error.response.data.message,
+            }) */
+        })
+
+}
 
   
 const obtenerTituloVot = async() => {
@@ -224,8 +254,8 @@ const actualizarIdVotacion = async () =>{
       .then(response=>{
         setIdVotacionLocal(response.data[response.data.length - 1].id_votacion)
         //setLoading(true);
-        //console.log("trae esto getVotaciones:");
-        //console.log(response.data[response.data.length - 1].id_votacion);
+        console.log("trae esto getVotaciones:");
+        console.log(response.data[response.data.length - 1].id_votacion);
     })
     .catch (error=> {
       setIdVotacionLocal(0)

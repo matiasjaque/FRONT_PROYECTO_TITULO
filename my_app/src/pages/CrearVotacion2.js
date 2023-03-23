@@ -19,6 +19,7 @@ const conectado = new Cookies();
 
 var idUsuario = conectado.get('id'); 
 var controlador = 1;
+var tieneVotaciones = false;
 
 
 const CrearVotacion2 = () => {
@@ -27,6 +28,7 @@ const {tipo} = useParams();
 const {idVotacion} = useParams();
 
 console.log(tipo, idVotacion);
+
 
 const [idVotacionLocal, setIdVotacionLocal] = useState(0);
 const [idPregInsert, setIdPregInsert] = useState(0)
@@ -37,14 +39,42 @@ const [idPregEditar, setIdPregEditar] = useState(0);
 
 // funciones que necesito cargar en cada render
 useEffect(() => {
-    actualizarIdVotacion();
-    actualizarIdPreguntas();
+
+  verificarSiTieneVotaciones();
+
+    if (tieneVotaciones === true){
+      actualizarIdVotacion();
+      actualizarIdPreguntas();
+    }
+    
     if(tipo === 'especial' && controlador === 1){
         obtenerTituloVot();
         obtenerTituloPreg();	
         controlador = 0;
     }
 });
+
+
+const verificarSiTieneVotaciones = async() => {
+	await axios.get(serverUrl + "/votaciones", {params:{idUsuario: idUsuario}})
+    .then(response=>{
+      setIdVotacionLocal(response.data[response.data.length - 1].id_votacion)
+      //setLoading(true);
+      console.log("trae esto getVotaciones:");
+      console.log(response.data[response.data.length - 1].id_votacion);
+      tieneVotaciones = true;
+  }).catch (error=> {
+            tieneVotaciones = false;
+            setIdVotacionLocal(0);
+            /* Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: error.response.data.message,
+            }) */
+        })
+
+}
+
 
 const obtenerTituloVot = async() => {
 	await axios.get(serverUrl + "/votacionById", {params:{idVotacion: idVotacion}})
@@ -127,8 +157,10 @@ const volverHome = () =>{
 }
 
 const crearVotacion2 = () => {
+  //console.log(typeof(parseInt(porcentajeVotacion)))
     
     if(tituloVotacion !== '' && preguntaVotacion !== '') {
+      if(parseInt(porcentajeVotacion)){
         console.log(tituloVotacion, preguntaVotacion);
         createVotacion()
         createPregunta()
@@ -138,7 +170,15 @@ const crearVotacion2 = () => {
             //window.location.reload()
             window.location.replace('/misVotaciones');          
         }, 2000);
+      } else{
+        Swal.fire({
+          icon: 'error',
+          title: 'El porcentaje ingresado es invalido',
+          
+        })
+      }
     }
+        
     else{
         alert('Debe asegurarse de ingresar un titulo y pregunta para la nueva votación')
     }
