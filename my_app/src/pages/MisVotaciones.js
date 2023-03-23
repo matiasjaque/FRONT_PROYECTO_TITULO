@@ -1027,9 +1027,7 @@ const MisVotaciones = () => {
             }
             if(result.isConfirmed && estado === 0 && tipo !== 'normal'){
                 //alert('copia especial')
-
-                
-                <>
+                /* <>
                     <Form.Label htmlFor="inputPassword5">Password</Form.Label>
                     <Form.Control
                         type="password"
@@ -1040,7 +1038,7 @@ const MisVotaciones = () => {
                         Your password must be 8-20 characters long, contain letters and numbers,
                         and must not contain spaces, special characters, or emoji.
                     </Form.Text>
-                </>
+                </> */
 
                 getTituloCopia(idVotacionCop)
                 copiarPregYresp(idVotacionCop)
