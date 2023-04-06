@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react'
-import Form from 'react-bootstrap/Form';
+
 
 
 import ModalCompartir from '../componts/ModalCompartir';
@@ -66,8 +66,6 @@ const MisVotaciones = () => {
 
     const [idPregEstado2, setIdPregEstado2] = useState(0)
 
-    // cantidad de usuarios para la segunda ronda
-    const [cantidadUsuario, setCantidadUsuario] = useState(0);
 
 
 
@@ -1012,7 +1010,7 @@ const MisVotaciones = () => {
             if (result.isConfirmed && (estado === 1 || estado === 2)) {
                 getTituloCopia(idVotacionCop)
 
-                copiarPregYresp(idVotacionCop)
+                copiarPregYresp(idVotacionCop, 0)
                 
                 Swal.fire(
                     'Votación copiada!',
@@ -1026,22 +1024,52 @@ const MisVotaciones = () => {
               
             }
             if(result.isConfirmed && estado === 0 && tipo !== 'normal'){
-                //alert('copia especial')
-                /* <>
-                    <Form.Label htmlFor="inputPassword5">Password</Form.Label>
-                    <Form.Control
-                        type="password"
-                        id="inputPassword5"
-                        aria-describedby="passwordHelpBlock"
-                    />
-                    <Form.Text id="passwordHelpBlock" muted>
-                        Your password must be 8-20 characters long, contain letters and numbers,
-                        and must not contain spaces, special characters, or emoji.
-                    </Form.Text>
-                </> */
+                
 
-                getTituloCopia(idVotacionCop)
-                copiarPregYresp(idVotacionCop)
+                Swal.fire({
+                    title: "Ingrese el numero de respuesta para la siguiente ronda!",
+                    text: "Numero de usuarios para la siguiente ronda!",
+                    input: 'text',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonText: 'Continuar',
+                    
+                    showCancelButton: true,  
+                    inputValidator: (value) => {
+                        if (!value) {
+                        return 'El campo de la cantidad de usuarios es obligatorio!'
+                        }    
+                    }  
+                }).then((result) => {
+                    if (result.value !== "" && result.value !== undefined && Number.isInteger( parseInt(result.value)) === true) {
+                        
+                        // se llama la funcion de crear la votacion 
+                        
+
+                        getTituloCopia(idVotacionCop)
+                        copiarPregYresp(idVotacionCop, result.value)
+                        Swal.fire(
+                            'Votación copiada!',
+                            'Su votación ha sido copiada con éxito!',
+                            'success'
+                        )
+                        setTimeout(function () {   
+                            //window.location.reload()
+                            window.location.reload(true);          
+                        }, 2000);
+                    } 
+        
+                    /* else{
+                        setTimeout(function () {   
+                            cerrarVotacion(idVot, estado)  
+                        }, 1500);
+                    } */
+            })
+                
+                
+
+                
             }})
     }
 
@@ -1093,7 +1121,7 @@ const MisVotaciones = () => {
             })
     };
 
-    const copiarPregYresp = async(idVot) => {
+    const copiarPregYresp = async(idVot, cantidadRespuestas) => {
         await axios.get(serverUrl + "/preguntasConRespuestas", {params:{idVotacion: idVot}})
         .then(response=>{
         //setPreguntas(response.data);
@@ -1165,12 +1193,33 @@ const MisVotaciones = () => {
 
             //console.log(newPregYresp)
 
-            newPregYresp.forEach((k) =>{
-                createPregunta(k.tituloPreg)
-                k.respuesta.forEach((r) => {
-                    createResp(r.respuesta)
+            if(cantidadRespuestas === 0){
+                newPregYresp.forEach((k) =>{
+                    createPregunta(k.tituloPreg)
+                    k.respuesta.forEach((r) => {
+                        createResp(r.respuesta)
+                    })
                 })
-            })
+            }
+            else{
+                newPregYresp.forEach((k) =>{
+                    createPregunta(k.tituloPreg)
+                    if(cantidadRespuestas > k.respuesta.length){
+                        k.respuesta.forEach((r) => {
+                            createResp(r.respuesta)
+                        })   
+                    }
+                    else{
+                        for(let i = 0; i < cantidadRespuestas; i++) {
+                        
+                            createResp(k.respuesta[i].respuesta)
+                        }
+                    }
+                    
+                })
+                
+            }
+            
 
 
 

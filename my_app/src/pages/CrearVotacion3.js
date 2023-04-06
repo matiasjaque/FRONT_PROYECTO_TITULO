@@ -20,6 +20,7 @@ const conectado = new Cookies();
 var idUsuario = conectado.get('id'); 
 var controlador = 1;
 var tieneVotaciones = false;
+var tieneVotacionesFunc = 0;
 
 
 
@@ -42,10 +43,17 @@ const [idPregEditar, setIdPregEditar] = useState(0);
 useEffect(() => {
 
 
-  verificarSiTieneVotaciones();
+  if(tieneVotacionesFunc === 0){
+    verificarSiTieneVotaciones();
+  }
 
   if (tieneVotaciones === true){
     actualizarIdVotacion();
+    actualizarIdPreguntas();
+  }
+
+  else{
+    actualizarIdVotacionGeneral();
     actualizarIdPreguntas();
   }
 
@@ -57,6 +65,7 @@ useEffect(() => {
 });
 
 const verificarSiTieneVotaciones = async() => {
+  tieneVotacionesFunc = 1;
 	await axios.get(serverUrl + "/votaciones", {params:{idUsuario: idUsuario}})
     .then(response=>{
       setIdVotacionLocal(response.data[response.data.length - 1].id_votacion)
@@ -114,6 +123,25 @@ const obtenerTituloPreg = async() => {
             })
         })
 }
+
+const actualizarIdVotacionGeneral = async () =>{
+  await axios.get(serverUrl + "/votacionesGenerales")
+    .then(response=>{
+      setIdVotacionLocal(response.data[response.data.length - 1].ID_VOTACION)
+      //setLoading(true);
+      /* console.log("trae esto getVotacionesGlobal:");
+      console.log(response.data)
+      console.log(response.data[response.data.length - 1].ID_VOTACION); */
+  })
+  .catch (error=> {
+    setIdVotacionLocal(0)
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: error.response.data.message,
+    })
+  })
+};
 
 
 const actualizarIdVotacion = async () =>{
