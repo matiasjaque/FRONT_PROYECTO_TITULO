@@ -101,38 +101,4 @@ function Login() {
     
   );
 }
-
-
-/* const useStyles = makeStyles(Theme => ({
-    root: {
-            backgroundImage: `url(${fondo})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            height: '100vh'    
-    },
-    container: {
-        height: '60%',
-        marginTop: '20px',
-
-
-        
-    },
-    
-})); */
-
-
-/* function Login() {
-    const classes = useStyles()
-
-    return (
-        <Grid container component='main' className={classes.root}   >
-           <Container component={Paper} elevation={5} maxWidth='xs'>
-
-           </Container>
-        </Grid>
-    ) */
-  
-//}
-
 export default Login;

@@ -14,6 +14,7 @@ import Votacion from '../componts/Votacion';
 const serverUrl = process.env.REACT_APP_SERVER;
 const conectado = new Cookies();
 
+
 var idUsuario = conectado.get('id');
 
 

@@ -29,10 +29,70 @@ const imagenFondo = {
 const RecuperarContraseña = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [passwordAntigua, setPasswordAntigua] = useState('');
+
+    const validarContraseñaAntigua = async(contraseñaAntigua) => {
+
+        var dataUsuarios = [];
+        var correoOk = false;
+        var contraseñaAntiguaOk = false;
+
+        //obtener la data sobre los usuario
+        await axios.get(serverUrl + "/usuarios")
+            .then(response=>{
+            console.log(response.data)
+            console.log(passwordAntigua)
+            dataUsuarios = response.data;
+            //setLoading(true);
+            //console.log("trae esto getPreguntas:");
+            //console.log(response.data[response.data.length - 1].ID_PREGUNTA);
+        })
+        .catch (error=> {
+            Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: error.response.data.message,
+            })
+        })
+
+        //validar que el gmail corresponde
+        for(let i=0; i<dataUsuarios.length; i++){
+            if(email.toUpperCase() === dataUsuarios[i].EMAIL){
+                correoOk = true;
+            }
+        }
+
+        if(correoOk === true){
+            //validar que la contraseña antigua corresponde 
+            for (let i=0; i<dataUsuarios.length; i++) {
+                if(email.toUpperCase() === dataUsuarios[i].EMAIL && passwordAntigua === dataUsuarios[i].PASSWORD){
+                    contraseñaAntiguaOk = true;
+                }
+            }
+            if(contraseñaAntiguaOk === true){
+                crearUsuario()
+            }
+            else{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'La contraseña antigua ingresado es invalida',
+                })
+            }
+        }
+
+        else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'El correo electronico ingresado es invalido',
+            })
+        }
+    }
 
 
     const crearUsuario =  async () =>{
-        if (email !=='' && password!=='') {
+        if (email !=='' && password!=='' && passwordAntigua !=='') {
             console.log(email, password)
             await axios({
                 method: 'put',
@@ -82,11 +142,19 @@ const RecuperarContraseña = () => {
                             </Form.Group>
 
                             <Form.Group className="mb-3" controlId="text" id="filaRecuperarContra">
-                                <Form.Label>PASSWORD</Form.Label>
+                                <Form.Label>ANTIGUA PASSWORD</Form.Label>
+                                <Form.Control type="text" placeholder="Ingrese su antigua contraseña" onChange={(
+                                    event => setPasswordAntigua(event.target.value)
+                                )}/>
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="text" id="filaRecuperarContra">
+                                <Form.Label>NUEVA PASSWORD</Form.Label>
                                 <Form.Control type="text" placeholder="Ingrese su nueva contraseña" onChange={(
                                     event => setPassword(event.target.value)
                                 )}/>
                             </Form.Group>
+
                             <Row className='botones'>
                                 <Col>
                                     {window.innerWidth >= 1200 ?
@@ -95,7 +163,7 @@ const RecuperarContraseña = () => {
                                     }
                                 </Col>
                                 <Col>
-                                    <Button className='botonCrearCuenta' onClick={crearUsuario}>RECUPERAR CONTRASEÑA</Button>
+                                    <Button className='botonCrearCuenta' onClick={validarContraseñaAntigua}>CAMBIAR CONTRASEÑA</Button>
                                 </Col>
                             </Row>
                         </Form>
