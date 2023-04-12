@@ -60,18 +60,42 @@ const Registrarse = () => {
                     setTimeout(function () {
                         window.location.replace("/")               
                     }, 3000);
+                    document.getElementById('nombreRegis').value = ''
+                    document.getElementById('apellidoRegis').value = ''
+                    document.getElementById('apellidoMatRegis').value = ''
+                    document.getElementById('emailRegis').value = ''
+                    document.getElementById('contraseñaRegis').value = ''
                 })
+                
                 .catch(error=>{
-                    alert(error.response.data.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: error.response.data.message,
+                    })
                     console.log(error);
+                    document.getElementById('nombreRegis').value = ''
+                    document.getElementById('apellidoRegis').value = ''
+                    document.getElementById('apellidoMatRegis').value = ''
+                    document.getElementById('emailRegis').value = ''
+                    document.getElementById('contraseñaRegis').value = ''
+                    
                 })
             }
             else{
-                alert('Debe completar todos los parametros para crear una nueva cuenta!');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Debe completar todos los parametros para crear una nueva cuenta!',
+                })
             }
         }
         else{
-            alert('El correo ingresado no es valido');
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'El correo ingresado no es valido',
+            })
         }
     
 
@@ -87,37 +111,37 @@ const Registrarse = () => {
                     <Row  className="tituloRegistrarse">REGISTRARSE</Row>
                     <Row className="parametrosRec">
                         <Form id='formRec'>
-                            <Form.Group className="mb-3" controlId="text" id="filaRec">
+                            <Form.Group className="mb-3"  id="filaRec">
                                 <Form.Label>NOMBRE</Form.Label>
-                                <Form.Control type="text" placeholder="Ingrese su nombre" onChange={(
+                                <Form.Control controlId="text" type="text" id='nombreRegis' placeholder="Ingrese su nombre" onChange={(
                                     event => setNombreUsuario(event.target.value)
                                 )}/>
                             </Form.Group>
 
-                            <Form.Group className="mb-3" controlId="text" id="filaRec">
+                            <Form.Group className="mb-3"  id="filaRec">
                                 <Form.Label>APELLIDO PATERNO</Form.Label>
-                                <Form.Control type="text" placeholder="Ingrese su apellido paterno" onChange={(
+                                <Form.Control controlId="text" id='apellidoRegis' type="text" placeholder="Ingrese su apellido paterno" onChange={(
                                     event => setApellidoPaterno(event.target.value)
                                 )}/>
                             </Form.Group>
 
-                            <Form.Group className="mb-3" controlId="text" id="filaRec">
+                            <Form.Group className="mb-3"  id="filaRec">
                                 <Form.Label>APELLIDO MATERNO</Form.Label>
-                                <Form.Control type="text" placeholder="Ingrese su apellido materno" onChange={(
+                                <Form.Control controlId="text" id='apellidoMatRegis' type="text" placeholder="Ingrese su apellido materno" onChange={(
                                     event => setApellidoMaterno(event.target.value)
                                 )}/>
                             </Form.Group>
 
                             <Form.Group className="mb-3" id="filaRec">
                                 <Form.Label>EMAIL</Form.Label>
-                                <Form.Control type="email" placeholder="Ingrese su email" onChange={(
+                                <Form.Control id='emailRegis' type="email" placeholder="Ingrese su email" onChange={(
                                     event => setEmail(event.target.value)
                                 )}/>
                             </Form.Group>
 
-                            <Form.Group className="mb-3" controlId="text" id="filaRec">
+                            <Form.Group className="mb-3"  id="filaRec">
                                 <Form.Label>PASSWORD</Form.Label>
-                                <Form.Control type="text" placeholder="Ingrese su contraseña" onChange={(
+                                <Form.Control controlId="text" id='contraseñaRegis' type="text" placeholder="Ingrese su contraseña" onChange={(
                                     event => setPassword(event.target.value)
                                 )}/>
                             </Form.Group>

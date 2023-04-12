@@ -15,7 +15,8 @@ import Swal from 'sweetalert2';
 
 import { CgAdd } from "react-icons/cg";
 import { BsArchive } from "react-icons/bs";
-import { GiReturnArrow } from "react-icons/gi";
+//import { GiReturnArrow } from "react-icons/gi";
+import {MdPerson} from "react-icons/md";
 
 
 const conectado = new Cookies();
@@ -91,7 +92,7 @@ const MyNavbar = (props) => {
               
             </div>
 
-            {/* <Nav.Link href="/crearVotacion" id='createLink' ><CgAdd id='iconoCrearVotacion'/> Crear Votación </Nav.Link> */}
+            
             </Nav.Item> 
 
             }
@@ -99,10 +100,30 @@ const MyNavbar = (props) => {
             <Nav.Item className="botonesNavbar">
               <Nav.Link href="/misVotaciones" id='navLink'><BsArchive id='iconoMisVotaciones'/> Mis Votaciones</Nav.Link>
             </Nav.Item> 
+
+
             
-            <Nav.Item className="botonesNavbar">
+            <Nav.Item className="botonesNavbar"> 
+            <div id='contenedorCrearVotacion'>
+              <Row id='filaGenerico'>
+                <Col className='colGenerico' id='columnaIcono'>
+                  <MdPerson id='iconoCrearVotacion'/> 
+                </Col>
+                <Col className='colGenerico'>
+                  <NavDropdown  title="Configuración" id="colorDelDrop" >
+                    <NavDropdown.Item href={`/recuperarContrasena`} className='interiorDropDown'>Cambiar Constraseña</NavDropdown.Item>
+                    <NavDropdown.Item onClick={()=>cerrarSesion()} className='interiorDropDown'>Cerrar Sesión</NavDropdown.Item>
+                  </NavDropdown>
+                </Col>
+              </Row>
+              
+            </div>
+            </Nav.Item> 
+          
+
+            {/* <Nav.Item className="botonesNavbar">
               <Nav.Link onClick={()=>cerrarSesion()} id='returnLink'><GiReturnArrow id='iconoReturn'/> Cerrar Sesión</Nav.Link>
-            </Nav.Item>
+            </Nav.Item> */}
 
             <Navbar.Brand id='usuarioConectado' >{`Bienvenido ${nombre} ${apellido}`}</Navbar.Brand>
             

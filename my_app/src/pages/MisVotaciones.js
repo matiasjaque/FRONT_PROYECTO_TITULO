@@ -67,10 +67,6 @@ const MisVotaciones = () => {
     const [idPregEstado2, setIdPregEstado2] = useState(0)
 
 
-
-
-
-
     useEffect(() => {
         votacionesGet();
         respuestasGet();

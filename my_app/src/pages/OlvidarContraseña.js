@@ -26,23 +26,22 @@ const imagenFondo = {
   };
 
 
-const RecuperarContraseña = () => {
+const OlvidarContraseña = () => {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordAntigua, setPasswordAntigua] = useState('');
 
-    const validarContraseñaAntigua = async(contraseñaAntigua) => {
+    const validarContraseñaAntigua = async() => {
 
         var dataUsuarios = [];
         var correoOk = false;
-        var contraseñaAntiguaOk = false;
+
+        
 
         //obtener la data sobre los usuario
-        await axios.get(serverUrl + "/usuarios")
+        await axios.get(serverUrl + "/usuariosGmail")
             .then(response=>{
-            console.log(response.data)
-            console.log(passwordAntigua)
+            console.log(response.data);
             dataUsuarios = response.data;
+            console.log(email.toUpperCase())
             //setLoading(true);
             //console.log("trae esto getPreguntas:");
             //console.log(response.data[response.data.length - 1].ID_PREGUNTA);
@@ -57,34 +56,18 @@ const RecuperarContraseña = () => {
 
         //validar que el gmail corresponde
         for(let i=0; i<dataUsuarios.length; i++){
-            if(email.toUpperCase() === dataUsuarios[i].EMAIL){
+            if(email.toUpperCase() === dataUsuarios[i].email.toUpperCase()){
                 correoOk = true;
             }
         }
 
         if(correoOk === true){
-            //validar que la contraseña antigua corresponde 
-            for (let i=0; i<dataUsuarios.length; i++) {
-                if(email.toUpperCase() === dataUsuarios[i].EMAIL.toUpperCase() && passwordAntigua === dataUsuarios[i].PASSWORD){
-                    contraseñaAntiguaOk = true;
-                }
-            }
-            if(contraseñaAntiguaOk === true){
-                crearUsuario()
-                document.getElementById('emailRec').value = ''
-                document.getElementById('antiguaContraRec').value = ''
-                document.getElementById('nuevaContraRec').value = ''
-            }
-            else{
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'La contraseña antigua ingresado es invalida',
-                })
-                document.getElementById('emailRec').value = ''
-                document.getElementById('antiguaContraRec').value = ''
-                document.getElementById('nuevaContraRec').value = ''
-            }
+
+            // se envia el correo
+            recuperarContrasena()
+            document.getElementById('emailRec').value = ''
+            document.getElementById('antiguaContraRec').value = ''
+            document.getElementById('nuevaContraRec').value = ''
         }
 
         else{
@@ -96,18 +79,18 @@ const RecuperarContraseña = () => {
         }
     }
 
-
-    const crearUsuario =  async () =>{
-        if (email !=='' && password!=='' && passwordAntigua !=='') {
-            console.log(email, password)
+    
+    const recuperarContrasena =  async () =>{
+        if (email !=='') {
+            console.log(email)
             await axios({
                 method: 'put',
-                url:serverUrl + "/usuarioUpdate", 
+                url:serverUrl + "/usuarioUpdateContrasena", 
                 headers: {'Content-Type': 'application/json'},
             params:
                 {
-                email: email,
-                password: password}
+                email: email
+                }
             }).then(response=>{
                 console.log("la data funciona " + response);
                 //var respuesta = response.data;
@@ -130,7 +113,6 @@ const RecuperarContraseña = () => {
         
             
     }
-    //console.log(window.innerWidth +' <= 1200' )
 
     return (
         <div style={imagenFondo} className="containerPadre">
@@ -147,20 +129,6 @@ const RecuperarContraseña = () => {
                                 )}/>
                             </Form.Group>
 
-                            <Form.Group className="mb-3"  id="filaRecuperarContra">
-                                <Form.Label>ANTIGUA PASSWORD</Form.Label>
-                                <Form.Control type="text" controlId="text" id='antiguaContraRec' placeholder="Ingrese su antigua contraseña" onChange={(
-                                    event => setPasswordAntigua(event.target.value)
-                                )}/>
-                            </Form.Group>
-
-                            <Form.Group className="mb-3"  id="filaRecuperarContra">
-                                <Form.Label>NUEVA PASSWORD</Form.Label>
-                                <Form.Control type="text" controlId="text" id='nuevaContraRec' placeholder="Ingrese su nueva contraseña" onChange={(
-                                    event => setPassword(event.target.value)
-                                )}/>
-                            </Form.Group>
-
                             <Row className='botones'>
                                 <Col>
                                     {window.innerWidth >= 1200 ?
@@ -169,7 +137,7 @@ const RecuperarContraseña = () => {
                                     }
                                 </Col>
                                 <Col>
-                                    <Button className='botonCrearCuenta' onClick={validarContraseñaAntigua}>CAMBIAR CONTRASEÑA</Button>
+                                    <Button className='botonCrearCuenta' onClick={validarContraseñaAntigua}>RECUPERAR CONTRASEÑA</Button>
                                 </Col>
                             </Row>
                         </Form>
@@ -181,4 +149,4 @@ const RecuperarContraseña = () => {
 }
     
 
-export default RecuperarContraseña
+export default OlvidarContraseña

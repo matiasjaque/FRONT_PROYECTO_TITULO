@@ -58,6 +58,11 @@
     -o-border-radius: 20px;
 }
 
+#dropDownConfiguracion{
+    color: white;
+    background: none;
+}
+
 #homeLink {
     border-radius: inherit;
 }

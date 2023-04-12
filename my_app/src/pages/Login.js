@@ -49,6 +49,7 @@ function Login() {
                 window.location.replace("/misVotaciones")               
             }, 2500);
             document.getElementById('email').value = ''
+            document.getElementById('contraseña').value = ''
         })
         .catch(error=>{
             Swal.fire({
@@ -56,9 +57,9 @@ function Login() {
                 title: 'Oops...',
                 text: (error.response.data.message),
                 timer: 3000
-              })/* 
-            alert();
-            console.log(error); */
+              })
+            document.getElementById('email').value = ''
+            document.getElementById('contraseña').value = ''
         })
             
     }
@@ -89,7 +90,7 @@ function Login() {
                 </Button>
             </Form>
             <div className='contenedorBotones'>
-                <Button id="botonOlvideContraseña" variant="primary" type="onClick" href='/recuperarContrasena'>
+                <Button id="botonOlvideContraseña" variant="primary" type="onClick" href='/olvidarContrasena'>
                     ¿Olvidaste tu contraseña?
                 </Button>
                 <Button id="botonRegistrarse" variant="primary" type="onclick" href='/registrarse' >
