@@ -28,7 +28,7 @@ var controlador = 1;
 var tieneVotaciones = false;
 var tieneVotacionesFunc = 0;
 
-console.log(tieneVotaciones)
+//console.log(tieneVotaciones)
 
 const CrearVotaciones = () => {
   const {tipo} = useParams();
@@ -67,6 +67,8 @@ const CrearVotaciones = () => {
   const [datosVotacion, setDatosVotacion] = useState(false);
   var reloadPage = false;
 
+  var controladorFunc = 0;
+
   // funciones que necesito cargar en cada render
   useEffect(() => {
 
@@ -75,9 +77,11 @@ const CrearVotaciones = () => {
     }
     
 
-    if (tieneVotaciones === true){
+    if (tieneVotaciones === true && controladorFunc === 0){
       actualizarIdVotacion();
       actualizarIdPreguntas();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      controladorFunc = 1;
     }
 
     else{
@@ -93,11 +97,12 @@ const CrearVotaciones = () => {
         controlador = 0;
 
     }
-  });
+  }, [controladorFunc]);
 
 
 const verificarSiTieneVotaciones = async() => {
   tieneVotacionesFunc = 1;
+  console.log("esto solo una vez")
 	await axios.get(serverUrl + "/votaciones", {params:{idUsuario: idUsuario}})
     .then(response=>{
       setIdVotacionLocal(response.data[response.data.length - 1].id_votacion)
@@ -567,8 +572,8 @@ const volverHome = () =>{
     console.log(idPregu, newTitle);
 
     const newPreguntas = preguntas.map((preg) => {
-        console.log(preg.id);
-        console.log(idPregu);
+        /* console.log(preg.id);
+        console.log(idPregu); */
         if(preg.id === idPregu){
             return {
             ...preg,
@@ -611,15 +616,15 @@ const volverHome = () =>{
   
   const updateTitulosResp = (idRespu, idPregu, newTitleResp) => {
     setDatosVotacion(false);
-    console.log('datos de la funcion: ')
+  /*   console.log('datos de la funcion: ')
     console.log(idRespu);
     console.log(idPregu);
-    console.log(newTitleResp);
+    console.log(newTitleResp); */
 
 
     // actualizar las respuestas generales
     const newRespuestas = respuestas.map((resp) => {
-      console.log(resp.idRespuesta + ' === ' + idRespu);
+      //console.log(resp.idRespuesta + ' === ' + idRespu);
       if(resp.idRespuesta === idRespu){
         return {
           ...resp,
@@ -882,15 +887,6 @@ const volverHome = () =>{
     createPreguntasYrespuestas()
 
     setDatosVotacion(true)
-    
-    /* if(listoVotacion){
-      createPreguntasYrespuestas()
-
-      setDatosVotacion(true)
-    } */
-
-    // crear preguntas y respuestas de la votacion
-    
 
     
     
@@ -1004,9 +1000,9 @@ const updateTituloResp = async (idPregEditar, idRespEditar, newTitulo) => {
   console.log('cantidadResp')
   console.log(cantidadResp) */
 
-  console.log(preguntas)
-  console.log(respuestasGen)
-  console.log(respuestas)
+  /* console.log(preguntas)
+  console.log(setRespuestasGen)
+  console.log(respuestas) */
 
 
   return (

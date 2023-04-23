@@ -29,7 +29,7 @@ const CrearVotacion3 = () => {
 const {tipo} = useParams();
 const {idVotacion} = useParams();
 
-console.log(tipo, idVotacion);
+//console.log(tipo, idVotacion);
 
 const [idVotacionLocal, setIdVotacionLocal] = useState(0);
 const [idPregInsert, setIdPregInsert] = useState(0)

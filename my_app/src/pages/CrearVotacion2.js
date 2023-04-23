@@ -28,7 +28,7 @@ const CrearVotacion2 = () => {
 const {tipo} = useParams();
 const {idVotacion} = useParams();
 
-console.log(tipo, idVotacion);
+//console.log(tipo, idVotacion);
 
 
 const [idVotacionLocal, setIdVotacionLocal] = useState(0);

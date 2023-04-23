@@ -132,8 +132,8 @@ const OlvidarContraseña = () => {
                             <Row className='botones'>
                                 <Col>
                                     {window.innerWidth >= 1200 ?
-                                        <Button id="botonVolverRecContra" href='/misVotaciones'>VOLVER</Button>
-                                        :<Button id='botonVolverRecContraChico' href='/misVotaciones'>VOLVER</Button>
+                                        <Button id="botonVolverRecContra" href='/'>VOLVER</Button>
+                                        :<Button id='botonVolverRecContraChico' href='/'>VOLVER</Button>
                                     }
                                 </Col>
                                 <Col>
