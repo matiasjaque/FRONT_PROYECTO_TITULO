@@ -5,6 +5,7 @@ import React, { useEffect, useState} from 'react'
 import ModalCompartir from '../componts/ModalCompartir';
 import ModalResultados from '../componts/ModalResultados';
 
+
 import MyNavbar from '../componts/MyNavbar';
 
 import Table from 'react-bootstrap/Table';
@@ -41,6 +42,7 @@ const MisVotaciones = () => {
 
     const [modalShow, setModalShow] = useState(false);
     const [modalResultShow, setModalResultShow] = useState(false);
+   
     const [modalEspecial, setModalEspecial] = useState(false);
 
     const [enlace, setEnlace] = useState('');
@@ -52,6 +54,9 @@ const MisVotaciones = () => {
     const [porcentajeModal, setPorcentajeModal ] = useState(0);
     const [tituloPregEspecial, setTituloPregEspecial] = useState('');
     const [idVotacionEspecial, setIdVotacionEspecial] = useState(0);
+
+    // data usuarios votantes
+    const [dataUsuarioVotantes, setDataUsuariosVotantes] = useState([]);
     
 
     //data para la nueva votacion
@@ -71,6 +76,7 @@ const MisVotaciones = () => {
         votacionesGet();
         respuestasGet();
         preguntasGet();
+        getUsuarioVotantesGlobal();
       },[]);
 
     const votacionesGet = async () =>{
@@ -134,6 +140,7 @@ const MisVotaciones = () => {
 
 
     const confirmacionEliminarVotacion = (idVotacion) => {
+    
         Swal.fire({
             title: '¿Esta seguro de eliminar la votación?',
             icon: 'warning',
@@ -159,7 +166,9 @@ const MisVotaciones = () => {
     }   
 
     const eliminarVotacion = (idVotacion) => {
-        
+        //console.log(dataUsuarioVotantes)
+        const usuariosVotantesAborrar = dataUsuarioVotantes.filter(e => e.ID_VOTACION === idVotacion)
+        //console.log(usuariosVotantesAborrar)
         
         const pregAborrar = preguntas.filter((preg) => (preg.ID_VOTACION === idVotacion))
 
@@ -177,6 +186,13 @@ const MisVotaciones = () => {
             }
             
         } 
+
+        if(usuariosVotantesAborrar.length > 0){
+            for(let k = 0; k < usuariosVotantesAborrar.length; k++) {
+                eliminarUsuarioVotanteId(idVotacion, parseInt(usuariosVotantesAborrar[k].RUT));
+            }
+        }
+        
         
         eliminarVotacionId(idVotacion, idUsuario)
     
@@ -225,6 +241,22 @@ const MisVotaciones = () => {
         });
     };
 
+    const eliminarUsuarioVotanteId = async (idVotacion, rut) => {
+        console.log(typeof(rut))
+        await axios.delete(serverUrl+"/usuarioVotanteDelete",
+            {
+                params:{idVotacion: idVotacion, rut: rut}
+            }
+        ).then(response =>{
+            window.location.reload(false);
+            console.log('response');
+            console.log(response);
+        }).catch(error =>{
+            alert(error.response.data.message);
+            console.log(error);
+        });
+    };
+
     const handleModal = (idVot, estado) => {
 
         //validar que se obtengo el id de preg cuando el estado es = a 2
@@ -266,11 +298,80 @@ const MisVotaciones = () => {
 
     const handleModalResult = (idVot, tituloVotacion, estado) => {
         //console.log(estado)
-        //setEnlace(`http://localhost:3000/votar/${idVot}`);
+        
         setTituloVotacionResult(tituloVotacion)
         preguntasConRespuestasGet(idVot)
         setEstadoVotacion(estado)
+
+        if(estado === 0){
+            getUsuarioVotantes(idVot);
+        }
+
     }
+
+
+    // funcion para traer la data sobre los usuarios que participan de las votaciones
+
+    const getUsuarioVotantes = async (idVot) =>{
+        await axios.get(serverUrl + "/usuariosVotante")
+          .then(response=>{
+            let usuarioVotantes = response.data.filter((e) => e.ID_VOTACION === idVot);
+            console.log(response.data)
+            console.log(usuarioVotantes)
+
+            console.log(usuarioVotantes.length)
+            for(let i = 0; i < usuarioVotantes.length; i++){
+                let nuevoRut = '';
+                let rutAux = String(usuarioVotantes[i].RUT);
+                
+                console.log(rutAux);
+                console.log(typeof(rutAux));
+                for(let j = 0; j < 9; j++){
+                    if(j === 2 || j === 5 ){
+                        nuevoRut = nuevoRut + '.' + rutAux[j];
+                    }
+                    else if(j === 8){
+                        nuevoRut = nuevoRut + '-' + rutAux[j];
+                    }
+                    else{
+                        nuevoRut = nuevoRut + rutAux[j];
+                    }
+                    
+                }
+                console.log(nuevoRut);
+                usuarioVotantes[i].RUT = nuevoRut;
+                
+            }
+            console.log(usuarioVotantes)
+
+            setDataUsuariosVotantes(usuarioVotantes)
+        })
+        .catch (error=> {
+          //setIdVotacion(0)
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: error.response.data.message,
+          })
+        })
+    };
+
+
+    const getUsuarioVotantesGlobal = async () =>{
+        await axios.get(serverUrl + "/usuariosVotante")
+          .then(response=>{
+            setDataUsuariosVotantes(response.data)
+        })
+        .catch (error=> {
+          //setIdVotacion(0)
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: error.response.data.message,
+          })
+        })
+    };
+
 
     const preguntasConRespuestasGet = async (id) =>{
         await axios.get(serverUrl + "/preguntasConRespuestas", {params:{idVotacion: id}})
@@ -844,7 +945,7 @@ const MisVotaciones = () => {
 
             }
             // aqui creo el crear votacion para que se haga solo 1 vez
-            obtenerTipoVotacion(tituloNuevo)
+            obtenerTipoVotacion(tituloNuevo, id)
             //createVotacion(tituloNuevo)
         })
         .catch (error=> {
@@ -857,7 +958,7 @@ const MisVotaciones = () => {
         })
     }
 
-    const obtenerTipoVotacion = async(tituloNuevo) => {
+    const obtenerTipoVotacion = async(tituloNuevo, id) => {
         await axios.get(serverUrl + "/votacionById", {params:{idVotacion: idVotacion}})
             .then(response=>{
             var tipoVot = response.data[0].tipo;
@@ -865,8 +966,14 @@ const MisVotaciones = () => {
             console.log("trae esto getVotaciones ojo:");
             console.log(response.data[0]);
 
+            const usuariosAcopiar = dataUsuarioVotantes.filter(e => e.ID_VOTACION === id)
+                
+                if(usuariosAcopiar.length > 0){
+                    createVotacion(tituloNuevo, tipoVot, 1)
+                }
+
             //creo la nueva votacion con el titulo nuevo y el tipo
-            createVotacion(tituloNuevo, tipoVot)
+            createVotacion(tituloNuevo, tipoVot, 0)
         })
         .catch (error=> {
             Swal.fire({
@@ -878,7 +985,7 @@ const MisVotaciones = () => {
     }
 
 
-    const createVotacion = async (tituloVotacion, tipoVot) =>{
+    const createVotacion = async (tituloVotacion, tipoVot, segura) =>{
         var idVot = idVotacion + 1;
         var estado = 1;
         console.log(idUsuario, tituloVotacion, idVot)
@@ -893,6 +1000,8 @@ const MisVotaciones = () => {
             idVotacion: idVot,
             estado: estado,
             tipo: tipoVot,
+            porcentaje: 0,
+            segura: segura,
           }
         }).then(response=>{
           console.log("Funciona create votacion con id de votacion: ");
@@ -1003,10 +1112,28 @@ const MisVotaciones = () => {
             confirmButtonText: 'Si, copiar votación!',
             cancelButtonText: 'Cancelar'
           }).then((result) => {
+            var idVot = idVotacion + 1;
             if (result.isConfirmed && (estado === 1 || estado === 2)) {
-                getTituloCopia(idVotacionCop)
 
+                console.log('estamos aqui?')
+                console.log(idVot)
+
+                const usuariosAcopiar = dataUsuarioVotantes.filter(e => e.ID_VOTACION === idVotacionCop)
+
+                if(usuariosAcopiar.length > 0){
+                    getTituloCopia(idVotacionCop, 1)
+                }
+                else {
+                    getTituloCopia(idVotacionCop, 0)
+                }
                 copiarPregYresp(idVotacionCop, 0)
+
+                
+                if(usuariosAcopiar.length > 0){
+                    for(let k = 0; k < usuariosAcopiar.length; k++) {
+                        crearUsuarioVotante(usuariosAcopiar[k].NOMBRE, parseInt(usuariosAcopiar[k].RUT),idVot );
+                    }
+                }
                 
                 Swal.fire(
                     'Votación copiada!',
@@ -1042,8 +1169,20 @@ const MisVotaciones = () => {
                         
                         // se llama la funcion de crear la votacion 
                         
+                        const usuariosAcopiar = dataUsuarioVotantes.filter(e => e.ID_VOTACION === idVotacionCop)
+                
+                        if(usuariosAcopiar.length > 0){
+                            getTituloCopia(idVotacionCop, 1)
+                        }
 
-                        getTituloCopia(idVotacionCop)
+                        if(usuariosAcopiar.length > 0){
+                            for(let k = 0; k < usuariosAcopiar.length; k++) {
+                                crearUsuarioVotante(usuariosAcopiar[k].NOMBRE, parseInt(usuariosAcopiar[k].RUT),idVot );
+                            }
+                        }
+
+
+                        getTituloCopia(idVotacionCop, 0)
                         copiarPregYresp(idVotacionCop, result.value)
                         Swal.fire(
                             'Votación copiada!',
@@ -1069,14 +1208,14 @@ const MisVotaciones = () => {
             }})
     }
 
-    const getTituloCopia = async (idVotacionCopia) =>{
+    const getTituloCopia = async (idVotacionCopia, segura) =>{
         await axios.get(serverUrl + "/votacionById", {params:{idVotacion: idVotacionCopia}})
             .then(response=>{
     
             console.log(response.data[0])
             var tituloCopia = response.data[0].TITULO + ' (copia)';
             let tipoVot = response.data[0].tipo;
-            createVotacionCopia(tituloCopia, tipoVot)
+            createVotacionCopia(tituloCopia, tipoVot, segura)
             
         })
         .catch (error=> {
@@ -1089,7 +1228,7 @@ const MisVotaciones = () => {
         })
     };
 
-    const createVotacionCopia = async (tituloVotacion, tipoVot) =>{
+    const createVotacionCopia = async (tituloVotacion, tipoVot, segura) =>{
         var idVot = idVotacion + 1;
         var estado = 2;
         console.log(idUsuario, tituloVotacion, idVot)
@@ -1105,6 +1244,7 @@ const MisVotaciones = () => {
             estado: estado,
             tipo: tipoVot,
             porcentaje: 0,
+            segura: segura,
         }
         }).then(response=>{
         console.log("Funciona create votacion con id de votacion: ");
@@ -1288,6 +1428,31 @@ const MisVotaciones = () => {
         })
     };
 
+    //funcion para crear al usuario votante
+    const crearUsuarioVotante =  async (nombre, rut, idVota) =>{
+        console.log(nombre, rut, idVota);   
+        await axios({
+            method: 'post',
+            url:serverUrl + "/usuarioVotanteCreate", 
+            headers: {'Content-Type': 'application/json'},
+        params:
+            {nombre: nombre,
+            rut: rut,
+            idVotacion: idVota,
+            validacion: 1,
+            }
+        }).then(response=>{
+            
+        })
+        
+        .catch(error=>{
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'El usuario ya existe',
+            })
+        })
+    }
     
 
 
@@ -1450,6 +1615,7 @@ const MisVotaciones = () => {
             tituloVotacion = {tituloVotacionResult}
             data={pregYresp}
             estado= {estadoVotacion}
+            dataUsuariosVot={dataUsuarioVotantes}
         />
 
         <ModalVotEspecial

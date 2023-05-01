@@ -63,9 +63,9 @@ const MyNavbar = (props) => {
                   </Col>
                   <Col className='colGenerico'>
                     <NavDropdown  title="Crear Votación" id="colorDelDrop" >
-                      <NavDropdown.Item href={`/crearVotacion/${'null'}/${'null'}`} className='interiorDropDown'>  Votación normal</NavDropdown.Item>
-                      <NavDropdown.Item href={`/crearVotacionUnGanador/${'null'}/${'null'}`} className='interiorDropDown'>Votación especial</NavDropdown.Item>
-                      <NavDropdown.Item href={`/crearVotacionDirectorio/${'null'}/${'null'}`}  className='interiorDropDown'>Votación directorio</NavDropdown.Item>
+                      <NavDropdown.Item href={`/crearVotacion/${'null'}/${'null'}`} className='interiorDropDown'>  Votación Normal</NavDropdown.Item>
+                      <NavDropdown.Item href={`/crearVotacionUnGanador/${'null'}/${'null'}`} className='interiorDropDown'>Votación Única Selección</NavDropdown.Item>
+                      <NavDropdown.Item href={`/crearVotacionDirectorio/${'null'}/${'null'}`}  className='interiorDropDown'>Votación Estratégica</NavDropdown.Item>
                     </NavDropdown>
                   </Col>
                 </Row>
@@ -83,9 +83,9 @@ const MyNavbar = (props) => {
                 </Col>
                 <Col className='colGenerico'>
                   <NavDropdown  title="Crear Votación" id="colorDelDrop" >
-                    <NavDropdown.Item href={`/crearVotacion/${'null'}/${'null'}`} className='interiorDropDown'>Votación normal</NavDropdown.Item>
-                    <NavDropdown.Item href={`/crearVotacionUnGanador/${'null'}/${'null'}`} className='interiorDropDown'>Votación especial</NavDropdown.Item>
-                    <NavDropdown.Item href= {`/crearVotacionDirectorio/${'null'}/${'null'}`} className='interiorDropDown'>Votación directorio</NavDropdown.Item>
+                    <NavDropdown.Item href={`/crearVotacion/${'null'}/${'null'}`} className='interiorDropDown'>Votación Normal</NavDropdown.Item>
+                    <NavDropdown.Item href={`/crearVotacionUnGanador/${'null'}/${'null'}`} className='interiorDropDown'>Votación Única Selección</NavDropdown.Item>
+                    <NavDropdown.Item href= {`/crearVotacionDirectorio/${'null'}/${'null'}`} className='interiorDropDown'>Votación Estratégica</NavDropdown.Item>
                   </NavDropdown>
                 </Col>
               </Row>

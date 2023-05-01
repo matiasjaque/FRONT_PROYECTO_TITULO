@@ -37,6 +37,17 @@ canvas {
     font-family: sans-serif, 'Roboto';
   }
 
+  #tituloListaParticipantesModalResult{
+    width: 100%;
+    text-align: center;
+    font-size: xx-large;
+    font-weight: bold;
+    font-family: sans-serif, 'Roboto';
+    color: black;
+  }
+
+  
+
   #contenedorPie{
     display: flex;
     justify-content: left;

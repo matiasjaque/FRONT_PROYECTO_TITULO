@@ -6,12 +6,19 @@ import MyNavbar from '../componts/MyNavbar';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import '../styles/CrearVotacion3.css';
+
+import { TiDeleteOutline } from "react-icons/ti";
+
 
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import Swal from 'sweetalert2';
+
+const onlyLettersPattern = /^[a-zA-Z0-9?¿!¡ ()áéíóúñÁÉÍÓÚÑ]+$/;
+
 const serverUrl = process.env.REACT_APP_SERVER;
 
 const conectado = new Cookies();
@@ -21,6 +28,7 @@ var idUsuario = conectado.get('id');
 var controlador = 1;
 var tieneVotaciones = false;
 var tieneVotacionesFunc = 0;
+var controlador0 = 0;
 
 
 
@@ -37,24 +45,71 @@ const [tituloVotacion, setTituloVotacion] = useState('');
 const [preguntaVotacion, setPreguntaVotacion] = useState('');
 const [idPregEditar, setIdPregEditar] = useState(0);
 
+const [activarLista, setActivarLista] = useState(false);
+
+const [listaParticipantes, setListaParticipantes] = useState([]);
+
+
+const [nombre, setNombre] = useState('');
+const [rut, setRut] = useState('');
+
 
 
 // funciones que necesito cargar en cada render
 useEffect(() => {
+  const obtenerTituloVot = async() => {
+    await axios.get(serverUrl + "/votacionById", {params:{idVotacion: idVotacion}})
+              .then(response=>{
+      
+              console.log(response.data[0])
+              let tituloGet = response.data[0].TITULO;
+              setTituloVotacion(tituloGet);
+              
+          })
+          .catch (error=> {
+              Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: error.response.data.message,
+              })
+          })
+  }
+  
+  const obtenerTituloPreg = async() => {
+    await axios.get(serverUrl + "/preguntasGet", {params:{idVotacion: idVotacion}})
+              .then(response=>{
+      
+              console.log(response.data[0])
+              let tituloGet = response.data[0].titulo;
+        setIdPregEditar(response.data[0].id_pregunta)
+              setPreguntaVotacion(tituloGet);
+              
+          })
+          .catch (error=> {
+              Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: error.response.data.message,
+              })
+          })
+  }
 
 
   if(tieneVotacionesFunc === 0){
     verificarSiTieneVotaciones();
+    tieneVotacionesFunc = 1;
   }
 
   if (tieneVotaciones === true){
     actualizarIdVotacion();
     actualizarIdPreguntas();
+    tieneVotaciones = false;
   }
 
-  else{
+  else if (controlador0 === 0){
     actualizarIdVotacionGeneral();
     actualizarIdPreguntas();
+    controlador0 = 1;
   }
 
   if(tipo === 'directorio' && controlador === 1){
@@ -62,7 +117,9 @@ useEffect(() => {
       obtenerTituloPreg();	
       controlador = 0;
   }
-});
+
+
+}, [idVotacion, listaParticipantes, tipo]);
 
 const verificarSiTieneVotaciones = async() => {
   tieneVotacionesFunc = 1;
@@ -87,42 +144,7 @@ const verificarSiTieneVotaciones = async() => {
 
 
 
-const obtenerTituloVot = async() => {
-	await axios.get(serverUrl + "/votacionById", {params:{idVotacion: idVotacion}})
-            .then(response=>{
-    
-            console.log(response.data[0])
-            let tituloGet = response.data[0].TITULO;
-            setTituloVotacion(tituloGet);
-            
-        })
-        .catch (error=> {
-            Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: error.response.data.message,
-            })
-        })
-}
 
-const obtenerTituloPreg = async() => {
-	await axios.get(serverUrl + "/preguntasGet", {params:{idVotacion: idVotacion}})
-            .then(response=>{
-    
-            console.log(response.data[0])
-            let tituloGet = response.data[0].titulo;
-			setIdPregEditar(response.data[0].id_pregunta)
-            setPreguntaVotacion(tituloGet);
-            
-        })
-        .catch (error=> {
-            Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: error.response.data.message,
-            })
-        })
-}
 
 const actualizarIdVotacionGeneral = async () =>{
   await axios.get(serverUrl + "/votacionesGenerales")
@@ -187,22 +209,77 @@ const volverHome = () =>{
 }
 
 const crearVotacion2 = () => {
-    
+  let auxSwitch = document.getElementById('switchListaParticipantes').checked;
+  var idVot = idVotacionLocal + 1;
+
     if(tituloVotacion !== '' && preguntaVotacion !== '') {
+
+      if(auxSwitch === true && listaParticipantes.length > 0){
         console.log(tituloVotacion, preguntaVotacion);
-        createVotacion()
+        createVotacion(1)
         createPregunta()
+
+        for(let i = 0; i < listaParticipantes.length; i++){
+          crearUsuarioVotante(listaParticipantes[i].nombre, listaParticipantes[i].rut, idVot)
+        }
+
         Swal.fire({title: 'Votación creada con éxito',
         icon: "success", timer: "2000"})
         setTimeout(function () {   
             //window.location.reload()
             window.location.replace('/misVotaciones');          
         }, 2000);
+      }
+
+      else{
+        console.log(tituloVotacion, preguntaVotacion);
+        createVotacion(0)
+        createPregunta()
+
+        Swal.fire({title: 'Votación creada con éxito',
+        icon: "success", timer: "2000"})
+        setTimeout(function () {   
+            //window.location.reload()
+            window.location.replace('/misVotaciones');          
+        }, 2000);
+      }
+
+        
     }
     else{
-        alert('Debe asegurarse de ingresar un titulo y pregunta para la nueva votación')
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Debe asegurarse de ingresar un titulo y pregunta para la nueva votación',
+      })  
     }
 }
+
+
+    //funcion para crear al usuario votante
+    const crearUsuarioVotante =  async (nombre, rut, idVot) =>{   
+      await axios({
+          method: 'post',
+          url:serverUrl + "/usuarioVotanteCreate", 
+          headers: {'Content-Type': 'application/json'},
+      params:
+          {nombre: nombre,
+          rut: rut,
+          idVotacion: idVot,
+          validacion: 1,
+          }
+      }).then(response=>{
+          
+      })
+      
+      .catch(error=>{
+          Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'El usuario ya existe',
+          })
+      })
+  }
 
 const GuardarCambios = () =>{
 	if(tituloVotacion !== '' && preguntaVotacion !== '') {
@@ -245,7 +322,7 @@ const updateTituloPreg = async () => {
 	});
 };
 
-const createVotacion = async () =>{
+const createVotacion = async (segura) =>{
     var idVot = idVotacionLocal + 1;
     var estado = 2;
     var porcentaje = 0;
@@ -262,6 +339,7 @@ const createVotacion = async () =>{
         estado: estado,
         tipo: 'directorio',
         porcentaje: porcentaje,
+        segura: segura,
       }
     }).then(response=>{
       console.log("Funciona create votacion con id de votacion: ");
@@ -305,6 +383,83 @@ const createPregunta = async () =>{
         })
 };
 
+const handleActivarLista = (e) => {
+  setActivarLista(e.target.checked);
+};
+
+const handleSubmit = (event) => {
+  event.preventDefault();
+  console.log(nombre, rut)
+  console.log(rut.length)
+  if(nombre !== null && nombre !== undefined && !nombre.match(onlyLettersPattern) === false && rut !== null && rut !== undefined && rut.length === 9){
+    
+    if(listaParticipantes.length === 0){
+      let aux = {nombre: nombre.toUpperCase(), rut: rut}
+  
+      setListaParticipantes([...listaParticipantes, aux]);
+      document.getElementById('nombreUserVotante').value = '';
+      document.getElementById('rutUserVotante').value = '';
+  
+      setNombre('')
+      setRut('');
+    
+      console.log(listaParticipantes)
+    }
+
+    else{
+      // validar que el nombre o rut no esta ya en la lista
+
+      let auxValidador = 0;
+
+      for(let i = 0; i < listaParticipantes.length; i++){
+        if(listaParticipantes[i].nombre === nombre.toUpperCase() || listaParticipantes[i].rut === rut){
+          auxValidador++;
+        }
+      }
+
+      if(auxValidador === 0){
+        let aux = {nombre: nombre.toUpperCase(), rut: rut}
+  
+        setListaParticipantes([...listaParticipantes, aux]);
+        document.getElementById('nombreUserVotante').value = '';
+        document.getElementById('rutUserVotante').value = '';
+    
+        setNombre('')
+        setRut('');
+      
+        console.log(listaParticipantes)
+      }
+      else{
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'El participante ya esta en la lista!',
+        })
+      }
+
+    }
+
+    
+  }
+
+  else{
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Los parametros ingresados son invalidos',
+    })
+  }
+
+  
+};
+
+const handleEliminar = (index) => {
+  const nuevaListaParticipantes = [...listaParticipantes];
+  nuevaListaParticipantes.splice(index, 1);
+  setListaParticipantes(nuevaListaParticipantes);
+};
+
+
 return (
     <>
     {tipo === 'null' ?
@@ -315,7 +470,7 @@ return (
             <Row className='filasCrearVot3' id='filaTituloVot3'>
               <Col lg={12} md={12} sm={12} className='columnasVot3'>
                 <h1 id='tituloVotacion3'>              
-                  Para crear una nueva votación especial ingrese los siguientes datos por favor
+                  Para crear una nueva votación estratégica ingrese los siguientes datos por favor
                 </h1>
               </Col>
             </Row>
@@ -343,6 +498,88 @@ return (
                     /> 
                 </Col>
             </Row>
+
+            <Row className='filasCrearVot3' id='filaSwitchCrearVot3'>
+                <Col lg={12} md={12} sm={12} className='columnasVot3'>
+                  <Form>
+                    <Form.Check 
+                      type="switch"
+                      id="switchListaParticipantes"
+                      label="Activar/desactivar lista de participantes"
+                      onChange={handleActivarLista}
+                      checked={activarLista}
+                      
+                    />
+                    
+                  </Form>
+                </Col>
+            </Row>
+
+            <>
+            {activarLista === true ? 
+              <div>
+                <Row className='filasCrearVot3' id='filaSwitchCrearVot3'>
+                  <Col lg={12} md={12} sm={12} className='columnasVot3'>
+                    <h1 id='tituloSwitchVot3'>
+                      Lista de participantes de la votación
+                    </h1>
+                    <h3 id='numeroParticipantesVot3'>
+                      N° de participantes: {listaParticipantes.length}
+                    </h3>
+                    <Form onSubmit={handleSubmit}>
+                      <Form.Group  id='nombreVot3'>
+                        <Form.Label>Nombre</Form.Label>
+                        <Form.Control type="text" placeholder='Ingrese el nombre y apellido del participante' id='nombreUserVotante' value={nombre} onChange={(e) => setNombre(e.target.value)} />
+                      </Form.Group>
+
+                      <Form.Group  id='rutVot3'>
+                        <Form.Label>Rut
+                          
+                        </Form.Label>
+                        <Form.Control type="text" placeholder='Ingrese el rut del participante' id='rutUserVotante' value={rut} onChange={(e) => setRut(e.target.value)} />
+                      </Form.Group>
+                      <div id='contenedorBtnAgregarParticipanteVot3'>
+                        <Button variant="primary" type="submit" id='btnAgregarParticipantesVot3'>
+                          Agregar participante a la lista
+                        </Button>
+                      </div>
+                      
+                    </Form>
+                  </Col>
+                </Row>
+
+                <>{listaParticipantes.length > 0?
+                <Table striped bordered hover variant="dark" responsive>
+                <tbody>
+                    <tr>
+                        <th className='titulosTabla'>#</th>
+                        <th className='titulosTabla'>Nombre Participante</th>
+                        <th className='titulosTabla'>Rut</th>
+                        <th className='titulosTabla'>Acción</th>
+                    </tr>
+                    
+                    {listaParticipantes.map((e, key) => (
+                         <tr>
+                            <td className='textosTabla'>{key + 1}</td>
+                            <td className='textosTabla'>{e.nombre}</td>
+                            <td className='textosTabla'>{e.rut}</td>
+                            <td className='textosTabla'>
+                              <TiDeleteOutline id='iconoEliminarVot3' onClick= {() => handleEliminar(e.key)}/>
+                              <button id='btnEliminarParticipanteVot3' onClick={() => handleEliminar(e.key)}>Eliminar</button>
+                            </td> 
+                        </tr> 
+                    ))}
+                </tbody>
+              </Table>:
+              <div></div>
+
+                }</>
+              </div>:
+              <div></div>
+            }
+            </>
+
+            
 
             <Row className='filasCrearVot3' id='filavot2Botones'>
               <Col lg={12} md={12} sm={12} className='columnasVot3'>

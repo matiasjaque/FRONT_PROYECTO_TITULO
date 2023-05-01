@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Table from 'react-bootstrap/Table';
 
 import { useParams } from 'react-router-dom';
 
@@ -12,12 +13,15 @@ import MyNavbar from '../componts/MyNavbar';
 import '../styles/CrearVotacion.css'
 
 import { AiFillCloseCircle } from "react-icons/ai";
+import { TiDeleteOutline } from "react-icons/ti";
 
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 
 
 import Swal from 'sweetalert2';
+
+const onlyLettersPattern = /^[a-zA-Z0-9?¿!¡ ()áéíóúñÁÉÍÓÚÑ]+$/;
 
 const serverUrl = process.env.REACT_APP_SERVER;
 const conectado = new Cookies();
@@ -55,6 +59,14 @@ const CrearVotaciones = () => {
   const [idPreg, setIdPreg] = useState(0)
 
   const [idPregInsert, setIdPregInsert] = useState(0)
+
+  const [activarLista, setActivarLista] = useState(false);
+
+  const [listaParticipantes, setListaParticipantes] = useState([]);
+
+
+  const [nombre, setNombre] = useState('');
+  const [rut, setRut] = useState('');
 
  
 
@@ -323,7 +335,7 @@ const actualizarIdPreguntas = async () =>{
 
 
 const volverHome = () =>{
-    window.location.replace('/paginaPrincipal')
+    window.location.replace('/misVotaciones')
 }
 
   //funcion que inicializa la votacion con los datos ingresados por el usuario
@@ -724,7 +736,7 @@ const volverHome = () =>{
 
   }
 
-  const createVotacion = async () =>{
+  const createVotacion = async (segura) =>{
     var idVot = idVotacionLocal + 1;
     var estado = 1;
     var porcentaje = 0;
@@ -741,6 +753,7 @@ const volverHome = () =>{
         estado: estado,
         tipo: 'normal',
         porcentaje: porcentaje,
+        segura: segura,
       }
     }).then(response=>{
       console.log("Funciona create votacion con id de votacion: ");
@@ -878,15 +891,39 @@ const volverHome = () =>{
   //funcion que crea la votacion
 
   const crearVotacion = () => {
-    console.log('crearVotacion')
+    let auxSwitch = document.getElementById('switchListaParticipantesVot1').checked;
+    var idVot = idVotacionLocal + 1;
 
-    setDatosVotacion(false)
+    if(tituloVotacion !== '' && preguntas.length > 0) {
 
-    createVotacion()
+      if(auxSwitch === true && listaParticipantes.length > 0){
+        
+        createVotacion(1)
+        createPreguntasYrespuestas()
 
-    createPreguntasYrespuestas()
+        for(let i = 0; i < listaParticipantes.length; i++){
+          crearUsuarioVotante(listaParticipantes[i].nombre, listaParticipantes[i].rut, idVot)
+        }
 
-    setDatosVotacion(true)
+        
+      }
+
+      else{
+        createVotacion(0)
+        createPreguntasYrespuestas()
+      }
+
+        
+    }
+    else{
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Debe asegurarse de ingresar un titulo y preguntas para la nueva votación',
+      })  
+    }
+
+    
 
     
     
@@ -902,6 +939,32 @@ const volverHome = () =>{
       
     }
 
+  }
+
+  
+    //funcion para crear al usuario votante
+    const crearUsuarioVotante =  async (nombre, rut, idVot) =>{   
+      await axios({
+          method: 'post',
+          url:serverUrl + "/usuarioVotanteCreate", 
+          headers: {'Content-Type': 'application/json'},
+      params:
+          {nombre: nombre,
+          rut: rut,
+          idVotacion: idVot,
+          validacion: 1,
+          }
+      }).then(response=>{
+          
+      })
+      
+      .catch(error=>{
+          Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'El usuario ya existe',
+          })
+      })
   }
 
   const GuardarCambios = () =>{
@@ -1004,6 +1067,82 @@ const updateTituloResp = async (idPregEditar, idRespEditar, newTitulo) => {
   console.log(setRespuestasGen)
   console.log(respuestas) */
 
+  const handleActivarLista = (e) => {
+    setActivarLista(e.target.checked);
+  };
+
+  
+const handleSubmit = (event) => {
+  event.preventDefault();
+  console.log(nombre, rut)
+  console.log(rut.length)
+  if(nombre !== null && nombre !== undefined && !nombre.match(onlyLettersPattern) === false && rut !== null && rut !== undefined && rut.length === 9){
+    
+    if(listaParticipantes.length === 0){
+      let aux = {nombre: nombre.toUpperCase(), rut: rut}
+  
+      setListaParticipantes([...listaParticipantes, aux]);
+      document.getElementById('nombreUserVotante').value = '';
+      document.getElementById('rutUserVotante').value = '';
+  
+      setNombre('')
+      setRut('');
+    
+      console.log(listaParticipantes)
+    }
+
+    else{
+      // validar que el nombre o rut no esta ya en la lista
+
+      let auxValidador = 0;
+
+      for(let i = 0; i < listaParticipantes.length; i++){
+        if(listaParticipantes[i].nombre === nombre.toUpperCase() || listaParticipantes[i].rut === rut){
+          auxValidador++;
+        }
+      }
+
+      if(auxValidador === 0){
+        let aux = {nombre: nombre.toUpperCase(), rut: rut}
+  
+        setListaParticipantes([...listaParticipantes, aux]);
+        document.getElementById('nombreUserVotante').value = '';
+        document.getElementById('rutUserVotante').value = '';
+    
+        setNombre('')
+        setRut('');
+      
+        console.log(listaParticipantes)
+      }
+      else{
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'El participante ya esta en la lista!',
+        })
+      }
+
+    }
+
+    
+  }
+
+  else{
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Los parametros ingresados son invalidos',
+    })
+  }
+
+  
+};
+
+const handleEliminar = (index) => {
+  const nuevaListaParticipantes = [...listaParticipantes];
+  nuevaListaParticipantes.splice(index, 1);
+  setListaParticipantes(nuevaListaParticipantes);
+};
 
   return (
     <>{tipo === 'null' ?
@@ -1119,12 +1258,96 @@ const updateTituloResp = async (idPregEditar, idRespEditar, newTitulo) => {
 
 
                 {element.id === preguntas[preguntas.length-1].id ?
+                <>
+                  <Row className='filasCrearVot1' id='filaSwitchCrearVot1'>
+                  <Col lg={12} md={12} sm={12} className='columnasVot3'>
+                    <Form>
+                      <Form.Check 
+                        type="switch"
+                        id="switchListaParticipantesVot1"
+                        label="Activar/desactivar lista de participantes"
+                        onChange={handleActivarLista}
+                        checked={activarLista}
+                        
+                      />
+                      
+                    </Form>
+                  </Col>
+                  </Row>
+
+                  <>
+            {activarLista === true ? 
+              <div>
+                <Row className='filasCrearVot1' id='filaSwitchCrearVot1'>
+                  <Col lg={12} md={12} sm={12} className='columnasVot3'>
+                    <h1 id='tituloSwitchVot1'>
+                      Lista de participantes de la votación
+                    </h1>
+                    <h3 id='numeroParticipantesVot1'>
+                      N° de participantes: {listaParticipantes.length}
+                    </h3>
+                    <Form onSubmit={handleSubmit}>
+                      <Form.Group  id='nombreVot1'>
+                        <Form.Label>Nombre</Form.Label>
+                        <Form.Control type="text" placeholder='Ingrese el nombre y apellido del participante' id='nombreUserVotante' value={nombre} onChange={(e) => setNombre(e.target.value)} />
+                      </Form.Group>
+
+                      <Form.Group  id='rutVot1'>
+                        <Form.Label>Rut
+                          
+                        </Form.Label>
+                        <Form.Control type="text" placeholder='Ingrese el rut del participante' id='rutUserVotante' value={rut} onChange={(e) => setRut(e.target.value)} />
+                      </Form.Group>
+                      <div id='contenedorBtnAgregarParticipanteVot1'>
+                        <Button variant="primary" type="submit" id='btnAgregarParticipantesVot1'>
+                          Agregar participante a la lista
+                        </Button>
+                      </div>
+                      
+                    </Form>
+                  </Col>
+                </Row>
+
+                <>{listaParticipantes.length > 0?
+                <Table striped bordered hover variant="dark" responsive>
+                <tbody>
+                    <tr>
+                        <th className='titulosTabla'>#</th>
+                        <th className='titulosTabla'>Nombre Participante</th>
+                        <th className='titulosTabla'>Rut</th>
+                        <th className='titulosTabla'>Acción</th>
+                    </tr>
+                    
+                    {listaParticipantes.map((e, key) => (
+                         <tr>
+                            <td className='textosTabla'>{key + 1}</td>
+                            <td className='textosTabla'>{e.nombre}</td>
+                            <td className='textosTabla'>{e.rut}</td>
+                            <td className='textosTabla'>
+                              <TiDeleteOutline id='iconoEliminarVot1' onClick= {() => handleEliminar(e.key)}/>
+                              <button id='btnEliminarParticipanteVot1' onClick={() => handleEliminar(e.key)}>Eliminar</button>
+                            </td> 
+                        </tr> 
+                    ))}
+                </tbody>
+              </Table>:
+              <div></div>
+
+                }</>
+              </div>:
+              <div></div>
+            }
+            </>
+
+                  
+                  
+                  
                   <div id='contenedorBotonFinal'>
                      <Button variant="primary" id='botonFinal' onClick={() => crearVotacion(element.id)}>
                       Crear Votación
                     </Button>
                   </div>
-                  :
+                  </>:
                   <></>
               
               }
@@ -1248,6 +1471,7 @@ const updateTituloResp = async (idPregEditar, idRespEditar, newTitulo) => {
                   </div>
                         
               </Form>
+              
 
 
               {element.idPregunta === preguntas[preguntas.length-1].idPregunta ?

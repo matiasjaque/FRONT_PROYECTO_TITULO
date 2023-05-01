@@ -53,6 +53,13 @@ justify-content: center;
     min-height: 100vh;
 }
 
+#contenedorResultadosVotacionListaParticipantes{
+    background: #F6FAFB;
+    width: 80%;
+    padding: 40px;
+    border-radius: 20px;
+}
+
 
 #contenedorResulVotElement{
     background: #F6FAFB;

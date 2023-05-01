@@ -8,6 +8,7 @@ import OlvidarContraseña from '../pages/OlvidarContraseña';
 import CrearVotacion from '../pages/CrearVotacion';
 import MisVotaciones from '../pages/MisVotaciones';
 import Votar from '../pages/Votar';
+import VotarNormal from '../pages/VotarNormal';
 import ResultadosVotacion from '../pages/ResultadosVotacion';
 import CrearVotacion2 from '../pages/CrearVotacion2';
 import CrearVotacion3 from '../pages/CrearVotacion3';
@@ -27,6 +28,7 @@ function RoutesApp() {
         <Route path="/misVotaciones" element={<MisVotaciones />} />
         <Route path="/resultadosVotacion/:estado/:idVotacion" element={<ResultadosVotacion/>} />
         <Route path="/votar/:id/:estadoVotacion/:idPreg" element={ <Votar/>}/>
+        <Route path="/votarNormal/:id/:estadoVotacion/:idPreg" element={ <VotarNormal/>}/>
         <Route path="/olvidarContrasena" element={<OlvidarContraseña/>} />
         <Route path="/prueba2" element={ <Prueba/>}/>
         <Route path="*" element={<NotFound/>} />

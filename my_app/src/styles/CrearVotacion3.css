@@ -14,6 +14,7 @@
 }
 
 #contenedorCrearVotacion3{
+    overflow-y: auto;
     background: #F1F1F1;
     height: 80vh;
     border-radius: 20px;
@@ -36,12 +37,6 @@
     margin: 0px;
 }
 
-#filaTituloVot3{
-    
-    height: 30%;
-    align-items: center;
-}
-
 #tituloVotacion3{
     text-align: center;
     font-size: 32px;
@@ -50,7 +45,7 @@
 }
 
 #filaTituloVot3{
-    height: 25%;
+    height: 20%;
     align-items: center;
     width: 80%;
     margin: auto;
@@ -72,15 +67,104 @@
 }
 
 #filaTituloPregVot3{
-    height: 25%;
+    height: 20%;
     align-items: center;
     width: 80%;
     margin: auto;
 }
+
+#filaSwitchCrearVot3{
+    height: 15%;
+    align-items: center;
+    width: 80%;
+    margin: auto;
+    font-size: larger;
+}
+
+#switchListaParticipantes{
+    font-size: x-large;
+    font-weight: 400;
+    font-family: sans-serif;
+}
+
 
 #filaCantDePersonasDirectorio{
     height: 15%;
     align-items: center;
     width: 80%;
     margin: auto;
+}
+
+#tituloSwitchVot3{
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#numeroParticipantesVot3{
+    font-size: x-large;
+    font-weight: 500;
+    font-family: sans-serif;
+}
+
+#nombreVot3{
+    font-size: x-large;
+    font-weight: 500;
+    font-family: sans-serif;
+    width: 90%;
+    margin-bottom: 20px;
+}
+
+#nombreUserVotante{
+    font-size: x-large;
+    font-weight: 500;
+    font-family: sans-serif;
+    width: 90%;
+    margin-bottom: 20px;
+}
+
+#rutVot3{
+    font-size: x-large;
+    font-weight: 500;
+    font-family: sans-serif;
+    width: 90%;
+}
+
+#rutUserVotante{
+    font-size: x-large;
+    font-weight: 500;
+    font-family: sans-serif;
+    width: 90%;
+}
+
+#contenedorBtnAgregarParticipanteVot3{
+    display: flex;
+    height: 100px;
+    width: 100%;
+    justify-content: right;
+}
+
+#btnAgregarParticipantesVot3{
+    width: max-content;
+    height: 50%;
+    align-self: self-end;
+    font-size: x-large;
+    font-family: sans-serif;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+#btnEliminarParticipanteVot3{
+    background: none;
+    border: none;
+    font-size: 23px;
+    color: white;
+    font-weight: 700;
+    font-family: sans-serif;
+}
+
+#iconoEliminarVot3{
+    color: red;
+    font-size: xx-large;
+    cursor: pointer;
+    margin-right: 10px;
 }

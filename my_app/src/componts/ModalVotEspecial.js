@@ -277,7 +277,7 @@ const actualizarIdPreguntas = async () =>{
                         
                         <Form.Check
                             type="checkbox"
-                            label= {e.nombre}
+                            label= {e.nombre + '/' + e.cantidadVotos + ' votos'}
                             name="group1"
                             id= {e.nombre}
                             /* checked={true} */

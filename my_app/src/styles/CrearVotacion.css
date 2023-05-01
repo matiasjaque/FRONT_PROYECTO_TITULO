@@ -73,8 +73,8 @@
 
 #contenedorForm{
     background: #AFB2B7;
-    width: 60%;
-    height: 60vh;
+    width: 80%;
+    height: auto;
     border-radius: 20px;
     margin: 20px 0px;
     display: flex;
@@ -228,6 +228,84 @@
     font-size: 20px;
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
+}
+
+#filaSwitchCrearVot1{
+    height: 15%;
+    align-items: center;
+    width: 80%;
+    margin: auto;
+    font-size: larger;
+}
+
+.filasCrearVot1{
+    padding: 0px;
+    margin: 0px;
+}
+
+#switchListaParticipantesVot1{
+    font-size: x-large;
+    font-weight: 400;
+    font-family: sans-serif;
+}
+
+#tituloSwitchVot1{
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#numeroParticipantesVot1{
+    font-size: x-large;
+    font-weight: 500;
+    font-family: sans-serif;
+}
+
+#nombreVot1{
+    font-size: x-large;
+    font-weight: 500;
+    font-family: sans-serif;
+    width: 90%;
+    margin-bottom: 20px;
+}
+
+#rutVot1{
+    font-size: x-large;
+    font-weight: 500;
+    font-family: sans-serif;
+    width: 90%;
+}
+
+#contenedorBtnAgregarParticipanteVot1{
+    display: flex;
+    height: 100px;
+    width: 100%;
+    justify-content: right;
+}
+
+#btnAgregarParticipantesVot1{
+    width: max-content;
+    height: 50%;
+    align-self: self-end;
+    font-size: x-large;
+    font-family: sans-serif;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+#btnEliminarParticipanteVot1{
+    background: none;
+    border: none;
+    font-size: 23px;
+    color: white;
+    font-weight: 700;
+    font-family: sans-serif;
+}
+
+#iconoEliminarVot1{
+    color: red;
+    font-size: xx-large;
+    cursor: pointer;
+    margin-right: 10px;
 }
 
 
