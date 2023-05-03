@@ -89,11 +89,12 @@ const MisVotaciones = () => {
     })
     .catch (error=> {
         setMisVotaciones([]);
-        Swal.fire({
+        console.log(error);
+        /* Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: error.response.data.message,
-        })/* 
+        }) *//* 
         alert(error.response.data.message);
         console.log(error); */
     })
@@ -110,11 +111,12 @@ const MisVotaciones = () => {
         })
         .catch (error=> {
             setPreguntas([]);
-            Swal.fire({
+            console.log(error);
+            /* Swal.fire({
             icon: 'error',
             title: 'Oops...',
             text: error.response.data.message,
-            })/* 
+            }) *//* 
             alert(error.response.data.message);
             console.log(error); */
         })
@@ -128,11 +130,12 @@ const MisVotaciones = () => {
             })
             .catch (error=> {
                 setRespuestas([]);
-                Swal.fire({
+                console.log(error); 
+                /* Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: error.response.data.message,
-                })/* 
+                }) *//* 
                 alert(error.response.data.message);
                 console.log(error); */
             })
@@ -364,11 +367,12 @@ const MisVotaciones = () => {
         })
         .catch (error=> {
           //setIdVotacion(0)
-          Swal.fire({
+          console.log(error)
+          /* Swal.fire({
             icon: 'error',
             title: 'Oops...',
             text: error.response.data.message,
-          })
+          }) */
         })
     };
 
