@@ -24,7 +24,7 @@ import ModalVotEspecial from '../componts/ModalVotEspecial';
 
 
 const serverUrl = process.env.REACT_APP_SERVER;
-const puertoUrl = process.env.RUTA_PUERTO || 'http://localhost:3000';
+const puertoUrl = process.env.RUTA_PUERTO || 'https://votacionesfast.netlify.app';
 const conectado = new Cookies();
 
 var controldadorUseEfect = 0;
