@@ -60,6 +60,7 @@ const MisVotaciones = () => {
 
     // data usuarios votantes
     const [dataUsuarioVotantes, setDataUsuariosVotantes] = useState([]);
+    const [usuarioVotantesVotEsp, setUsuarioVotantesVotEsp] = useState([]);
     
 
     //data para la nueva votacion
@@ -73,6 +74,8 @@ const MisVotaciones = () => {
     // id preg para estado 2
 
     const [idPregEstado2, setIdPregEstado2] = useState(0)
+
+    const [segura, setSegura] = useState(0);
 
 
     useEffect(() => {
@@ -492,9 +495,10 @@ const MisVotaciones = () => {
           
     }
 
-    const segundoSwal = async(idVot, estado, porcentaje) => {
+    const segundoSwal = async(idVot, estado, porcentaje, seguraX) => {
+        var dataUserVotantes = dataUsuarioVotantes.filter((e) => e.ID_VOTACION === idVot);
 
-        console.log(estado, porcentaje)
+        console.log(estado, porcentaje, seguraX)
 
         // creamos la funcion del estado especial
         if(estado === 1){
@@ -557,6 +561,8 @@ const MisVotaciones = () => {
                     setPorcentajeModal(porcentaje)
                     setTituloPregEspecial(response.data[0].TITULO)
                     setIdVotacionEspecial(idVot)
+                    setSegura(seguraX)
+                    setUsuarioVotantesVotEsp(dataUserVotantes)
                     
                     setModalEspecial(true); 
                 }, 2500);
@@ -1469,7 +1475,7 @@ const MisVotaciones = () => {
     }
     
 
-
+console.log(misVotaciones)
   return (
     <div id='contenedorMisVotaciones'>
         <MyNavbar activeKey='/misVotaciones'/>{/* 
@@ -1541,8 +1547,8 @@ const MisVotaciones = () => {
                                 {e.estado === 1 ?
                                     <>
                                         <td className='botonesTablaCerrarVotacion'>
-                                            <MdRule id='iconoCerrarVotacion' onClick= {() => segundoSwal(e.id_votacion, e.estado, e.porcentaje)}/>
-                                            <button className='botonesTabla' onClick= {() => segundoSwal(e.id_votacion, e.estado, e.porcentaje)}>
+                                            <MdRule id='iconoCerrarVotacion' onClick= {() => segundoSwal(e.id_votacion, e.estado, e.porcentaje, e.segura)}/>
+                                            <button className='botonesTabla' onClick= {() => segundoSwal(e.id_votacion, e.estado, e.porcentaje, e.segura)}>
                                                 Cerrar votación
                                             </button> 
                                         </td>
@@ -1574,7 +1580,7 @@ const MisVotaciones = () => {
                                         <>
                                             <td className='botonesTablaCerrarVotacion'>
                                                 <MdRule id='iconoCerrarVotacion'/>
-                                                <button className='botonesTabla' onClick= {() => segundoSwal(e.id_votacion, e.estado)} disabled>
+                                                <button className='botonesTabla' onClick= {() => segundoSwal(e.id_votacion, e.estado, e.segura)} disabled>
                                                     Cerrar votación 
                                                 </button> 
                                             </td>
@@ -1639,6 +1645,8 @@ const MisVotaciones = () => {
             porcentaje={porcentajeModal}
             tituloPregEspecial={tituloPregEspecial}
             idVotacion = {idVotacionEspecial}
+            segura = {segura}
+            dataUsuariosVotantes = {usuarioVotantesVotEsp}
         />
     
     </div>

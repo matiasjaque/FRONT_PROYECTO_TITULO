@@ -18,7 +18,9 @@ const ModalVotEspecial = (props) => {
     const [idVotacionLocal, setIdVotacionLocal] = useState(1);
     const [idPregInsert, setIdPregInsert] = useState(0)
     const [porcentajeVot, setPorcentaje] = useState(0)
+    const [segura, setSegura] = useState(0)
     const [tituloPreg, setTituloPreg] = useState("")
+    const [usuariosVotantes, setUsuariosVotantes] = useState([])
 
     // funciones que necesito cargar en cada render
   useEffect(() => {
@@ -26,8 +28,10 @@ const ModalVotEspecial = (props) => {
     actualizarIdPreguntas();
     setPorcentaje(props.porcentaje)
     setTituloPreg(props.tituloPregEspecial)
+    setSegura(props.segura)
+    setUsuariosVotantes(props.dataUsuariosVotantes)
     
-  },[props.porcentaje, props.tituloPregEspecial]);
+  },[props.porcentaje, props.tituloPregEspecial, props.segura, props.dataUsuariosVotantes]);
 
   const actualizarIdVotacion = async () =>{
     await axios.get(serverUrl + "/votaciones", {params:{idUsuario: idUsuario}})
@@ -124,21 +128,46 @@ const actualizarIdPreguntas = async () =>{
                 //logicaRepetirVotacionAuto(idVot, result.value)
                 createVotacion(result.value)
                 createPregunta()
-                //console.log(props.data)
-                props.data.forEach((r) => {
+                console.log(usuariosVotantes)
+                if(usuariosVotantes.length > 0 && segura === 1) {
+                  for(let i = 0; i < usuariosVotantes.length; i++){
+                    crearUsuarioVotante(usuariosVotantes[i].NOMBRE, usuariosVotantes[i].RUT)
+                  }
+                  //console.log(props.data)
+                  props.data.forEach((r) => {
                     if(r.isCheck === true) {
                         createResp(r.nombre)
                     }
                     
-                })
-                Swal.fire(
+                  })
+                  Swal.fire(
                     'Votación creada!',
                     'Su votación ha sido creada con éxito',
                     'success',
-                )
-                setTimeout(function () {   
+                  )
+                  setTimeout(function () {   
                     updateEstadoVotacion(props.idVotacion, idUsuario)  
-                }, 1500);
+                  }, 1500);
+                }
+                else{
+                    //console.log(props.data)
+                    props.data.forEach((r) => {
+                      if(r.isCheck === true) {
+                          createResp(r.nombre)
+                      }
+                      
+                    })
+                    Swal.fire(
+                      'Votación creada!',
+                      'Su votación ha sido creada con éxito',
+                      'success',
+                    )
+                    setTimeout(function () {   
+                      updateEstadoVotacion(props.idVotacion, idUsuario)  
+                    }, 1500);
+                }
+
+                
                 //console.log("Result: " + result.value);
             } 
 
@@ -150,6 +179,32 @@ const actualizarIdPreguntas = async () =>{
     })}
         })
     }
+
+    //funcion para crear al usuario votante
+    const crearUsuarioVotante =  async (nombre, rut) =>{ 
+      var idVot = idVotacionLocal + 1;  
+      await axios({
+          method: 'post',
+          url:serverUrl + "/usuarioVotanteCreate", 
+          headers: {'Content-Type': 'application/json'},
+      params:
+          {nombre: nombre,
+          rut: rut,
+          idVotacion: idVot,
+          validacion: 1,
+          }
+      }).then(response=>{
+          
+      })
+      
+      .catch(error=>{
+          Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'El usuario ya existe',
+          })
+      })
+  }
 
     const createVotacion = async (tituloVotacion) =>{
         var idVot = idVotacionLocal + 1;
@@ -168,6 +223,7 @@ const actualizarIdPreguntas = async () =>{
             estado: estado,
             tipo: 'especial',
             porcentaje: porcentaje,
+            segura: segura,
           }
         }).then(response=>{
           console.log("Funciona create votacion con id de votacion: ");
@@ -254,7 +310,7 @@ const actualizarIdPreguntas = async () =>{
 
 
 
-    console.log(props.data)
+    console.log(props.dataUsuariosVotantes)
     return (
         <Modal
             {...props}

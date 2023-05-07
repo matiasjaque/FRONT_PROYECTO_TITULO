@@ -72,11 +72,11 @@ const VotarNormal = () => {
                 
             })
             .catch (error=> {
-                Swal.fire({
+                /* Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: error.response.data.message,
-                })
+                }) */
             })
     }
     
@@ -92,11 +92,11 @@ const VotarNormal = () => {
         })
         .catch (error=> {
             setVotacion([]);
-            Swal.fire({
+            /* Swal.fire({
             icon: 'error',
             title: 'Oops...',
             text: error.response.data.message,
-            })
+            }) */
         })
     };
 
@@ -183,11 +183,11 @@ const VotarNormal = () => {
         })
         .catch (error=> {
             setPreguntas([]);
-            Swal.fire({
+            /* Swal.fire({
             icon: 'error',
             title: 'Oops...',
             text: 'La data no carga',
-            })/* 
+            }) *//* 
             alert(error.response.data.message);
             console.log(error); */
         })
