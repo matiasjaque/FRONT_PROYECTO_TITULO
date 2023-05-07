@@ -24,7 +24,10 @@ import ModalVotEspecial from '../componts/ModalVotEspecial';
 
 
 const serverUrl = process.env.REACT_APP_SERVER;
+const puertoUrl = process.env.RUTA_PUERTO || 'http://localhost:3000';
 const conectado = new Cookies();
+
+var controldadorUseEfect = 0;
 
 
 var idUsuario = conectado.get('id'); 
@@ -73,10 +76,14 @@ const MisVotaciones = () => {
 
 
     useEffect(() => {
-        votacionesGet();
-        respuestasGet();
-        preguntasGet();
-        getUsuarioVotantesGlobal();
+        if(controldadorUseEfect === 0){
+            votacionesGet();
+            respuestasGet();
+            preguntasGet();
+            getUsuarioVotantesGlobal();
+            controldadorUseEfect = 1;
+        }
+        
       },[]);
 
     const votacionesGet = async () =>{
@@ -271,7 +278,7 @@ const MisVotaciones = () => {
         }
 
         else{
-            setEnlace(`http://localhost:3000/votar/${idVot}/${estado}/${idPregEstado2}`);
+            setEnlace(`${puertoUrl}/votar/${idVot}/${estado}/${idPregEstado2}`);
         }
 
         setModalShow(true);
@@ -281,7 +288,7 @@ const MisVotaciones = () => {
         await axios.get(serverUrl + "/preguntasGet", {params:{idVotacion: idVot}})
           .then(response=>{
             setIdPregEstado2(response.data[0].id_pregunta)
-            setEnlace(`http://localhost:3000/votar/${idVot}/${estado}/${response.data[0].id_pregunta}`);
+            setEnlace(`${puertoUrl}/votar/${idVot}/${estado}/${response.data[0].id_pregunta}`);
             //setIdPregInsert(response.data[response.data.length - 1].ID_PREGUNTA)
             //setLoading(true);
             //console.log("trae esto getPreguntas:");
@@ -1178,6 +1185,9 @@ const MisVotaciones = () => {
                         if(usuariosAcopiar.length > 0){
                             getTituloCopia(idVotacionCop, 1)
                         }
+                        else {
+                            getTituloCopia(idVotacionCop, 0)
+                        }
 
                         if(usuariosAcopiar.length > 0){
                             for(let k = 0; k < usuariosAcopiar.length; k++) {
@@ -1186,7 +1196,7 @@ const MisVotaciones = () => {
                         }
 
 
-                        getTituloCopia(idVotacionCop, 0)
+                        
                         copiarPregYresp(idVotacionCop, result.value)
                         Swal.fire(
                             'Votación copiada!',

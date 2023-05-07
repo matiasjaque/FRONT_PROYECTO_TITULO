@@ -96,19 +96,21 @@ const CrearVotaciones = () => {
       controladorFunc = 1;
     }
 
+    if(tipo === 'normal' && controlador === 1){
+      obtenerTituloVot();
+      obtenerTituloPreg();	
+      preguntasConRespuestasGet()
+      controlador = 0;
+
+  }
+
     else{
       actualizarIdVotacionGeneral();
       actualizarIdPreguntas();
     }
 
 
-    if(tipo === 'normal' && controlador === 1 && tieneVotaciones === true){
-        obtenerTituloVot();
-        obtenerTituloPreg();	
-        preguntasConRespuestasGet()
-        controlador = 0;
-
-    }
+    
   }, [controladorFunc]);
 
 
@@ -1476,7 +1478,8 @@ const handleEliminar = (index) => {
 
               {element.idPregunta === preguntas[preguntas.length-1].idPregunta ?
                 <div id='contenedorBotonFinal'>
-                   <Button variant="primary" id='botonFinal' onClick={() => GuardarCambios(element.id)}>
+                   <Button id='botonFinal' onClick={volverHome}>Cancelar</Button>
+                  <Button variant="primary" id='botonFinal' onClick={() => GuardarCambios(element.id)}>
                         Guardar Cambios
                   </Button>
                 </div>
