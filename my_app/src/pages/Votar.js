@@ -297,7 +297,7 @@ const Votar = () => {
     return (
         <div id='contenedorPadreVotar'>
             <div id='contenedorSecundarioVotar'>
-                {(estadoVotacion === '1') && segura === 0 /* || estadoVotacion === '2' */? 
+                {(estadoVotacion === '1') /* || estadoVotacion === '2' */? 
                 <>
                     {segura === 0 ? 
                     
