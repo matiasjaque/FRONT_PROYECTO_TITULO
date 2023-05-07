@@ -1,3 +1,97 @@
+/* Para pantallas con ancho menor o igual a 768px (teléfonos celulares) */
+@media screen and (max-width: 768px) {
+    #contenedorSecundarioVotar {
+      width: 90%;
+      height: auto;
+    }
+    
+    #tituloVotar {
+      font-size: 30px;
+    }
+    
+    #filaCuerpoVotar {
+      width: 100%;
+      height: 85%;
+      border-radius: 0px;
+    }
+    
+    #contenedorVotacionVotar {
+      width: 100%;
+      height: 80%;
+      margin: 10px 0px;
+    }
+    
+    #tituloPregVotacion {
+      height: 15%;
+    }
+    
+    #contenedorRespVotar {
+      height: 65%;
+    }
+    
+    #contenedorCheck {
+      width: 90%;
+      height: 15%;
+      font-size: 20px;
+    }
+    
+    #finalizarVotacion {
+      width: 40%;
+      font-size: 20px;
+      border-radius: 20px;
+    }
+    
+    #filaTituloVOtarEstado1Nuevo {
+      height: 15%;
+    }
+    
+    #filaTituloVOtarEstado2 {
+      height: 15%;
+    }
+    
+    #tituloEstado2 {
+      font-size: 20px;
+    }
+    
+    #filaFormularioEstado2 {
+      height: 40%;
+    }
+    
+    #filaFormularioEstado1Nuevo {
+      height: 30%;
+    }
+    
+    #formularioEstado2 {
+      height: 60%;
+      font-size: 15px;
+    }
+    
+    #filaBotonEstado2 {
+      height: 25%;
+    }
+    
+    .botonEstado2 {
+      width: 40%;
+      font-size: 15px;
+      height: 50px;
+    }
+    
+    #contenedorEsperandoVotacionEstado2 {
+      height: 35%;
+    }
+    
+    #tituloEsperarVotacion {
+      font-size: 25px;
+    }
+    
+    #filaCargando {
+      height: 65%;
+    }
+}
+
+/* Para pantallas con ancho mayor a 768px (computadoras) */
+@media screen and (min-width: 769px) {
+
 #contenedorPadreVotar {
     background: #AFB2B7;
     width: 100%;
@@ -272,4 +366,5 @@
     font-family: sans-serif;
     font-weight: bold;
     margin: 0px 10px 10px 0px;
+}
 }

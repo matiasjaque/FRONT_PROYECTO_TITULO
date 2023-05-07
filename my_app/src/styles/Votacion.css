@@ -54,3 +54,34 @@
     margin-top: 25px;
 }
 
+/* Estilos para pantallas de celular */
+@media only screen and (max-width: 768px) {
+    #rowDiv {
+        height: auto;
+        padding: 10px;
+    }
+    
+    #columnasDiv {
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 10px;
+    }
+    
+    #card {
+        width: 90%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+    
+    #cardTitulo {
+        margin-top: 10px;
+    }
+    
+    #cardTexto {
+        margin-top: 10px;
+    }
+    
+    #botonVotacion {
+        margin: 10px 0px;
+    }
+}
