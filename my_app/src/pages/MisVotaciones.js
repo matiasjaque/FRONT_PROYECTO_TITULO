@@ -24,7 +24,7 @@ import ModalVotEspecial from '../componts/ModalVotEspecial';
 
 
 const serverUrl = process.env.REACT_APP_SERVER;
-const puertoUrl = process.env.RUTA_PUERTO || 'https://votacionesfast.netlify.app';
+const puertoUrl = process.env.RUTA_PUERTO || 'http://localhost:3000';
 const conectado = new Cookies();
 
 var controldadorUseEfect = 0;
@@ -1474,8 +1474,7 @@ const MisVotaciones = () => {
         })
     }
     
-
-console.log(misVotaciones)
+    
   return (
     <div id='contenedorMisVotaciones'>
         <MyNavbar activeKey='/misVotaciones'/>{/* 

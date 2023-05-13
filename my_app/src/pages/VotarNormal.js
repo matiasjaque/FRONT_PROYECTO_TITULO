@@ -264,7 +264,20 @@ const VotarNormal = () => {
         console.log(parametrosOk, preguntas.length)
         if(parametrosOk === preguntas.length){
 
-            // setiar los votos de las preguntas
+            let votosAcumulados = [];
+            for(let i = 0; i < preguntas.length; i++) {
+                for(let j = 0; j < preguntas[i].respuesta.length; j++) {
+                    if(preguntas[i].respuesta[j].isCheck === true){
+                    const idPreg = preguntas[i].idPregunta;
+                    const idResp = preguntas[i].respuesta[j].idResp;
+                    const cantVotos = preguntas[i].respuesta[j].votos + 1;
+                    votosAcumulados.push({idPregunta: idPreg, idRespuesta: idResp, voto: cantVotos});
+                }
+                }
+            }
+            setVoto(votosAcumulados)
+
+            /* // setiar los votos de las preguntas
             for(let i = 0; i < preguntas.length; i++) {
                 for(let j = 0; j < preguntas[i].respuesta.length; j++) {
                     if(preguntas[i].respuesta[j].isCheck === true){
@@ -272,7 +285,7 @@ const VotarNormal = () => {
                     }
                     
                 }
-            }
+            } */
             Swal.fire({title: "Votar", text:'su votacion fue realizada con exito',
             icon: "success", timer: "2000"})
             setTimeout(function () {
@@ -293,20 +306,17 @@ const VotarNormal = () => {
 
     
 
-    const setVoto = async (idPregu, idRespu, CantVotos) =>{
+    const setVoto = async (votos) =>{
+
+        console.log(votos)
     
-        console.log(idPregu, idRespu, CantVotos);
+        //console.log(idPregu, idRespu, CantVotos);
     
         await axios({
           method: 'put',
           url:serverUrl + "/votoUpdate", 
           headers: {'Content-Type': 'application/json'},
-          params:
-          {
-            idPregunta: idPregu,
-            idRespuesta: idRespu,
-            voto: CantVotos,
-          }
+          data: votos
         }).then(response=>{
           console.log("Funciona update voto");
         })
@@ -362,15 +372,10 @@ const VotarNormal = () => {
 
             // quiere decir que el nombre esta disponible
             if(disponible === 0 && ok === true){
+
                 createResp(idPreg, nombreVotante);
                 //necesito un swal alert que diga que el mensaje de exito y se recarge la pagina
-                Swal.fire(
-                    'Respuesta registrada',
-                    'Su respuesta ha sido ingresada con éxito',
-                    'success'
-                )
-
-                setIsRegister(true) 
+                
                 /* setTimeout(function () {   
                     window.location.reload(true); 
                 }, 2000); */
@@ -406,10 +411,20 @@ const VotarNormal = () => {
           }
         }).then(response=>{
           console.log("Funciona create respuesta ");
+          Swal.fire(
+            'Respuesta registrada',
+            'Su respuesta ha sido ingresada con éxito',
+            'success'
+        )
+
+        setIsRegister(true) 
         })
         .catch(error=>{
-                alert(error.response.data.message);
-                console.log(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Respuesta ya ingresada',
+                    text: 'La respuesta ya fue registrada',
+                })
               })
     };
 

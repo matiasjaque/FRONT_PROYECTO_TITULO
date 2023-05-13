@@ -1,8 +1,10 @@
 /* Para pantallas con ancho menor o igual a 768px (teléfonos celulares) */
 @media screen and (max-width: 768px) {
+
     #contenedorSecundarioVotar {
       width: 90%;
       height: auto;
+      margin: auto;
     }
     
     #tituloVotar {
