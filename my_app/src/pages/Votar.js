@@ -49,8 +49,6 @@ const Votar = () => {
             controlador = 1;
         }
         
-
-        
     });
 
 

@@ -48,6 +48,8 @@ const [idPregEditar, setIdPregEditar] = useState(0);
 const [activarLista, setActivarLista] = useState(false);
 
 const [listaParticipantes, setListaParticipantes] = useState([]);
+const [listaParticipantesEliminar, setListaParticipantesEliminar] = useState([]);
+const [listaParticipantesAgregar, setListaParticipantesAgregar] = useState([]);
 
 
 const [nombre, setNombre] = useState('');
@@ -115,11 +117,36 @@ useEffect(() => {
   if(tipo === 'directorio' && controlador === 1){
       obtenerTituloVot();
       obtenerTituloPreg();	
+      getUsuarioVotantes(idVotacion)
       controlador = 0;
   }
 
 
 }, [idVotacion, listaParticipantes, tipo]);
+
+// funcion para traer la data sobre los usuarios que participan de las votaciones
+
+const getUsuarioVotantes = async (idVot) =>{
+  console.log(idVot)
+  console.log(typeof(idVot));
+  await axios.get(serverUrl + "/usuariosVotante")
+    .then(response=>{
+      let usuarioVotantes = response.data.filter((e) => e.ID_VOTACION === parseInt(idVot));
+      console.log(typeof(response.data[0].ID_VOTACION));
+      console.log(response.data)
+      console.log(usuarioVotantes)
+
+      setListaParticipantes(usuarioVotantes)
+  })
+  .catch (error=> {
+    //setIdVotacion(0)
+    /* Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: error.response.data.message,
+    }) */
+  })
+};
 
 const verificarSiTieneVotaciones = async() => {
   tieneVotacionesFunc = 1;
@@ -219,9 +246,14 @@ const crearVotacion2 = () => {
         createVotacion(1)
         createPregunta()
 
+        var dataUserVotantesPorLote = [];
+
         for(let i = 0; i < listaParticipantes.length; i++){
-          crearUsuarioVotante(listaParticipantes[i].nombre, listaParticipantes[i].rut, idVot)
+          dataUserVotantesPorLote.push({NOMBRE: listaParticipantes[i].nombre, RUT: listaParticipantes[i].rut, idVotacion: idVot, validacion: 1})
+          //crearUsuarioVotante(listaParticipantes[i].nombre, listaParticipantes[i].rut, idVot)
         }
+        crearUsuarioVotante(dataUserVotantesPorLote)
+
 
         Swal.fire({title: 'Votación creada con éxito',
         icon: "success", timer: "2000"})
@@ -256,18 +288,14 @@ const crearVotacion2 = () => {
 }
 
 
-    //funcion para crear al usuario votante
-    const crearUsuarioVotante =  async (nombre, rut, idVot) =>{   
+    //funcion para crear al usuario votante por lote
+    const crearUsuarioVotante =  async (usuarioVotantes) =>{  
+      console.log(usuarioVotantes) 
       await axios({
           method: 'post',
-          url:serverUrl + "/usuarioVotanteCreate", 
+          url:serverUrl + "/usuarioVotanteCreateLote", 
           headers: {'Content-Type': 'application/json'},
-      params:
-          {nombre: nombre,
-          rut: rut,
-          idVotacion: idVot,
-          validacion: 1,
-          }
+          data: usuarioVotantes, 
       }).then(response=>{
           
       })
@@ -285,6 +313,10 @@ const GuardarCambios = () =>{
 	if(tituloVotacion !== '' && preguntaVotacion !== '') {
         updateTituloVotacion();
         updateTituloPreg()
+        // agregar por lote y eliminar por lote
+        crearUsuarioVotante(listaParticipantesAgregar)
+        eliminarUsuarioVotanteLote(listaParticipantesEliminar)
+
         Swal.fire({title: 'Votación editada con éxito',
         icon: "success", timer: "2000"})
         setTimeout(function () {   
@@ -391,7 +423,7 @@ const handleSubmit = (event) => {
   event.preventDefault();
   console.log(nombre, rut)
   console.log(rut.length)
-  if(nombre !== null && nombre !== undefined && !nombre.match(onlyLettersPattern) === false && rut !== null && rut !== undefined && rut.length === 9){
+  if(nombre !== null && nombre !== undefined && !nombre.match(onlyLettersPattern) === false && rut !== null && rut !== undefined){
     
     if(listaParticipantes.length === 0){
       let aux = {nombre: nombre.toUpperCase(), rut: rut}
@@ -453,12 +485,113 @@ const handleSubmit = (event) => {
   
 };
 
+
+const handleSubmitAgregar = (event) => {
+  event.preventDefault();
+  var idVot = idVotacionLocal;
+  console.log(nombre, rut)
+  console.log(rut.length)
+  if(nombre !== null && nombre !== undefined && !nombre.match(onlyLettersPattern) === false && rut !== null && rut !== undefined){
+    
+    if(listaParticipantes.length === 0){
+      let aux = {NOMBRE: nombre.toUpperCase(), RUT: rut}
+      let aux2 = {NOMBRE: nombre.toUpperCase(), RUT: rut, idVotacion: idVot, validacion: 1}
+
+      setListaParticipantes([...listaParticipantes, aux]);
+      setListaParticipantesAgregar([...listaParticipantesAgregar, aux2]);
+      document.getElementById('nombreUserVotante').value = '';
+      document.getElementById('rutUserVotante').value = '';
+  
+      setNombre('')
+      setRut('');
+    
+      console.log(listaParticipantes)
+    }
+
+    else{
+      // validar que el nombre o rut no esta ya en la lista
+
+      let auxValidador = 0;
+
+      for(let i = 0; i < listaParticipantes.length; i++){
+        if(listaParticipantes[i].nombre === nombre.toUpperCase() || listaParticipantes[i].rut === rut){
+          auxValidador++;
+        }
+      }
+
+      if(auxValidador === 0){
+
+        let aux = {NOMBRE: nombre.toUpperCase(), RUT: rut}
+        let aux2 = {NOMBRE: nombre.toUpperCase(), RUT: rut, idVotacion: idVot, validacion: 1}
+  
+        setListaParticipantes([...listaParticipantes, aux]);
+        setListaParticipantesAgregar([...listaParticipantesAgregar, aux2]);
+        document.getElementById('nombreUserVotante').value = '';
+        document.getElementById('rutUserVotante').value = '';
+    
+        setNombre('')
+        setRut('');
+      
+        console.log(listaParticipantes)
+      }
+      else{
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'El participante ya esta en la lista!',
+        })
+      }
+
+    }
+
+    
+  }
+
+  else{
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Los parametros ingresados son invalidos',
+    })
+  }
+
+  
+};
+
 const handleEliminar = (index) => {
   const nuevaListaParticipantes = [...listaParticipantes];
   nuevaListaParticipantes.splice(index, 1);
   setListaParticipantes(nuevaListaParticipantes);
 };
 
+const handleEliminarLote = (index, rutEliminar) => {
+  console.log(index)
+  var idVot = idVotacionLocal;
+  let aux = {RUT: rutEliminar, idVotacion: idVot}
+  const nuevaListaParticipantes = [...listaParticipantes];
+  nuevaListaParticipantes.splice(index, 1);
+  setListaParticipantes(nuevaListaParticipantes);
+
+  setListaParticipantesEliminar([...listaParticipantesEliminar, aux]);
+};
+
+const eliminarUsuarioVotanteLote = async (usuariosVotantesEliminar) => {
+  console.log(typeof(rut))
+  await axios.delete(serverUrl+"/usuarioVotanteDeleteLote",
+      {
+        data: usuariosVotantesEliminar
+      }
+  ).then(response =>{
+      
+  }).catch(error =>{
+      alert(error.response.data.message);
+      console.log(error);
+  });
+};
+
+
+console.log(listaParticipantesAgregar)
+console.log(listaParticipantesEliminar)
 
 return (
     <>
@@ -564,8 +697,8 @@ return (
                             <td className='textosTabla'>{e.nombre}</td>
                             <td className='textosTabla'>{e.rut}</td>
                             <td className='textosTabla'>
-                              <TiDeleteOutline id='iconoEliminarVot3' onClick= {() => handleEliminar(e.key)}/>
-                              <button id='btnEliminarParticipanteVot3' onClick={() => handleEliminar(e.key)}>Eliminar</button>
+                              <TiDeleteOutline id='iconoEliminarVot3' onClick= {() => handleEliminar(key)}/>
+                              <button id='btnEliminarParticipanteVot3' onClick={() => handleEliminar(key)}>Eliminar</button>
                             </td> 
                         </tr> 
                     ))}
@@ -633,6 +766,70 @@ return (
                   /> 
               </Col>
           </Row>
+
+          <>
+            {listaParticipantes.length > 0 ? 
+              <div>
+                <Row className='filasCrearVot3' id='filaSwitchCrearVot3'>
+                  <Col lg={12} md={12} sm={12} className='columnasVot3'>
+                    <h1 id='tituloSwitchVot3'>
+                      Lista de participantes de la votación
+                    </h1>
+                    <h3 id='numeroParticipantesVot3'>
+                      N° de participantes: {listaParticipantes.length}
+                    </h3>
+                    <Form onSubmit={handleSubmitAgregar}>
+                      <Form.Group  id='nombreVot3'>
+                        <Form.Label>Nombre</Form.Label>
+                        <Form.Control type="text" placeholder='Ingrese el nombre y apellido del participante' id='nombreUserVotante' value={nombre} onChange={(e) => setNombre(e.target.value)} />
+                      </Form.Group>
+
+                      <Form.Group  id='rutVot3'>
+                        <Form.Label>Rut
+                          
+                        </Form.Label>
+                        <Form.Control type="text" placeholder='Ingrese el rut del participante' id='rutUserVotante' value={rut} onChange={(e) => setRut(e.target.value)} />
+                      </Form.Group>
+                      <div id='contenedorBtnAgregarParticipanteVot3'>
+                        <Button variant="primary" type="submit" id='btnAgregarParticipantesVot3'>
+                          Agregar participante a la lista
+                        </Button>
+                      </div>
+                      
+                    </Form>
+                  </Col>
+                </Row>
+
+          <>{listaParticipantes.length > 0?
+                <Table striped bordered hover variant="dark" responsive>
+                <tbody>
+                    <tr>
+                        <th className='titulosTabla'>#</th>
+                        <th className='titulosTabla'>Nombre Participante</th>
+                        <th className='titulosTabla'>Rut</th>
+                        <th className='titulosTabla'>Acción</th>
+                    </tr>
+                    
+                    {listaParticipantes.map((e, key) => (
+                         <tr>
+                            <td className='textosTabla'>{key + 1}</td>
+                            <td className='textosTabla'>{e.NOMBRE}</td>
+                            <td className='textosTabla'>{e.RUT}</td>
+                            <td className='textosTabla'>
+                              <TiDeleteOutline id='iconoEliminarVot3' onClick= {() => handleEliminarLote(key, e.RUT)}/>
+                              <button id='btnEliminarParticipanteVot3' onClick={() => handleEliminarLote(key, e.RUT)}>Eliminar</button>
+                            </td> 
+                        </tr> 
+                    ))}
+                </tbody>
+              </Table>:
+              <div></div>
+
+                }</>
+                </div>:
+              <div></div>
+            }
+            </>
 
           <Row className='filasCrearVot3' id='filavot2Botones'>
             <Col lg={12} md={12} sm={12} className='columnasVot3'>

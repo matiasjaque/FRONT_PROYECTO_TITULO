@@ -182,29 +182,49 @@ const MisVotaciones = () => {
         //console.log(dataUsuarioVotantes)
         const usuariosVotantesAborrar = dataUsuarioVotantes.filter(e => e.ID_VOTACION === idVotacion)
         //console.log(usuariosVotantesAborrar)
+        let usuariosVotantesDelete = [];
+        for (var i = 0; i < usuariosVotantesAborrar.length; i++) {
+            usuariosVotantesDelete.push({idVotacion: usuariosVotantesAborrar[i].ID_VOTACION, RUT: usuariosVotantesAborrar[i].RUT})
+        }
+
+        console.log(usuariosVotantesDelete)
         
         const pregAborrar = preguntas.filter((preg) => (preg.ID_VOTACION === idVotacion))
+        let preguntasDelete = [];
+        let respuestasDelete = [];
+
 
 
         // ahora se eliminan las preguntas asociadas y las respuestas asociadas a cada pregunta
        
         for (let i = 0; i < pregAborrar.length; i++) {
-            eliminarPreguntaId(idVotacion, pregAborrar[i].ID_PREGUNTA)
+            preguntasDelete.push({idVotacion: idVotacion, idPregunta: pregAborrar[i].ID_PREGUNTA})
+            //eliminarPreguntaId(idVotacion, pregAborrar[i].ID_PREGUNTA)
             
             const respAborrar = respuestas.filter((respu) => (respu.ID_PREGUNTA === pregAborrar[i].ID_PREGUNTA))
             
             
             for (let j = 0; j < respAborrar.length; j++) {
-                eliminarRespuestaId(pregAborrar[i].ID_PREGUNTA, respAborrar[j].ID_RESPUESTA)
+                respuestasDelete.push({idPregunta: pregAborrar[i].ID_PREGUNTA, idRespuesta: respAborrar[j].ID_RESPUESTA})
+                //eliminarRespuestaId(pregAborrar[i].ID_PREGUNTA, respAborrar[j].ID_RESPUESTA)
             }
             
         } 
 
-        if(usuariosVotantesAborrar.length > 0){
+        console.log(preguntasDelete)
+        console.log(respuestasDelete)
+
+        /* if(usuariosVotantesAborrar.length > 0){
             for(let k = 0; k < usuariosVotantesAborrar.length; k++) {
                 eliminarUsuarioVotanteId(idVotacion, parseInt(usuariosVotantesAborrar[k].RUT));
             }
-        }
+        } */
+
+        eliminarPreguntaLote(preguntasDelete)
+
+        eliminarRespuestaLote(respuestasDelete)
+
+        eliminarUsuarioVotanteLote(usuariosVotantesDelete)
         
         
         eliminarVotacionId(idVotacion, idUsuario)
@@ -229,10 +249,10 @@ const MisVotaciones = () => {
         });
     };
 
-    const eliminarPreguntaId = async (idVotacion, idPreg) => {
-        await axios.delete(serverUrl+"/preguntaDelete",
+    const eliminarPreguntaLote = async (preguntasDelete) => {
+        await axios.delete(serverUrl+"/preguntaDeleteLote",
             {
-                params:{idVotacion: idVotacion, idPregunta: idPreg}
+                data: preguntasDelete
             }
         ).then(response =>{
             window.location.reload(false);
@@ -242,10 +262,12 @@ const MisVotaciones = () => {
         });
     };
 
-    const eliminarRespuestaId = async (idPreg, idResp) => {
-        await axios.delete(serverUrl+"/respuestaDelete",
+    
+
+    const eliminarRespuestaLote = async (respuestasDelete) => {
+        await axios.delete(serverUrl+"/respuestaDeleteLote",
             {
-                params:{idPregunta: idPreg, idRespuesta: idResp}
+                data: respuestasDelete
             }
         ).then(response =>{
             window.location.reload(false);
@@ -253,12 +275,13 @@ const MisVotaciones = () => {
             alert(error.response.data.message);
         });
     };
+    
 
-    const eliminarUsuarioVotanteId = async (idVotacion, rut) => {
+    const eliminarUsuarioVotanteLote = async (usuariosVotantesEliminar) => {
         console.log(typeof(rut))
-        await axios.delete(serverUrl+"/usuarioVotanteDelete",
+        await axios.delete(serverUrl+"/usuarioVotanteDeleteLote",
             {
-                params:{idVotacion: idVotacion, rut: rut}
+                data: usuariosVotantesEliminar
             }
         ).then(response =>{
             window.location.reload(false);
@@ -1062,6 +1085,24 @@ const MisVotaciones = () => {
             })
     };
 
+    const createPreguntaLote = async (preguntasAgregar) =>{
+        console.log(preguntasAgregar)
+
+    
+        await axios({
+          method: 'post',
+          url:serverUrl + "/preguntaCreateLote",
+          headers: {'Content-Type': 'application/json'},
+          data: preguntasAgregar
+        }).then(response=>{
+          console.log("Funciona create pregunta ");
+        })
+        .catch(error=>{
+                alert(error.response.data.message);
+                console.log(error);
+            })
+    };
+
     const createResp = async (tituloResp) =>{
     
         console.log( tituloResp);
@@ -1145,12 +1186,18 @@ const MisVotaciones = () => {
                 }
                 copiarPregYresp(idVotacionCop, 0)
 
-                
+                var dataUserVotantesPorLote = [];
+
+                                
                 if(usuariosAcopiar.length > 0){
-                    for(let k = 0; k < usuariosAcopiar.length; k++) {
-                        crearUsuarioVotante(usuariosAcopiar[k].NOMBRE, parseInt(usuariosAcopiar[k].RUT),idVot );
+                    for(let i = 0; i < usuariosAcopiar.length; i++){
+                        dataUserVotantesPorLote.push({NOMBRE: usuariosAcopiar[i].NOMBRE, RUT: usuariosAcopiar[i].RUT, idVotacion: idVot, validacion: 1})
+                        //crearUsuarioVotante(listaParticipantes[i].nombre, listaParticipantes[i].rut, idVot)
                     }
+                    crearUsuarioVotante(dataUserVotantesPorLote)     
                 }
+
+                
                 
                 Swal.fire(
                     'Votación copiada!',
@@ -1196,9 +1243,11 @@ const MisVotaciones = () => {
                         }
 
                         if(usuariosAcopiar.length > 0){
-                            for(let k = 0; k < usuariosAcopiar.length; k++) {
-                                crearUsuarioVotante(usuariosAcopiar[k].NOMBRE, parseInt(usuariosAcopiar[k].RUT),idVot );
+                            for(let i = 0; i < usuariosAcopiar.length; i++){
+                                dataUserVotantesPorLote.push({NOMBRE: usuariosAcopiar[i].NOMBRE, RUT: usuariosAcopiar[i].RUT, idVotacion: idVot, validacion: 1})
+                                //crearUsuarioVotante(listaParticipantes[i].nombre, listaParticipantes[i].rut, idVot)
                             }
+                            crearUsuarioVotante(dataUserVotantesPorLote)     
                         }
 
 
@@ -1347,38 +1396,53 @@ const MisVotaciones = () => {
                 return 0;
             })
 
-            //console.log(newPregYresp)
+            console.log(newPregYresp)
+            let preguntasAgregar = [];
+            let respuestasAgregar = [];
+            let idVotCorrecto = idVot + 1;
+            let idPreguntaGlobal = idPreguntaInsert;
 
             if(cantidadRespuestas === 0){
                 newPregYresp.forEach((k) =>{
-                    createPregunta(k.tituloPreg)
+                    idPreguntaGlobal++
+                    preguntasAgregar.push({idVotacion: idVotCorrecto, titulo: k.tituloPreg, idPregunta: idPreguntaGlobal})
+                    //createPregunta(k.tituloPreg)
                     k.respuesta.forEach((r) => {
-                        createResp(r.respuesta)
+                        //createResp(r.respuesta)
+                        respuestasAgregar.push({idPregunta: idPreguntaGlobal, respuestas: r.respuesta})
                     })
                 })
+
+                createPreguntaLote(preguntasAgregar)
+                createRespLote(respuestasAgregar)
+
             }
             else{
                 newPregYresp.forEach((k) =>{
-                    createPregunta(k.tituloPreg)
+                    //createPregunta(k.tituloPreg)
+                    idPreguntaGlobal++
+                    preguntasAgregar.push({idVotacion: idVotCorrecto, titulo: k.tituloPreg, idPregunta: idPreguntaGlobal})
                     if(cantidadRespuestas > k.respuesta.length){
                         k.respuesta.forEach((r) => {
-                            createResp(r.respuesta)
+                            //createResp(r.respuesta)
+                            respuestasAgregar.push({idPregunta: idPreguntaGlobal, respuestas: r.respuesta})
                         })   
+                        createRespLote(respuestasAgregar)
                     }
                     else{
                         for(let i = 0; i < cantidadRespuestas; i++) {
-                        
-                            createResp(k.respuesta[i].respuesta)
+                            respuestasAgregar.push({idPregunta: idPreguntaGlobal, respuestas: k.respuesta[i].respuesta})
                         }
+                        createRespLote(respuestasAgregar)
                     }
                     
                 })
-                
+
+                createPreguntaLote(preguntasAgregar)
+
             }
-            
-
-
-
+            console.log(preguntasAgregar)
+            console.log(respuestasAgregar)
 
     })
     .catch (error=> {
@@ -1448,19 +1512,14 @@ const MisVotaciones = () => {
         })
     };
 
-    //funcion para crear al usuario votante
-    const crearUsuarioVotante =  async (nombre, rut, idVota) =>{
-        console.log(nombre, rut, idVota);   
+    //funcion para crear al usuario votante por lote
+    const crearUsuarioVotante =  async (usuarioVotantes) =>{  
+        console.log(usuarioVotantes) 
         await axios({
             method: 'post',
-            url:serverUrl + "/usuarioVotanteCreate", 
+            url:serverUrl + "/usuarioVotanteCreateLote", 
             headers: {'Content-Type': 'application/json'},
-        params:
-            {nombre: nombre,
-            rut: rut,
-            idVotacion: idVota,
-            validacion: 1,
-            }
+            data: usuarioVotantes, 
         }).then(response=>{
             
         })
@@ -1473,6 +1532,29 @@ const MisVotaciones = () => {
             })
         })
     }
+
+    //funcion para crear respuestas por lote
+    const createRespLote =  async (respuestasAdd) =>{  
+        console.log(respuestasAdd) 
+        await axios({
+            method: 'post',
+            url:serverUrl + "/respuestaCreateLote", 
+            headers: {'Content-Type': 'application/json'},
+            data: respuestasAdd, 
+        }).then(response=>{
+            
+        })
+        
+        .catch(error=>{
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'El usuario ya existe',
+            })
+        })
+    }
+
+    
     
     
   return (
