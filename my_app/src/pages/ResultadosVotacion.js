@@ -429,7 +429,7 @@ const mostrarModalVisualizarResultadoTipoEspecial = () => {
 
                                 <div id='contenedorBotonDirectorio'>
                                     <Button id='BotonVerDirectorio' onClick={() => mostrarModalVisualizarResultado()}>
-                                        Ver al directorio
+                                        Ver resultados
                                     </Button>
                                 </div> 
                             </div>:

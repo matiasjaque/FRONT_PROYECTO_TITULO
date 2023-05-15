@@ -242,9 +242,6 @@ const crearVotacion2 = () => {
     if(tituloVotacion !== '' && preguntaVotacion !== '') {
 
       if(auxSwitch === true && listaParticipantes.length > 0){
-        console.log(tituloVotacion, preguntaVotacion);
-        createVotacion(1)
-        createPregunta()
 
         var dataUserVotantesPorLote = [];
 
@@ -252,28 +249,41 @@ const crearVotacion2 = () => {
           dataUserVotantesPorLote.push({NOMBRE: listaParticipantes[i].nombre, RUT: listaParticipantes[i].rut, idVotacion: idVot, validacion: 1})
           //crearUsuarioVotante(listaParticipantes[i].nombre, listaParticipantes[i].rut, idVot)
         }
-        crearUsuarioVotante(dataUserVotantesPorLote)
-
-
-        Swal.fire({title: 'Votación creada con éxito',
-        icon: "success", timer: "2000"})
-        setTimeout(function () {   
-            //window.location.reload()
-            window.location.replace('/misVotaciones');          
-        }, 2000);
+        // Ejecutar las tres peticiones al servidor de manera asíncrona
+        Promise.all([
+          createVotacion(1),
+          createPregunta(),
+          crearUsuarioVotante(dataUserVotantesPorLote)
+        ]).then(() => {
+          // Cuando todas las peticiones hayan finalizado, ejecutar estas acciones
+          Swal.fire({
+              title: 'Votación creada con éxito',
+              icon: "success",
+              timer: "2000"
+          });
+          setTimeout(function () {   
+              //window.location.reload()
+              window.location.replace('/misVotaciones');          
+          }, 2000);
+      });
       }
 
       else{
-        console.log(tituloVotacion, preguntaVotacion);
-        createVotacion(0)
-        createPregunta()
-
-        Swal.fire({title: 'Votación creada con éxito',
-        icon: "success", timer: "2000"})
-        setTimeout(function () {   
-            //window.location.reload()
-            window.location.replace('/misVotaciones');          
-        }, 2000);
+        Promise.all([
+          createVotacion(0),
+          createPregunta(),
+        ]).then(() => {
+          // Cuando todas las peticiones hayan finalizado, ejecutar estas acciones
+          Swal.fire({
+              title: 'Votación creada con éxito',
+              icon: "success",
+              timer: "2000"
+          });
+          setTimeout(function () {   
+              //window.location.reload()
+              window.location.replace('/misVotaciones');          
+          }, 2000);
+        });
       }
 
         
@@ -311,21 +321,42 @@ const crearVotacion2 = () => {
 
 const GuardarCambios = () =>{
 	if(tituloVotacion !== '' && preguntaVotacion !== '') {
-        updateTituloVotacion();
-        updateTituloPreg()
-        // agregar por lote y eliminar por lote
-        crearUsuarioVotante(listaParticipantesAgregar)
-        eliminarUsuarioVotanteLote(listaParticipantesEliminar)
+    // Se crean las promesas correspondientes a cada solicitud al servidor
+    const updateTituloVotacionPromise = updateTituloVotacion();
+    const updateTituloPregPromise = updateTituloPreg();
+    const crearUsuarioVotantePromise = crearUsuarioVotante(listaParticipantesAgregar);
+    const eliminarUsuarioVotanteLotePromise = eliminarUsuarioVotanteLote(listaParticipantesEliminar);
 
-        Swal.fire({title: 'Votación editada con éxito',
-        icon: "success", timer: "2000"})
-        setTimeout(function () {   
-            window.location.replace('/misVotaciones');          
-        }, 2000);
-    }
-    else{
-        alert('Debe asegurarse de ingresar un titulo y pregunta para la nueva votación')
-    }
+    // Se ejecutan todas las promesas en paralelo utilizando Promise.all
+    Promise.all([
+      updateTituloVotacionPromise,
+      updateTituloPregPromise,
+      crearUsuarioVotantePromise,
+      eliminarUsuarioVotanteLotePromise
+    ]).then(() => {
+      Swal.fire({
+        title: 'Votación editada con éxito',
+        icon: 'success',
+        timer: 2000
+      });
+      setTimeout(function() {
+        window.location.replace('/misVotaciones');
+      }, 2000);
+    }).catch((error) => {
+      console.error(error);
+      // Mostrar mensaje de error en caso de fallo
+      Swal.fire({
+        title: 'Ocurrió un error al editar la votación',
+        icon: 'error'
+      });
+    });
+  }
+  else{
+    Swal.fire({
+      title: 'Debe asegurarse de ingresar un titulo y pregunta para la nueva votación',
+      icon: 'error'
+    });
+  }
 }
 
 const updateTituloVotacion = async () => {

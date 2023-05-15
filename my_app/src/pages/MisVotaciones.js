@@ -178,7 +178,7 @@ const MisVotaciones = () => {
             }})
     }   
 
-    const eliminarVotacion = (idVotacion) => {
+    const eliminarVotacion = async (idVotacion) => {
         //console.log(dataUsuarioVotantes)
         const usuariosVotantesAborrar = dataUsuarioVotantes.filter(e => e.ID_VOTACION === idVotacion)
         //console.log(usuariosVotantesAborrar)
@@ -220,14 +220,56 @@ const MisVotaciones = () => {
             }
         } */
 
-        eliminarPreguntaLote(preguntasDelete)
+        if(respuestasDelete.length > 0 && usuariosVotantesDelete.length > 0){
+            try {
+                await Promise.all([
+                    eliminarPreguntaLote(preguntasDelete),
+                    eliminarRespuestaLote(respuestasDelete),
+                    eliminarUsuarioVotanteLote(usuariosVotantesDelete),
+                    eliminarVotacionId(idVotacion, idUsuario)
+                ]);
+                console.log("Todas las eliminaciones se completaron correctamente");
+            } catch (error) {
+                console.log("Ocurrió un error al eliminar la votación: ", error);
+            }
+        }
+
+        else if(respuestasDelete.length > 0) {
+            try {
+                await Promise.all([
+                    eliminarPreguntaLote(preguntasDelete),
+                    eliminarRespuestaLote(respuestasDelete),
+                    eliminarVotacionId(idVotacion, idUsuario)
+                ]);
+                console.log("Todas las eliminaciones se completaron correctamente");
+            } catch (error) {
+                console.log("Ocurrió un error al eliminar la votación: ", error);
+            }    
+        }
+
+        else{
+            try {
+                await Promise.all([
+                    eliminarPreguntaLote(preguntasDelete),
+                    eliminarUsuarioVotanteLote(usuariosVotantesDelete),
+                    eliminarVotacionId(idVotacion, idUsuario)
+                ]);
+                console.log("Todas las eliminaciones se completaron correctamente");
+            } catch (error) {
+                console.log("Ocurrió un error al eliminar la votación: ", error);
+            } 
+        }
+
+        
+
+        /* eliminarPreguntaLote(preguntasDelete)
 
         eliminarRespuestaLote(respuestasDelete)
 
         eliminarUsuarioVotanteLote(usuariosVotantesDelete)
         
         
-        eliminarVotacionId(idVotacion, idUsuario)
+        eliminarVotacionId(idVotacion, idUsuario) */
     
       }
 
@@ -1093,7 +1135,7 @@ const MisVotaciones = () => {
           method: 'post',
           url:serverUrl + "/preguntaCreateLote",
           headers: {'Content-Type': 'application/json'},
-          data: preguntasAgregar
+          data: preguntasAgregar,
         }).then(response=>{
           console.log("Funciona create pregunta ");
         })
@@ -1178,13 +1220,20 @@ const MisVotaciones = () => {
 
                 const usuariosAcopiar = dataUsuarioVotantes.filter(e => e.ID_VOTACION === idVotacionCop)
 
+
+                let promesas = [];
+
                 if(usuariosAcopiar.length > 0){
-                    getTituloCopia(idVotacionCop, 1)
+                    promesas.push(getTituloCopia(idVotacionCop, 1));
+                    //getTituloCopia(idVotacionCop, 1)
                 }
                 else {
-                    getTituloCopia(idVotacionCop, 0)
+                    promesas.push(getTituloCopia(idVotacionCop, 0));
+                    //getTituloCopia(idVotacionCop, 0)
                 }
-                copiarPregYresp(idVotacionCop, 0)
+
+                promesas.push(copiarPregYresp(idVotacionCop, 0));
+                //copiarPregYresp(idVotacionCop, 0)
 
                 var dataUserVotantesPorLote = [];
 
@@ -1194,20 +1243,25 @@ const MisVotaciones = () => {
                         dataUserVotantesPorLote.push({NOMBRE: usuariosAcopiar[i].NOMBRE, RUT: usuariosAcopiar[i].RUT, idVotacion: idVot, validacion: 1})
                         //crearUsuarioVotante(listaParticipantes[i].nombre, listaParticipantes[i].rut, idVot)
                     }
-                    crearUsuarioVotante(dataUserVotantesPorLote)     
+                    promesas.push(crearUsuarioVotante(dataUserVotantesPorLote));
+                    //crearUsuarioVotante(dataUserVotantesPorLote)     
                 }
 
-                
-                
-                Swal.fire(
-                    'Votación copiada!',
-                    'Su votación ha sido copiada con éxito!',
-                    'success'
-                )
-                setTimeout(function () {   
-                    //window.location.reload()
-                    window.location.reload(true);          
-                }, 2000);
+                Promise.all(promesas)
+                .then(() => {
+                    Swal.fire(
+                        'Votación copiada!',
+                        'Su votación ha sido copiada con éxito!',
+                        'success'
+                    )
+                    setTimeout(function () {
+                        //window.location.reload()
+                        window.location.reload(true);
+                    }, 2000);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
               
             }
             if(result.isConfirmed && estado === 0 && tipo !== 'normal'){
@@ -1234,42 +1288,53 @@ const MisVotaciones = () => {
                         // se llama la funcion de crear la votacion 
                         
                         const usuariosAcopiar = dataUsuarioVotantes.filter(e => e.ID_VOTACION === idVotacionCop)
+
+                        let promesas = [];
                 
                         if(usuariosAcopiar.length > 0){
-                            getTituloCopia(idVotacionCop, 1)
+                            promesas.push(getTituloCopia(idVotacionCop, 1));
+                            //getTituloCopia(idVotacionCop, 1)
                         }
                         else {
-                            getTituloCopia(idVotacionCop, 0)
+                            promesas.push(getTituloCopia(idVotacionCop, 0));
+                            //getTituloCopia(idVotacionCop, 0)
                         }
 
+                        promesas.push(copiarPregYresp(idVotacionCop, result.value));
+
+                        var dataUserVotantesPorLote = [];
+
+                                
                         if(usuariosAcopiar.length > 0){
                             for(let i = 0; i < usuariosAcopiar.length; i++){
                                 dataUserVotantesPorLote.push({NOMBRE: usuariosAcopiar[i].NOMBRE, RUT: usuariosAcopiar[i].RUT, idVotacion: idVot, validacion: 1})
                                 //crearUsuarioVotante(listaParticipantes[i].nombre, listaParticipantes[i].rut, idVot)
                             }
-                            crearUsuarioVotante(dataUserVotantesPorLote)     
+                            promesas.push(crearUsuarioVotante(dataUserVotantesPorLote));
+                            //crearUsuarioVotante(dataUserVotantesPorLote)     
                         }
 
 
+                        Promise.all(promesas)
+                        .then(() => {
+                            Swal.fire(
+                                'Votación copiada!',
+                                'Su votación ha sido copiada con éxito!',
+                                'success'
+                            )
+                            setTimeout(function () {
+                                //window.location.reload()
+                                window.location.reload(true);
+                            }, 2000);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
                         
-                        copiarPregYresp(idVotacionCop, result.value)
-                        Swal.fire(
-                            'Votación copiada!',
-                            'Su votación ha sido copiada con éxito!',
-                            'success'
-                        )
-                        setTimeout(function () {   
-                            //window.location.reload()
-                            window.location.reload(true);          
-                        }, 2000);
-                    } 
-        
-                    /* else{
-                        setTimeout(function () {   
-                            cerrarVotacion(idVot, estado)  
-                        }, 1500);
-                    } */
-            })
+                        
+                        
+                    }
+                })
                 
                 
 
@@ -1299,7 +1364,7 @@ const MisVotaciones = () => {
 
     const createVotacionCopia = async (tituloVotacion, tipoVot, segura) =>{
         var idVot = idVotacion + 1;
-        var estado = 2;
+        var estado = 1;
         console.log(idUsuario, tituloVotacion, idVot)
         await axios({
         method: 'post',
@@ -1414,7 +1479,9 @@ const MisVotaciones = () => {
                 })
 
                 createPreguntaLote(preguntasAgregar)
-                createRespLote(respuestasAgregar)
+                if(respuestasAgregar.length >0){
+                    createRespLote(respuestasAgregar)
+                }
 
             }
             else{
@@ -1427,13 +1494,18 @@ const MisVotaciones = () => {
                             //createResp(r.respuesta)
                             respuestasAgregar.push({idPregunta: idPreguntaGlobal, respuestas: r.respuesta})
                         })   
-                        createRespLote(respuestasAgregar)
+                        if(respuestasAgregar.length > 0){
+                            createRespLote(respuestasAgregar)
+
+                        }
                     }
                     else{
                         for(let i = 0; i < cantidadRespuestas; i++) {
                             respuestasAgregar.push({idPregunta: idPreguntaGlobal, respuestas: k.respuesta[i].respuesta})
                         }
-                        createRespLote(respuestasAgregar)
+                        if(respuestasAgregar.length > 0){
+                            createRespLote(respuestasAgregar)
+                        }
                     }
                     
                 })
@@ -1676,18 +1748,7 @@ const MisVotaciones = () => {
 
                                         }
                                         <>
-                                            {/* <td className='botonesTablaCerrarVotacion'>
-                                                <MdRule id='iconoCerrarVotacion' onClick= {() => segundoSwal(e.id_votacion, e.estado)}/>
-                                                <button className='botonesTabla' onClick= {() => segundoSwal(e.id_votacion, e.estado)}>
-                                                    Cerrar votación
-                                                </button> 
-                                            </td>
-                                            <td className='columnaTablaEstado'>
-                                                <MdHighlightOff id='iconoNoDisponibleCerrarVotacion' />
-                                                <button className='botonesTabla' disabled>
-                                                    Finalizada
-                                                </button> 
-                                            </td> */}
+                                    
                                         </>
                                     </>
                                 }

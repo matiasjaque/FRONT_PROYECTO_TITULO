@@ -47,7 +47,6 @@ const CrearVotaciones = () => {
   const [cantidadResp, setCantidadResp] = useState(0);
 
   const [respuestas, setRespuestas] = useState([]);
-  const [respuestasGen, setRespuestasGen] = useState([]);
   const [preguntas, setPreguntas] = useState([]);
   var preguntasDemo = [];
   var respuestasDemo = [];
@@ -77,7 +76,7 @@ const CrearVotaciones = () => {
 
 
   const [datosVotacion, setDatosVotacion] = useState(false);
-  var reloadPage = false;
+  
 
   var controladorFunc = 0;
 
@@ -101,7 +100,6 @@ const CrearVotaciones = () => {
       obtenerTituloPreg();	
       preguntasConRespuestasGet()
       controlador = 0;
-
   }
 
     else{
@@ -263,7 +261,7 @@ const preguntasConRespuestasGet = async () =>{
 
 
         //setLoading(true);
-        setRespuestasGen(newRespGen)
+        //setRespuestasGen(newRespGen)
         setRespuestas(newRespGen)
         setPreguntas(newPregYresp);
         setDatosVotacion(true);
@@ -768,7 +766,7 @@ const volverHome = () =>{
           })
   };
 
-  const createPreguntasYrespuestas = () => {
+  const createPreguntasYrespuestas = (idVot) => {
     console.log(preguntas.length)
 
     var titulosPregVacios = 0;
@@ -787,38 +785,31 @@ const volverHome = () =>{
       }
     }
 
-    let preguntasPrimero = 0;
+    let preguntasAgregar = [];
+    let idVotCorrecto = idVot;
+    let idPreguntaGlobal = idPreguntaInsert;
+
+    let respuestasAgregar = [];
+    console.log(preguntas)
 
     if(titulosPregVacios === 0){
       if(titulosRespVacios === 0){
-        preguntas.forEach( (preg) => {
-          console.log(preg.tituloPregunta);
-          console.log('createPreguntas', preg)
-          createPregunta(preg.tituloPregunta);
-        })
-        preguntasPrimero = 1;  
-      }
-      else{
-        alert('Debe asegurarse de que todas las preguntas tengan sus respuestas asociadas.');
-      }
 
-    } 
-
-    else{
-      alert('Debe asegurarse de que todas las preguntas tengan un titulo asociado.');
-    }
-
-    if(titulosPregVacios === 0){
-      if(titulosRespVacios === 0 && preguntasPrimero === 1){
-        preguntas.forEach( (preg) => {
-          console.log('createPreguntas2', preg)
-          //idPregunta++
-          preg.respuestas.forEach( (resp) =>{
-            console.log('createRespuestas', resp);
-            createResp(resp.idPregunta, resp.tituloRespuesta)
+        preguntas.forEach((k) =>{
+          idPreguntaGlobal++
+          preguntasAgregar.push({idVotacion: idVotCorrecto, titulo: k.tituloPregunta, idPregunta: idPreguntaGlobal})
+          //createPregunta(k.tituloPreg)
+          k.respuestas.forEach((r) => {
+              //createResp(r.respuesta)
+              respuestasAgregar.push({idPregunta: idPreguntaGlobal, respuestas: r.tituloRespuesta})
           })
-        })
-       reloadPage = true;  
+      })
+
+        console.log(preguntasAgregar)
+        console.log(respuestasAgregar)
+        createPreguntaLote(preguntasAgregar)
+        createRespLote(respuestasAgregar)
+         
       }
       else{
         alert('Debe asegurarse de que todas las preguntas tengan sus respuestas asociadas.');
@@ -835,59 +826,44 @@ const volverHome = () =>{
 
       
 
-  
-  const createPregunta = async (tituloVota) =>{
-    console.log('idVotacion: ' )
-    console.log(idVotacionLocal);
-    let idVot = idVotacionLocal + 1;
+  const createPreguntaLote = async (preguntasAgregar) =>{
+    console.log(preguntasAgregar)
 
-    idPreguntaInsert++;
 
-    console.log('idPregunta: ' )
-    console.log(idPreguntaInsert);
-
-    console.log('idVot: ' )
-    console.log(idVot);
     await axios({
       method: 'post',
-      url:serverUrl + "/preguntaCreate",
+      url:serverUrl + "/preguntaCreateLote",
       headers: {'Content-Type': 'application/json'},
-      params:
-      {
-        idVotacion: idVot,
-        titulo: tituloVota,
-        idPregunta: idPreguntaInsert,
-      }
+      data: preguntasAgregar,
     }).then(response=>{
       console.log("Funciona create pregunta ");
     })
     .catch(error=>{
             alert(error.response.data.message);
             console.log(error);
-          })
-  };
+        })
+};
 
-  const createResp = async (idPregu, tituloResp) =>{
-    
-    console.log(idPregu, tituloResp);
-
-    await axios({
+//funcion para crear respuestas por lote
+const createRespLote =  async (respuestasAdd) =>{  
+  console.log(respuestasAdd) 
+  await axios({
       method: 'post',
-      url:serverUrl + "/respuestaCreate", 
+      url:serverUrl + "/respuestaCreateLote", 
       headers: {'Content-Type': 'application/json'},
-      params:
-      {
-        idPregunta: idPregu,
-        respuestas: tituloResp,
-      }
-    }).then(response=>{
-      console.log("Funciona create respuesta ");
-    })
-    .catch(error=>{
-            alert(error.response.data.message);
-            console.log(error);
-          })
-  };
+      data: respuestasAdd, 
+  }).then(response=>{
+      
+  })
+  
+  .catch(error=>{
+      Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'El usuario ya existe',
+      })
+  })
+}
 
 
   //funcion que crea la votacion
@@ -899,20 +875,50 @@ const volverHome = () =>{
     if(tituloVotacion !== '' && preguntas.length > 0) {
 
       if(auxSwitch === true && listaParticipantes.length > 0){
-        
-        createVotacion(1)
-        createPreguntasYrespuestas()
+
+        var dataUserVotantesPorLote = [];
 
         for(let i = 0; i < listaParticipantes.length; i++){
-          crearUsuarioVotante(listaParticipantes[i].nombre, listaParticipantes[i].rut, idVot)
+          dataUserVotantesPorLote.push({NOMBRE: listaParticipantes[i].nombre, RUT: listaParticipantes[i].rut, idVotacion: idVot, validacion: 1})
+          //crearUsuarioVotante(listaParticipantes[i].nombre, listaParticipantes[i].rut, idVot)
         }
 
+        // Ejecutar las tres peticiones al servidor de manera asíncrona
+        Promise.all([
+          createVotacion(1),
+          createPreguntasYrespuestas(idVot),
+          crearUsuarioVotante(dataUserVotantesPorLote)
+        ]).then(() => {
+          // Cuando todas las peticiones hayan finalizado, ejecutar estas acciones
+          Swal.fire({
+              title: 'Votación creada con éxito',
+              icon: "success",
+              timer: "2000"
+          });
+          setTimeout(function () {   
+              //window.location.reload()
+              window.location.replace('/misVotaciones');          
+          }, 2000);
+      });
         
       }
 
       else{
-        createVotacion(0)
-        createPreguntasYrespuestas()
+        Promise.all([
+          createVotacion(0),
+          createPreguntasYrespuestas(idVot),
+        ]).then(() => {
+          // Cuando todas las peticiones hayan finalizado, ejecutar estas acciones
+          Swal.fire({
+              title: 'Votación creada con éxito',
+              icon: "success",
+              timer: "2000"
+          });
+          setTimeout(function () {   
+              //window.location.reload()
+              window.location.replace('/misVotaciones');          
+          }, 2000);
+        });
       }
 
         
@@ -925,48 +931,28 @@ const volverHome = () =>{
       })  
     }
 
-    
-
-    
-    
-    if(reloadPage){
-      // crear la votacion
-      
-      Swal.fire({title: 'Votación creada con éxito',
-      icon: "success", timer: "2500"})
-      setTimeout(function () {   
-        //window.location.reload()
-        window.location.replace('/misVotaciones');          
-      }, 2500);
-      
-    }
-
   }
 
   
-    //funcion para crear al usuario votante
-    const crearUsuarioVotante =  async (nombre, rut, idVot) =>{   
-      await axios({
-          method: 'post',
-          url:serverUrl + "/usuarioVotanteCreate", 
-          headers: {'Content-Type': 'application/json'},
-      params:
-          {nombre: nombre,
-          rut: rut,
-          idVotacion: idVot,
-          validacion: 1,
-          }
-      }).then(response=>{
-          
-      })
-      
-      .catch(error=>{
-          Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'El usuario ya existe',
-          })
-      })
+    //funcion para crear al usuario votante por lote
+  const crearUsuarioVotante =  async (usuarioVotantes) =>{  
+    console.log(usuarioVotantes) 
+    await axios({
+        method: 'post',
+        url:serverUrl + "/usuarioVotanteCreateLote", 
+        headers: {'Content-Type': 'application/json'},
+        data: usuarioVotantes, 
+    }).then(response=>{
+        
+    })
+    
+    .catch(error=>{
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'El usuario ya existe',
+        })
+    })
   }
 
   const GuardarCambios = () =>{
@@ -1043,31 +1029,7 @@ const updateTituloResp = async (idPregEditar, idRespEditar, newTitulo) => {
 	});
 };
 
-   /* console.log('preg')
-  console.log(preguntas)
-  console.log('resp')
-  console.log(respuestas)
-  console.log('cantidadPreg')
-  console.log(cantidadPreg) */
-/*
-  
-  console.log('idResp')
-  console.log(idResp)
-
-  console.log('idPreg')
-  console.log(idPreg)
-
-  console.log('tituloVotacion')
-  console.log(tituloVotacion)
-
  
-
-  console.log('cantidadResp')
-  console.log(cantidadResp) */
-
-  /* console.log(preguntas)
-  console.log(setRespuestasGen)
-  console.log(respuestas) */
 
   const handleActivarLista = (e) => {
     setActivarLista(e.target.checked);
