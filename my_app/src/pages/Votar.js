@@ -134,7 +134,7 @@ const Votar = () => {
             Swal.fire({title: "Registrarse", text:'Sus credenciales han sido ingresadas con éxito',
             icon: "success", timer: "3000"})
             setTimeout(function () {
-                window.location.replace(`http://localhost:3000/votarNormal/${id}/${estadoVotacion}/${idPreg}`)               
+                window.location.replace(`https://votacionesfast.netlify.app/votarNormal/${id}/${estadoVotacion}/${idPreg}`)               
             }, 3000);
         })
         
@@ -278,7 +278,7 @@ const Votar = () => {
             Swal.fire({title: "Autenticación", text:'Sus credenciales han sido validadas con éxito',
             icon: "success", timer: "3000"})
             setTimeout(function () {
-                window.location.replace(`http://localhost:3000/votarNormal/${id}/${estadoVotacion}/${idPreg}`)               
+                window.location.replace(`https://votacionesfast.netlify.app/votarNormal/${id}/${estadoVotacion}/${idPreg}`)               
             }, 3000);
         })
         .catch(error=>{
@@ -358,7 +358,7 @@ const Votar = () => {
                 
                 </div>}
                     
-            </>: window.location.replace(`http://localhost:3000/votarNormal/${id}/${estadoVotacion}/${idPreg}`)
+            </>: window.location.replace(`https://votacionesfast.netlify.app/votarNormal/${id}/${estadoVotacion}/${idPreg}`)
             }      
                 
             </div>
