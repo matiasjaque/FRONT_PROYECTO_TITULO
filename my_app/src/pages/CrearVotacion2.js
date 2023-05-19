@@ -40,6 +40,7 @@ const [idPregInsert, setIdPregInsert] = useState(0)
 const [tituloVotacion, setTituloVotacion] = useState('');
 const [preguntaVotacion, setPreguntaVotacion] = useState('');
 const [porcentajeVotacion, setPorcentajeVotacion] = useState(50);
+const [porcentajeVotacionEditar, setPorcentajeVotacionEditar] = useState(0);
 const [idPregEditar, setIdPregEditar] = useState(0);
 
 
@@ -134,6 +135,7 @@ const obtenerTituloVot = async() => {
             console.log(response.data[0])
             let tituloGet = response.data[0].TITULO;
             setTituloVotacion(tituloGet);
+            setPorcentajeVotacionEditar(response.data[0].porcentaje)
             
         })
         .catch (error=> {
@@ -356,7 +358,7 @@ const updateTituloVotacion = async () => {
 		method: 'put',
 		url:serverUrl + "/votacionUpdate", 
 		headers: {'Content-Type': 'application/json'},
-		params:{idVotacion: idVotacion, idUsuario: idUsuario, titulo: tituloVotacion}
+		params:{idVotacion: idVotacion, idUsuario: idUsuario, titulo: tituloVotacion, porcentaje: porcentajeVotacion}
 	}).catch(error =>{
 		alert(error.response.data.message);
 		console.log(error);
@@ -611,9 +613,6 @@ const handleSubmitAgregar = (event) => {
   
 };
 
-console.log(listaParticipantes);
-console.log(listaParticipantesAgregar)
-console.log(listaParticipantesEliminar)
 
   return (
 
@@ -799,6 +798,18 @@ console.log(listaParticipantesEliminar)
                   /> 
               </Col>
           </Row>
+
+          <Row className='filasCrearVot2' id='filaTituloPreg'>
+                <Col lg={12} md={12} sm={12} className='columnasVot2'>
+                    <Form.Label className="titulosForm2">INGRESE EL % DE VOTOS</Form.Label>
+                    <Form.Control className="textosForm2"
+                        type="text"
+                        placeholder="Ingrese la pregunta de la votación"
+                        value={porcentajeVotacionEditar}
+                        onChange={(e) => setPorcentajeVotacion(e.target.value)}
+                    /> 
+                </Col>
+            </Row>
 
 
           <>

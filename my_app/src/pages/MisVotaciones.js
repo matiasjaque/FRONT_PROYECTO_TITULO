@@ -19,7 +19,7 @@ import Cookies from 'universal-cookie';
 import Swal from 'sweetalert2';
 
 
-import { MdAutorenew,MdOutlineContentCopy, MdDeleteForever, MdShare, MdPieChart, MdCheckCircleOutline, MdHighlightOff, MdRule, MdWorkspacesFilled } from "react-icons/md";
+import { MdAutorenew,MdOutlineContentCopy, MdDeleteForever,MdRemoveRedEye, MdShare, MdPieChart, MdCheckCircleOutline, MdHighlightOff, MdRule, MdWorkspacesFilled } from "react-icons/md";
 import ModalVotEspecial from '../componts/ModalVotEspecial';
 
 
@@ -80,16 +80,47 @@ const MisVotaciones = () => {
 
     useEffect(() => {
         if(controldadorUseEfect === 0){
-            votacionesGet();
+            fetchData();
+            /* votacionesGet();
             respuestasGet();
             preguntasGet();
-            getUsuarioVotantesGlobal();
+            getUsuarioVotantesGlobal(); */
             controldadorUseEfect = 1;
         }
         
-      },[]);
+      });
 
-    const votacionesGet = async () =>{
+      const fetchData = async () => {
+        try {
+          const [votacionesResponse, respuestasResponse, preguntasResponse] = await Promise.all([
+            axios.get(serverUrl + "/votaciones", { params: { idUsuario: idUsuario } }),
+            axios.get(serverUrl + "/respuestasGetGlobal"),
+            axios.get(serverUrl + "/preguntasGetGlobal")
+          ]);
+      
+          setMisVotaciones(votacionesResponse.data);
+          setIdVotacion(votacionesResponse.data[votacionesResponse.data.length - 1].id_votacion);
+          setRespuestas(respuestasResponse.data);
+          setPreguntas(preguntasResponse.data);
+          setIdPregInsert(preguntasResponse.data[preguntasResponse.data.length - 1].ID_PREGUNTA);
+      
+          getUsuarioVotantesGlobal();
+        } catch (error) {
+          setMisVotaciones([]);
+          setRespuestas([]);
+          setPreguntas([]);
+          console.log(error);
+          /* Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: error.response.data.message,
+          }) */
+          alert(error.response.data.message);
+          console.log(error);
+        }
+      };
+
+    /* const votacionesGet = async () =>{
     await axios.get(serverUrl + "/votaciones", {params:{idUsuario: idUsuario}})
         .then(response=>{
         setMisVotaciones(response.data);
@@ -106,7 +137,7 @@ const MisVotaciones = () => {
         text: error.response.data.message,
         }) *//* 
         alert(error.response.data.message);
-        console.log(error); */
+        console.log(error); 
     })
     };
 
@@ -128,7 +159,7 @@ const MisVotaciones = () => {
             text: error.response.data.message,
             }) *//* 
             alert(error.response.data.message);
-            console.log(error); */
+            console.log(error); 
         })
         };
 
@@ -147,9 +178,9 @@ const MisVotaciones = () => {
                 text: error.response.data.message,
                 }) *//* 
                 alert(error.response.data.message);
-                console.log(error); */
+                console.log(error); 
             })
-        };
+        }; */
 
 
     const confirmacionEliminarVotacion = (idVotacion) => {
@@ -335,11 +366,20 @@ const MisVotaciones = () => {
         });
     };
 
-    const handleModal = (idVot, estado) => {
+    const handleModal = (idVot, estado, tipo) => {
 
-        //validar que se obtengo el id de preg cuando el estado es = a 2
+        //validar que se obtengo el id de preg cuando el estado es = 2
+        console.log(tipo)
 
         if(estado === 2){
+
+            if(tipo === 'normal'){
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Error',
+                    text: 'Para compartir una votación normal, debe estar en estado "en curso"',
+                })
+            }
             // obtener el id de la pregunta
             getPreguntaId(idVot, estado)
             
@@ -347,9 +387,10 @@ const MisVotaciones = () => {
 
         else{
             setEnlace(`${puertoUrl}/votar/${idVot}/${estado}/${idPregEstado2}`);
+            setModalShow(true);
         }
 
-        setModalShow(true);
+        
     }
 
     const getPreguntaId = async (idVot, estado) =>{
@@ -1627,6 +1668,13 @@ const MisVotaciones = () => {
     }
 
     
+    const verVotacion = (idVota, idPregu )=> {
+        
+        console.log(idVota, idPregu)
+        window.location.replace(`/verVotacion/${idVota}/${idPregu}`)
+
+    }
+
     
     
   return (
@@ -1662,20 +1710,28 @@ const MisVotaciones = () => {
                             <tr>
                                 <td className='columnaTablaTitulo'>{e.titulo}</td>
                                 
-                                {e.estado === 2 ?
+                                {e.estado === 2 ?(
                                 <td className='columnaTablaFunciones'> 
                                     <MdAutorenew id='iconoEditar' onClick= {() => editarVotacion(e.id_votacion)}/>
                                     <button className='botonesTabla' onClick= {() => editarVotacion(e.id_votacion)}>
                                         Editar
                                     </button> 
-                                </td>:
-                                <td className='columnaTablaFunciones'> 
-                                    <MdOutlineContentCopy id='iconoEditar' onClick= {() => copiarVotacio(e.id_votacion, e.estado, e.tipo)}/>
-                                    <button className='botonesTabla' onClick= {() => copiarVotacio(e.id_votacion, e.estado, e.tipo)}>
-                                        Copiar
-                                    </button> 
-                                </td>
-                                }
+                                </td>): e.estado === 1 ?(
+                                    <td className='columnaTablaFunciones'> 
+                                        <MdRemoveRedEye id='iconoEditar' onClick= {() => copiarVotacio(e.id_votacion, e.estado, e.tipo)}/>
+                                        <button className='botonesTabla' onClick= {() => verVotacion(e.id_votacion, e.estado, e.tipo)}>
+                                            Ver
+                                        </button> 
+                                    </td>
+                                ) : (
+
+                                    <td className='columnaTablaFunciones'> 
+                                        <MdOutlineContentCopy id='iconoEditar' onClick= {() => copiarVotacio(e.id_votacion, e.estado, e.tipo)}/>
+                                        <button className='botonesTabla' onClick= {() => copiarVotacio(e.id_votacion, e.estado, e.tipo)}>
+                                            Copiar
+                                        </button> 
+                                    </td>
+                                    )}
 
                                 
                                 <td className='columnaTablaFunciones'>
@@ -1685,25 +1741,31 @@ const MisVotaciones = () => {
                                     </button> 
                                 </td>
                                 <td className='columnaTablaFunciones'>
-                                    <MdShare id='iconoCompartir' onClick= {() => handleModal(e.id_votacion, e.estado)}/>
-                                    <button className='botonesTabla' onClick={() => handleModal(e.id_votacion, e.estado)}>
+                                    <MdShare id='iconoCompartir' onClick= {() => handleModal(e.id_votacion, e.estado, e.tipo)}/>
+                                    <button className='botonesTabla' onClick={() => handleModal(e.id_votacion, e.estado, e.tipo)}>
                                         Compartir
                                     </button> 
                                 </td>
                                 <td className='columnaTablaVisualizarResult'>
-                                    <MdPieChart id='iconoVisualizarResultado' onClick= {() => handleModalResult(e.id_votacion, e.titulo, e.estado)}/>
-                                    <button className='botonesTabla' onClick= {() => handleModalResult(e.id_votacion, e.titulo, e.estado)}>
-                                        Visualizar resultados
-                                    </button> 
+                                    <div id='divVisualizarResult'>
+                                        <MdPieChart id='iconoVisualizarResultado' onClick= {() => handleModalResult(e.id_votacion, e.titulo, e.estado)}/>
+                                        <button className='botonesTabla' onClick= {() => handleModalResult(e.id_votacion, e.titulo, e.estado)}>
+                                            Visualizar resultados
+                                        </button> 
+                                    </div>
+                                    
                                 </td>
 
                                 {e.estado === 1 ?
                                     <>
                                         <td className='botonesTablaCerrarVotacion'>
-                                            <MdRule id='iconoCerrarVotacion' onClick= {() => segundoSwal(e.id_votacion, e.estado, e.porcentaje, e.segura)}/>
-                                            <button className='botonesTabla' onClick= {() => segundoSwal(e.id_votacion, e.estado, e.porcentaje, e.segura)}>
-                                                Cerrar votación
-                                            </button> 
+                                            <div id='divCerrarVot'>
+                                                <MdRule id='iconoCerrarVotacion' onClick= {() => segundoSwal(e.id_votacion, e.estado, e.porcentaje, e.segura)}/>
+                                                <button className='botonesTabla' onClick= {() => segundoSwal(e.id_votacion, e.estado, e.porcentaje, e.segura)}>
+                                                    Cerrar votación
+                                                </button> 
+                                            </div>
+                                            
                                         </td>
                                         <td className='columnaTablaEstado'>
                                             <MdWorkspacesFilled id='iconoEnCurso' />
@@ -1717,10 +1779,13 @@ const MisVotaciones = () => {
                                         {e.estado === 2 ?
                                         <>
                                             <td className='botonesTablaCerrarVotacion'>
-                                                <MdRule id='iconoCerrarVotacion' onClick= {() => empezarVotacion(e.id_votacion, e.estado)}/>
-                                                <button className='botonesTabla' onClick= {() => empezarVotacion(e.id_votacion, e.estado)}>
-                                                    Empezar Votación
-                                                </button> 
+                                                <div id='divEmpezarVot'>
+                                                    <MdRule id='iconoCerrarVotacion' onClick= {() => empezarVotacion(e.id_votacion, e.estado)}/>
+                                                    <button className='botonesTabla' onClick= {() => empezarVotacion(e.id_votacion, e.estado)}>
+                                                        Empezar Votación
+                                                    </button> 
+                                                </div>
+                                                
                                             </td>
                                             <td className='columnaTablaEstado'>
                                                 <MdHighlightOff id='iconoNoDisponibleCerrarVotacion' />
@@ -1732,10 +1797,12 @@ const MisVotaciones = () => {
 
                                         <>
                                             <td className='botonesTablaCerrarVotacion'>
-                                                <MdRule id='iconoCerrarVotacion'/>
-                                                <button className='botonesTabla' onClick= {() => segundoSwal(e.id_votacion, e.estado, e.segura)} disabled>
-                                                    Cerrar votación 
+                                            <div id= 'divCerrarVot'>
+                                                <MdRule id='iconoCerrarVotacion' onClick= {() => segundoSwal(e.id_votacion, e.estado, e.porcentaje, e.segura)}/>
+                                                <button className='botonesTabla' onClick= {() => segundoSwal(e.id_votacion, e.estado, e.porcentaje, e.segura)}>
+                                                    Cerrar votación
                                                 </button> 
+                                            </div>  
                                             </td>
                                             <td className='columnaTablaEstado'>
                                                 

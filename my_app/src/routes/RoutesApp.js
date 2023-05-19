@@ -12,7 +12,9 @@ import VotarNormal from '../pages/VotarNormal';
 import ResultadosVotacion from '../pages/ResultadosVotacion';
 import CrearVotacion2 from '../pages/CrearVotacion2';
 import CrearVotacion3 from '../pages/CrearVotacion3';
+import ControladorVotacion from '../pages/ControladorVotacion';
 import Prueba from '../pages/Prueba';
+import VerVotacion from '../pages/VerVotacion';
 
 function RoutesApp() {
   return (
@@ -30,6 +32,8 @@ function RoutesApp() {
         <Route path="/votar/:id/:estadoVotacion/:idPreg" element={ <Votar/>}/>
         <Route path="/votarNormal/:id/:estadoVotacion/:idPreg" element={ <VotarNormal/>}/>
         <Route path="/olvidarContrasena" element={<OlvidarContraseña/>} />
+        <Route path="/controladorVotacion" element={ <ControladorVotacion/>}/>
+        <Route path="/verVotacion/:idVotacion/:idPreg" element={ <VerVotacion/>}/>
         <Route path="/prueba2" element={ <Prueba/>}/>
         <Route path="*" element={<NotFound/>} />
       </Routes>

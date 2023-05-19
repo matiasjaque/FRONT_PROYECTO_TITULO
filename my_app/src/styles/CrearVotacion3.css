@@ -1,16 +1,20 @@
 #contenedorPrincipalMisVotaciones3{
-    background-color: red;
+    background-color: #020202;
     max-width: 100vw;
-    max-height: 100vh;
-    min-height: 100vh;
+    height: calc(100vh - 15vh);
+    overflow-y: auto;
 }
 
 #contenedorSecundarioMisVotaciones3{
-    background: #D7D8DA;
-    min-height: 90vh;
+    background: #E5E4E0;
+    height: 85%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    z-index: 0;
+    position: fixed;
+    top: 15vh;
 }
 
 #contenedorCrearVotacion3{
@@ -39,27 +43,27 @@
 
 #tituloVotacion3{
     text-align: center;
-    font-size: 32px;
+    font-size: 2vw;
     font-weight: bold;
     font-family: 'ROBOTO', sans-serif;
 }
 
 #filaTituloVot3{
-    height: 20%;
+    height: 15%;
     align-items: center;
     width: 80%;
     margin: auto;
 }
 
 .titulosForm3{
-    font-size: 20px;
+    font-size: 1.5vw;
     font-weight: 500;
     font-family: 'Roboto', sans-serif;
     padding: 0px 10px;
 }
 
 .textosForm3{ 
-    font-size: 18px;
+    font-size: 1.5vw;
     font-weight: 400;
     font-family: 'Roboto', sans-serif;
     margin: 0px 5px;
@@ -78,11 +82,11 @@
     align-items: center;
     width: 80%;
     margin: auto;
-    font-size: larger;
+    font-size: 2vw;
 }
 
 #switchListaParticipantes{
-    font-size: x-large;
+    font-size: 1.8vw;
     font-weight: 400;
     font-family: sans-serif;
 }
@@ -98,16 +102,17 @@
 #tituloSwitchVot3{
     text-align: center;
     margin-bottom: 15px;
+    font-size: 2vw;
 }
 
 #numeroParticipantesVot3{
-    font-size: x-large;
+    font-size: 1.4vw;
     font-weight: 500;
     font-family: sans-serif;
 }
 
 #nombreVot3{
-    font-size: x-large;
+    font-size: 1.4vw;
     font-weight: 500;
     font-family: sans-serif;
     width: 90%;
@@ -115,7 +120,7 @@
 }
 
 #nombreUserVotante{
-    font-size: x-large;
+    font-size: 1.4vw;
     font-weight: 500;
     font-family: sans-serif;
     width: 90%;
@@ -123,14 +128,14 @@
 }
 
 #rutVot3{
-    font-size: x-large;
+    font-size: 1.4vw;
     font-weight: 500;
     font-family: sans-serif;
     width: 90%;
 }
 
 #rutUserVotante{
-    font-size: x-large;
+    font-size: 1.4vw;
     font-weight: 500;
     font-family: sans-serif;
     width: 90%;
@@ -147,7 +152,7 @@
     width: max-content;
     height: 50%;
     align-self: self-end;
-    font-size: x-large;
+    font-size: 1.8vw;
     font-family: sans-serif;
     font-weight: 500;
     margin-bottom: 20px;

@@ -32,19 +32,34 @@ function cerrarSesion(){
     Swal.fire({title: "Cerrar Sesion",
                     icon: "success", timer: "2500"})
             setTimeout(function () {
-                window.location.replace("/")               
+                window.location.replace("/")              
             }, 2500);
 }
 
+const dropdown = document.getElementById('dropDownUser');
+
+window.addEventListener('scroll', () => {
+  const navbar = document.getElementById('navbar');
+  const navbarHeight = navbar.offsetHeight;
+  const navbarTop = navbar.getBoundingClientRect().top + window.scrollY;
+
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  const topOffset = Math.max(navbarHeight, scrollTop - navbarTop);
+
+  dropdown.style.top = topOffset + 'px';
+});
+
+
+
 const MyNavbar = (props) => {
     var nombre = conectado.get('nombre'); 
-    var apellido = conectado.get('apellido');
+    
 
   return (
     <div>
     <Navbar collapseOnSelect expand="lg" id="navbar" variant="dark">
       <Container id="containerNav">
-        <Navbar.Brand id='titulo' href="/">SOFTWARE DE VOTACIÓN ELECTRONICA</Navbar.Brand>
+        <Navbar.Brand id='titulo' href="/">Software de votación electrónica</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav id='navbarContenedor' variant="pills" defaultActiveKey={props.activeKey} disabled={props.activeKey} >
@@ -56,7 +71,7 @@ const MyNavbar = (props) => {
             {props.activeKey === '/crearVotacion' ?
               <Nav.Item className="botonesNavbar"> 
               <div id='contenedorCrearVotacionSelected'>
-                <Row id='filaGenerico'>
+                {/* <Row id='filaGenerico'>
                   <Col className='colGenerico' id='columnaIcono'>
                   
                     <CgAdd id='iconoCrearVotacion'/> 
@@ -68,7 +83,10 @@ const MyNavbar = (props) => {
                       <NavDropdown.Item href={`/crearVotacionDirectorio/${'null'}/${'null'}`}  className='interiorDropDown'>Votación Estratégica</NavDropdown.Item>
                     </NavDropdown>
                   </Col>
-                </Row>
+                </Row> */}
+                <Nav.Item className="botonesNavbar">
+                  <Nav.Link href="/controladorVotacion" id='navLink'><CgAdd id='iconoCrearVotacion'/>  Crear votación</Nav.Link>
+                </Nav.Item> 
                 
                 
               </div>
@@ -77,7 +95,7 @@ const MyNavbar = (props) => {
 
             <Nav.Item className="botonesNavbar"> 
             <div id='contenedorCrearVotacion'>
-              <Row id='filaGenerico'>
+              {/* <Row id='filaGenerico'>
                 <Col className='colGenerico' id='columnaIcono'>
                   <CgAdd id='iconoCrearVotacion'/> 
                 </Col>
@@ -88,7 +106,10 @@ const MyNavbar = (props) => {
                     <NavDropdown.Item href= {`/crearVotacionDirectorio/${'null'}/${'null'}`} className='interiorDropDown'>Votación Estratégica</NavDropdown.Item>
                   </NavDropdown>
                 </Col>
-              </Row>
+              </Row> */}
+                <Nav.Item className="botonesNavbar">
+                  <Nav.Link href="/controladorVotacion" id='navLink'><CgAdd id='iconoCrearVotacion'/>  Crear votación</Nav.Link>
+                </Nav.Item> 
               
             </div>
 
@@ -102,15 +123,15 @@ const MyNavbar = (props) => {
             </Nav.Item> 
 
 
-            
             <Nav.Item className="botonesNavbar"> 
             <div id='contenedorCrearVotacion'>
               <Row id='filaGenerico'>
                 <Col className='colGenerico' id='columnaIcono'>
                   <MdPerson id='iconoCrearVotacion'/> 
                 </Col>
+                
                 <Col className='colGenerico'>
-                  <NavDropdown  title="Configuración" id="colorDelDrop" >
+                  <NavDropdown  title={`${nombre}`} id="dropDownUser" >
                     <NavDropdown.Item href={`/recuperarContrasena`} className='interiorDropDown'>Cambiar Constraseña</NavDropdown.Item>
                     <NavDropdown.Item onClick={()=>cerrarSesion()} className='interiorDropDown'>Cerrar Sesión</NavDropdown.Item>
                   </NavDropdown>
@@ -119,13 +140,8 @@ const MyNavbar = (props) => {
               
             </div>
             </Nav.Item> 
-          
 
-            {/* <Nav.Item className="botonesNavbar">
-              <Nav.Link onClick={()=>cerrarSesion()} id='returnLink'><GiReturnArrow id='iconoReturn'/> Cerrar Sesión</Nav.Link>
-            </Nav.Item> */}
-
-            <Navbar.Brand id='usuarioConectado' >{`Bienvenido ${nombre} ${apellido}`}</Navbar.Brand>
+            
             
           </Nav>
         </Navbar.Collapse>

@@ -21,28 +21,28 @@
 .titulo{
     position: inherit;
     color: white;
-    font-size: 60px;
+    font-size: 2vw;
     font-family: Roboto, sans-serif;    
     justify-content: center;
-    padding-top: 30px;
+    padding-top: 10px;
     text-align: center;
 }
 
 .parametros{
-    font-size: 30px;
+    font-size: 1.5vw;
     color: white;
 }
 
 #filaRecuperarContra{
     padding-bottom: 5px;
-    margin-top: 30px;
+    margin-top: 15px;
     width: 70%;
 }
 
 
 #emailRec{
     padding-bottom: 5px;
-    margin-top: 30px;
+    margin-top: 15px;
 }
 
 .botones{
@@ -57,7 +57,7 @@
 
 
 #botonVolverRecContra{
-    font-size: 25px;
+    font-size: 1.5vw;
     justify-content: center;
     width: 100%;
     margin: auto;
@@ -71,7 +71,7 @@
 }
 
 #botonVolverRecContraChico{
-    font-size: 25px;
+    font-size: 1.5vw;
     justify-content: center;
     width: 100%;
     margin: auto;
@@ -85,13 +85,13 @@
     align-items: center;
     display: flex;
     align-items: center;
-    height: 90px;
+    
 }
 
 
 
 .botonCrearCuenta{
-    font-size: 25px;
+    font-size: 1.5vw;
     justify-content: center;
     width: 100%;
     margin: auto;

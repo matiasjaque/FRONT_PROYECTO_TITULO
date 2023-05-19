@@ -1,17 +1,17 @@
 #tituloModal{
-    font-size: 25px;
+    font-size: 1.5vw;
     font-weight: bold;
     font-family: 'Roboto', sans-serif;
 }
 
 .titulosForm{
-    font-size: 20px;
+    font-size: 1.5vw;
     font-weight: 500;
     font-family: 'Roboto', sans-serif;
 }
 
 .textosForm{ 
-    font-size: 18px;
+    font-size: 1.5vw;
     font-weight: 400;
     font-family: 'Roboto', sans-serif;
 }

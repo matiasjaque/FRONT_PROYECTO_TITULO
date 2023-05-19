@@ -38,7 +38,7 @@ const VotarNormal = () => {
     const [isRegister, setIsRegister] = useState(false);
 
 
-
+    var estado;
     
 
 
@@ -55,6 +55,7 @@ const VotarNormal = () => {
             preguntasConRespuestasGet();
             controlador = 1
         }
+        
 
         else if(estadoVotacion === '2' && respuestas.length === 0 && controlador2 === 0){
             respuestasGet();
@@ -85,7 +86,9 @@ const VotarNormal = () => {
         //console.log('hola')
         await axios.get(serverUrl + "/votacionById", {params:{idVotacion: id}})
             .then(response=>{
+                console.log(response.data)
                 setVotacion(response.data[0].TITULO);
+                estado = response.data[0].estado;
             //setLoading(true);
             console.log("trae esto getVotaciones ojo:");
             console.log(response.data[0].TITULO);
@@ -434,6 +437,21 @@ const VotarNormal = () => {
     }
     
 
+    const continuarProceso = async () => {
+        await votacionesGetById()
+        console.log(estado)
+        if(estado === 2){
+            Swal.fire({
+                icon: 'info',
+                title: 'Error',
+                text: 'Aun no empieza la votación',
+            })
+        }
+
+        else if(estado === 1){
+            window.location.replace(`https://votacionesfast.netlify.app/votar/${id}/${estado}/${idPreg}`)
+        }
+    }
     
 
     
@@ -517,6 +535,12 @@ const VotarNormal = () => {
                                 </Row>
                                 <Row className='filasEstado2' id='filaCargando'>
                                     <Spinner animation="border" variant="secondary" id='spinnerCargando'/>
+                                </Row>
+
+                                <Row className='filasEstado2' id='filaBotonContinuarProceso'>
+                                    <div id='contenedorBotonesEstado2'>
+                                        <Button className='botonEstado2' onClick={() => continuarProceso()}>Continuar votación</Button>
+                                    </div>
                                 </Row>
                                 
                             </div>

@@ -365,7 +365,7 @@ const updateTituloVotacion = async () => {
 		method: 'put',
 		url:serverUrl + "/votacionUpdate", 
 		headers: {'Content-Type': 'application/json'},
-		params:{idVotacion: idVotacion, idUsuario: idUsuario, titulo: tituloVotacion}
+		params:{idVotacion: idVotacion, idUsuario: idUsuario, titulo: tituloVotacion, porcentaje: 0}
 	}).catch(error =>{
 		alert(error.response.data.message);
 		console.log(error);

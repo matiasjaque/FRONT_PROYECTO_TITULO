@@ -29,6 +29,8 @@ const ResultadosVotacion = () => {
 
   const [dataUsuarioVotantes, setDataUsuariosVotantes] = useState([]);
 
+  var estadoVot;
+
   useEffect(() => {
     if( estado === '0'  && data.length === 0){
         preguntasConRespuestasGet();
@@ -100,6 +102,7 @@ const ResultadosVotacion = () => {
     await axios.get(serverUrl + "/votacionById", {params:{idVotacion: idVotacion}})
         .then(response=>{
             setTipoVotacion(response.data[0].tipo);
+            estadoVot = response.data[0].estado;
         //setLoading(true);
         console.log("trae esto getVotaciones ojo:");
         console.log(response.data[0].tipo);
@@ -332,14 +335,33 @@ const mostrarModalVisualizarResultadoTipoEspecial = () => {
 
   console.log(data)
 
+  const verResultados = async () => {
+    await votacionesGetById()
+        console.log(estadoVot)
+        if(estadoVot === 1 || estadoVot === 2){
+            Swal.fire({
+                icon: 'info',
+                title: 'Error',
+                text: 'Aun no empieza la votación',
+            })
+        }
+
+        else if(estadoVot === 0){
+            window.location.replace(`http://localhost:3000/resultadosVotacion/${estadoVot}/${idVotacion}`)
+        }
+  }
+
 
   return (
     <div id='contenedorResultVotacion'>
       { estado === '1' ?
 
         <Container fluid id='contenedorEsperarCerrarVotacion'>
-          <h1 id='mensajeTituloEsperarCerrar'>Felicidades su votación se ha realizado con éxito!</h1>
-          <h3 id='mensajeSecundarioEsperarCerrar'>Para visualizar los resultados debe esperar a que el propietario finalice la votación</h3>
+            <h1 id='mensajeTituloEsperarCerrar'>Felicidades su votación se ha realizado con éxito!</h1>
+            <h3 id='mensajeSecundarioEsperarCerrar'>Para visualizar los resultados debe esperar a que el propietario finalice la votación</h3>
+            <div id='contenedorBotonesEstado2'>
+                <Button className='botonEstado2' onClick={() => verResultados()}>Ver resultados</Button>
+            </div>
         </Container>:
         <>
             {tipoVotacion === 'especial' ?

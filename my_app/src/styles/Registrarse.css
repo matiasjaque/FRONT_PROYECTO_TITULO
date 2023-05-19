@@ -9,22 +9,22 @@
 .container{
     background-color: #AFB2B7;
     border-radius: 50px;
-    height: 75%;
-    min-height: 75%;
+    height: 90%;
+    min-height: 90%;
     overflow-y: auto;
 }
 
 .tituloRegistrarse{
     position: inherit;
     color: white;
-    font-size: 45px;
+    font-size: 2vw;
     font-family: Roboto, sans-serif;    
     justify-content: center;
     padding-top: 15px;
 }
 
 .parametrosRec{
-    font-size: 22px;
+    font-size: 1.5vw;
     color: white;
     padding: 0px;
     margin: 0px;
@@ -52,7 +52,7 @@
 
 
 .botonVolver{
-    font-size: 25px;
+    font-size: 1.5vw;
     justify-content: center;
     width: 80%;
     margin: auto;

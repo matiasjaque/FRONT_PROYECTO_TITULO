@@ -1,23 +1,26 @@
 #contenedorPrincipalMisVotaciones2{
-    background-color: red;
+    background-color: #020202;
     max-width: 100vw;
-    max-height: 100vh;
-    min-height: 100vh;
+    height: calc(100vh - 15vh);
+    overflow-y: auto;
 }
 
 #contenedorSecundarioMisVotaciones2{
-    /* background: #E5E4E0; */
-    background: #D7D8DA;
-    min-height: 90vh;
+    background: #E5E4E0;
+    height: 85%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    z-index: 0;
+    position: fixed;
+    top: 15vh;
 }
 
 #contenedorCrearVotacion2{
     overflow-y: auto;
     background: #F1F1F1;
-    height: 80vh;
+    height: 75vh;
     border-radius: 20px;
     /*min-height: 80vh;
     max-height: 80vh;
@@ -40,34 +43,34 @@
 }
 
 #filaTitulo{
-    height: 20%;
+    height: 10%;
     align-items: center;
 }
 
 #tituloVotacion2{
     text-align: center;
-    font-size: 32px;
+    font-size: 2vw;
     font-weight: bold;
     font-family: 'ROBOTO', sans-serif;
     
 }
 
 #filaTituloVot{
-    height: 20%;
+    height: 15%;
     align-items: center;
     width: 80%;
     margin: auto;
 }
 
 .titulosForm2{
-    font-size: 20px;
+    font-size: 1.2vw;
     font-weight: 500;
     font-family: 'Roboto', sans-serif;
     padding: 0px 10px;
 }
 
 .textosForm2{ 
-    font-size: 18px;
+    font-size: 1.1vw;
     font-weight: 400;
     font-family: 'Roboto', sans-serif;
     margin: 0px 5px;
@@ -91,7 +94,7 @@
     align-items: center;
     width: 80%;
     margin: auto;
-    font-size: larger;
+    font-size: 1.3vw;
 }
 
 #switchListaParticipantesVot2{
@@ -104,16 +107,17 @@
 #tituloSwitchVot2{
     text-align: center;
     margin-bottom: 15px;
+    font-size: 2vw;
 }
 
 #numeroParticipantesVot2{
-    font-size: x-large;
+    font-size: 1.8vw;
     font-weight: 500;
     font-family: sans-serif;
 }
 
 #nombreVot2{
-    font-size: x-large;
+    font-size: 1.8vw;
     font-weight: 500;
     font-family: sans-serif;
     width: 90%;
@@ -121,7 +125,7 @@
 }
 
 #rutVot2{
-    font-size: x-large;
+    font-size: 1.8vw;
     font-weight: 500;
     font-family: sans-serif;
     width: 90%;
@@ -138,7 +142,7 @@
     width: max-content;
     height: 50%;
     align-self: self-end;
-    font-size: x-large;
+    font-size: 1.8vw;
     font-family: sans-serif;
     font-weight: 500;
     margin-bottom: 20px;
@@ -155,7 +159,7 @@
     width: 15%;
     padding: 5px;
     margin: 0px 10px;
-    font-size: 20px;
+    font-size: 1.4vw;
     font-weight: 700;
     font-family: 'ROBOTO', sans-serif;
 }
@@ -163,7 +167,7 @@
 #btnEliminarParticipanteVot2{
     background: none;
     border: none;
-    font-size: 23px;
+    font-size: 1.5vw;
     color: white;
     font-weight: 700;
     font-family: sans-serif;
