@@ -380,8 +380,13 @@ const MisVotaciones = () => {
                     text: 'Para compartir una votación normal, debe estar en estado "en curso"',
                 })
             }
+            else{
+                setEnlace(`${puertoUrl}/votar/${idVot}/${estado}/${idPregEstado2}`);
+                setModalShow(true);
+            }
             // obtener el id de la pregunta
             getPreguntaId(idVot, estado)
+            
             
         }
 
